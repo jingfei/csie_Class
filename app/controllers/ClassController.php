@@ -4,12 +4,11 @@ class ClassController extends \BaseController {
 
 	public static function FindClass(){
 		$tmp = DB::table('classList')
-				->select('name')
+				->select('name', 'type')
 				->orderBy('id')
-//				->take(6)
 				->get();
 		foreach($tmp as &$i)
-			$i=$i->name;
+			$i=$i->name.'<br/>'.$i->type;
 		return $tmp;
 	}
 
@@ -18,7 +17,6 @@ class ClassController extends \BaseController {
 		$date = DB::table('BorrowList')
 				->select('classroom', 'start_time', 'end_time', 'username', 'reason')
 				->where('date', $date)
-//				->where('classroom', '<', '7')
 				->orderBy('classroom')
 				->orderBy('start_time')
 				->get();

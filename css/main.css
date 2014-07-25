@@ -23,14 +23,14 @@
 #navbar
 {
 	position: absolute;
-	top: 55px;
-	right: 220px;
+	top: 140px;
+	right: 200px;
 }
 #navbar ul
 {
 	display: inline-block;
 	overflow: hidden;
-	height: 120px;
+	height: 50px;
 }
 #navbar li{
 	display: inline;

@@ -9,13 +9,12 @@ $(document).ready(function(){
 		var nowDate = $( ".datepicker" ).datepicker( "getDate" );
 		gotoDate();
 	});
-
 });
 
 </script>
 
 
-		<h1 class="content_title" style="font-size:220%;">查詢 <small>日期</small></h1>
+		<h1 class="content_title" style="font-size:220%;">查詢 <small>教室</small></h1>
 		<hr/>
 		<div class="small_date">
 			{{HTML::style('css/date/jquery-ui-1.10.1_2.css')}}		
