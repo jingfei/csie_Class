@@ -1,0 +1,36 @@
+.class_left{ 
+	width: 25%;
+	display: inline-block;
+	background: yellow;
+}
+
+.class_outer {
+	width: 70%;
+	display: inline-block;
+	margin-left: 3%;
+}
+.class_table *{ border: 1px solid gray; }
+
+.class_content {
+	height: 600px;
+	overflow-y: scroll;
+}
+
+.class_time{ width: 45px; }
+
+.class_name{ height: 50px; }
+.class_inner{ height: 70px; }
+
+.class_name,
+.class_inner {
+	width: 105px;
+	vertical-align: middle;
+}
+
+.inner_div {
+	width: 90%;
+	height: 90%;
+	margin: 2px auto;
+	background: #9aaeff;
+}
+

@@ -4,6 +4,8 @@
 <title>CSIE Equipment Borrowing</title>
 
 {{HTML::style('css/main.css')}}
+{{HTML::style('css/Button.css')}}
+{{HTML::style('css/class.css')}}
 {{HTML::style('css/navbar/styles.css')}}
 {{HTML::style('css/Login/reset.css')}}
 {{HTML::style('css/Login/structure.css')}}
@@ -17,6 +19,7 @@
 <![endif]-->
 <script src="js/jquery-1.9.1.js"></script>
 <script src="js/jquery-ui-1.10.1.min.js"></script>
+<script src="js/control.js"></script>
 <script>
 	$(function() {	
 		$( ".datepicker" ).datepicker({
