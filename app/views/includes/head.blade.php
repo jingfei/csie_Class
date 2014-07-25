@@ -10,7 +10,7 @@
 {{HTML::style('css/Login/reset.css')}}
 {{HTML::style('css/Login/structure.css')}}
 {{HTML::style('css/date/lugo.datepicker.css')}}
-{{HTML::style('css/date/jquery-ui-1.10.1.css')}}
+{{HTML::style('css/date/siena.datepicker.css')}}
 <!-- Including the Lobster font from Google's Font Directory -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster" />
 <!-- Enabling HTML5 support for Internet Explorer -->

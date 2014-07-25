@@ -28,7 +28,7 @@ Route::get('test', function(){
 	$day = Input::get('day');
 	$date = ClassController::FindDate($month, $day, $year);
 	$table = ClassController::SetTable($date, count($data));
-	return View::make('pages.test')->with('data',$data)->with('table',$table)->with('date', $date);
+	return View::make('pages.test')->with('data',$data)->with('table',$table)->with('date', $date)->with('month', $month)->with('year', $year)->with('day', $day);
 });
 
 Route::get('Login', function(){

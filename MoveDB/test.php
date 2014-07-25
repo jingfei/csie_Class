@@ -52,7 +52,7 @@
 		if(!$type) continue;
 		$user_id = array_search($username, $User);
 		if(!$user_id) $user_id=0;
-		if(strtotime($date)<strtotime(date("Y-m-d", mktime(0,0,0,1,1,2012))))
+		if(strtotime($date)<strtotime(date("Y-m-d", mktime(0,0,0,1,1,2014))))
 			continue;
 		/*************/
 		$i++;

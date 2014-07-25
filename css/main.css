@@ -37,7 +37,7 @@
 	padding: 2px;
 }
 
-select {
+select:not(.ll-skin-siena *){
    background: url(../img/new_arrow.png) no-repeat right transparent;
    padding: 5px;
 	margin: 5px;
@@ -49,6 +49,10 @@ select {
    border-radius: 0;
    -webkit-appearance: none;
    overflow: hidden;
+}
+
+.ll-skin-siena select{
+	width: 5px;
 }
 
 #Query{

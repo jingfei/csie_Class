@@ -7,6 +7,7 @@
 			<button class="innerButton" onClick="ClickToday()" >today</button>
 			<button class="innerButton" onClick="gotoDate()">登記</button>
 		</div>
+{{HTML::style('css/date/jquery-ui-1.10.1.css')}}
 		<div class="datepicker ll-skin-lugo"></div>
 	
 @stop

@@ -1,14 +1,29 @@
+.classpage{
+	display: none;
+}
+
+.active{
+	display: block;
+}
+
 .class_left{ 
-	width: 25%;
+	width: 28%;
 	display: inline-block;
-	background: yellow;
+}
+
+.small_date{
+	position: fixed;
+	top: 200px;
+	left: 200px;
 }
 
 .class_outer {
 	width: 70%;
 	display: inline-block;
-	margin-left: 3%;
 }
+
+.class_outer img{ cursor: pointer; }
+
 .class_table *{ border: 1px solid gray; }
 
 .class_content {
@@ -16,7 +31,7 @@
 	overflow-y: scroll;
 }
 
-.class_time{ width: 45px; }
+.class_time{ width: 45px; height: 70px;}
 
 .class_name{ height: 50px; }
 .class_inner{ height: 70px; }
@@ -33,4 +48,6 @@
 	margin: 2px auto;
 	background: #9aaeff;
 }
+
+.no_event{ cursor: pointer; }
 
