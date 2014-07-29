@@ -21,14 +21,14 @@ Route::get('DownloadCSV', function(){
 	return View::make('pages.DownloadCSV');
 });
 
-Route::get('test', function(){
+Route::get('class', function(){
 	$data = ClassController::FindClass();
 	$year = Input::get('year');
 	$month = Input::get('month');
 	$day = Input::get('day');
 	$date = ClassController::FindDate($month, $day, $year);
 	$table = ClassController::SetTable($date, count($data));
-	return View::make('pages.test')->with('data',$data)->with('table',$table)->with('date', $date)->with('month', $month)->with('year', $year)->with('day', $day);
+	return View::make('pages.class')->with('data',$data)->with('table',$table)->with('date', $date)->with('month', $month)->with('year', $year)->with('day', $day);
 });
 
 Route::get('Login', function(){

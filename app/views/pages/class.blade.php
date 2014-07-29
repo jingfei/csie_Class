@@ -57,20 +57,28 @@ $(document).ready(function(){
 							<th class="class_time">{{$time}}</th>
 						@for($i=($classpage-1)*6+1; $i<=$classpage*6 &&$i<=count($data); $i++)
 							@if($table[$time-8][$i][0]==-1)
-							<td class="class_inner no_event"></td>
+							<td class="class_inner no_event">
+								<div class="outer_div">
+								<div class="inner_div">
+								</div></div>
+							</td>
 							@elseif($table[$time-8][$i][0]==1)
 							<td class="class_inner">
+								<div class="outer_div">
 								<div class="inner_div">
+									<br/>
 									{{$table[$time-8][$i][1]}}<br/>
 									<small>{{$table[$time-8][$i][2]}}</small>
-								</div>
+								</div></div>
 							</td>
 							@elseif($table[$time-8][$i][0]>1)
 							<td class="class_inner" rowspan="{{$table[$time-8][$i][0]}}">
+								<div class="outer_div">
 								<div class="inner_div">
+									<br/>
 									{{$table[$time-8][$i][1]}}<br/>
 									<small>{{$table[$time-8][$i][2]}}</small>
-								</div>
+								</div></div>
 							</td>
 							@endif
 						@endfor

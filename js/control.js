@@ -4,7 +4,7 @@ function ClickToday(){
 
 function gotoDate(){
 	var selectDate = $( ".datepicker" ).datepicker( "getDate" );
-	location.href="test?year="+selectDate.getFullYear()+"&month="+(selectDate.getMonth()+1)+"&day="+selectDate.getDate();
+	location.href="class?year="+selectDate.getFullYear()+"&month="+(selectDate.getMonth()+1)+"&day="+selectDate.getDate();
 }
 
 function ClassPage(off){
