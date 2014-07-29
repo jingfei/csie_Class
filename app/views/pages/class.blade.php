@@ -9,6 +9,16 @@ $(document).ready(function(){
 		var nowDate = $( ".datepicker" ).datepicker( "getDate" );
 		gotoDate();
 	});
+	$( "#dialog-form" ).dialog({ autoOpen: false });
+	$( ".inner_div" ).click(function() {
+		  $( "#dialog-form" ).dialog( "open" );
+	});
+	$( "#dialog-form" ).dialog({ closeText: "" });
+	$( "#dialog-form" ).dialog({ modal: true });
+	$( "#dialog-form" ).dialog({ show: true });
+	$( "#dialog-form" ).dialog({ hide: { effect: "explode", duration: 500 } });
+	$( "#dialog-form" ).dialog({ width: 340 });
+	$( "#dialog-form" ).dialog({ height: 650 });
 });
 
 </script>
@@ -16,6 +26,84 @@ $(document).ready(function(){
 
 		<h1 class="content_title" style="font-size:220%;">查詢 <small>教室</small></h1>
 		<hr/>
+		<!-- form-start -->
+		<div id="dialog-form" title="class">
+			{{ Form::open(array('class' => 'box login', 'url' => 'Login', 'method' => 'post')) }}
+			<fieldset class="boxBody">
+			
+			<label> 借用者 </label>
+			<input type="text" value="haha" readonly/>
+			
+			<label> 課程 / 活動名稱 </label>
+			<input type="text" name="title" required/>
+			
+			<label> 日期 </label>
+			<input type="date" name="date_start" required>
+			<br/>
+			<input type="checkbox" name="form_repeat" value="Repeat" onClick="if(this.checked) $('.Repeat').show(); else $('.Repeat').hide();"/>連續借用
+			<div class="Repeat" style="display:none">
+				循環方式: 
+				<select>
+					<option>每天</option>
+					<option selected="selected">每週</option>
+					<option>每月</option>
+				</select><br/><br/>
+				
+				間隔:
+				每隔 <br/><br/>
+				
+				循環次數:<br/>
+				<input type="radio" name="Repaet_end" value="occurence" required/>
+					<select>
+						@for($i=1; $i<=20; $i++)
+						<option>{{$i}}</option>
+						@endfor
+					</select>
+					個循環後<br/>
+				<input type="radio" name="Repaet_end" value="date" required/>
+				<input type="date" name="date_end" /><br/>
+			</div>
+			
+			<label> 教室 </label>
+			<select name="form_class">
+				@for($i=0; $i<count($data); $i++)
+				<option>{{ $data[$i] }}</option>
+				@endfor
+			</select>
+
+			<label> 時間 </label>
+			<select name="time_start">
+				@for($i=8; $i<22; $i++)
+				<option>{{ $i }}:00</option>
+				@endfor
+			</select>
+			~
+			<select name="time_end">
+				@for($i=9; $i<23; $i++)
+				<option>{{ $i }}:00</option>
+				@endfor
+			</select>
+			
+			<label> email </label>
+			<input type="text" name="form_email" required/>
+			
+			<label> 聯絡電話 </label>
+			<input type="text" name="form_tel" required/>
+			
+			<label> 借用事由 </label>
+			<input type="radio" name="form_reason" value="課程" required/>課程 &nbsp;&nbsp;
+			<input type="radio" name="form_reason" value="會議" required/>會議 &nbsp;&nbsp;
+			<input type="radio" name="form_reason" value="活動" required/>活動 &nbsp;&nbsp;
+
+			</fieldset>
+	
+			<footer>
+			<input type="submit" value="借用" class="btnLogin" tabindex="4">
+			</footer>
+			
+		{{ Form::close() }}
+		</div>
+		<!-- form-end -->
 		<div class="small_date">
 			{{HTML::style('css/date/jquery-ui-1.10.1_2.css')}}		
 			<div class="datepicker ll-skin-siena"></div>

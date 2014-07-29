@@ -17,10 +17,6 @@ Route::get('/', function()
 	return View::make('pages.home');
 });
 
-Route::get('DownloadCSV', function(){
-	return View::make('pages.DownloadCSV');
-});
-
 Route::get('class', function(){
 	$data = ClassController::FindClass();
 	$year = Input::get('year');

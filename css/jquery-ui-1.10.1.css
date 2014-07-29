@@ -87,9 +87,10 @@
 	height: 100%;
 }
 .ui-datepicker {
-	width: 17em;
+	width: 49em;
 	padding: .2em .2em 0;
 	display: none;
+	margin: 0 auto;
 }
 .ui-datepicker .ui-datepicker-header {
 	position: relative;
@@ -141,7 +142,15 @@
 }
 .ui-datepicker select.ui-datepicker-month,
 .ui-datepicker select.ui-datepicker-year {
-	width: 35%;
+	width: 100px;
+	height: 120%;
+	color: #fff;
+	margin: 0 5px;
+	background-color: transparent;
+}
+.ui-datepicker select.ui-datepicker-month *,
+.ui-datepicker select.ui-datepicker-year *{
+	color: black;
 }
 .ui-datepicker table {
 	width: 100%;
@@ -158,6 +167,8 @@
 .ui-datepicker td {
 	border: 0;
 	padding: 1px;
+	height: 7em;
+	width: 7em;
 }
 .ui-datepicker td span,
 .ui-datepicker td a {
@@ -165,6 +176,7 @@
 	padding: .2em;
 	text-align: right;
 	text-decoration: none;
+	height: 100%;
 }
 .ui-datepicker .ui-datepicker-buttonpane {
 	background-image: none;
@@ -295,9 +307,9 @@
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
 	border: 1px solid #cccccc;
-//	background: #f6f6f6 url(images/ui-bg_glass_100_f6f6f6_1x400.png) 50% 50% repeat-x;
+	background: #f6f6f6 url(images/ui-bg_glass_100_f6f6f6_1x400.png) 50% 50% repeat-x;
 	font-weight: bold;
-//	color: #1c94c4;
+	color: #1c94c4;
 }
 .ui-state-default a,
 .ui-state-default a:link,
@@ -635,7 +647,7 @@
 
 /* Overlays */
 .ui-widget-overlay {
-	background: #666666 url("images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat;
+	background: #666666 url(images/ui-bg_diagonals-thick_20_666666_40x40.png) 50% 50% repeat;
 	opacity: .5;
 	filter: Alpha(Opacity=50);
 }

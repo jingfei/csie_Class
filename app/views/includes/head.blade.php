@@ -18,7 +18,7 @@
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 <script src="js/jquery-1.9.1.js"></script>
-<script src="js/jquery-ui-1.10.1.min.js"></script>
+<script src="js/jquery-ui.js"></script>
 <script src="js/control.js"></script>
 <script>
 	$(function() {	
