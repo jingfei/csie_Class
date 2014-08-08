@@ -37,7 +37,7 @@ input, select { vertical-align: middle; }
 body {font:12px/18px Lucida Sans, sans-serif;} 
 select, input, textarea, button { font:99% sans-serif; }
 pre, code, kbd, samp { font-family: monospace, sans-serif; }
-a:hover, a:active, *:focus, input:focus, button:focus { outline: none; }
+// a:hover, a:active, *:focus, input:focus, button:focus { outline: none; }
 ul, ol { margin-left: 2em; }
 ol { list-style-type: decimal; }
 nav ul, nav li { margin: 0; list-style:none; list-style-image: none; }
@@ -70,7 +70,7 @@ button {  width: auto; overflow: visible; }
 .ie7 img { -ms-interpolation-mode: bicubic; }
 
 body, select, input, textarea {color: #444; }
-a, a:active, a:visited { color: #666; text-decoration:none; }
+a, a:active, a:visited { color: #0e2d66; text-decoration:none; }
 a:hover { color: #c00; }
 .ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
 .hidden { display: none; visibility: hidden; }

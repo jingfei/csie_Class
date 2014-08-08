@@ -9767,7 +9767,7 @@ var dialog = $.widget( "ui.dialog", {
 	version: "1.11.0",
 	options: {
 		appendTo: "body",
-		autoOpen: true,
+		autoOpen: false,
 		buttons: [],
 		closeOnEscape: true,
 		closeText: "Close",

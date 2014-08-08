@@ -3,7 +3,7 @@
 
 		<h1 class="content_title" style="font-size:220%;">登入 <small>學號</small></h1>
 		<hr/>
-		{{ Form::open(array('class' => 'box login', 'url' => 'Login', 'method' => 'post')) }}
+		{{ Form::open(array('class' => 'box login', 'url' => 'log_in', 'method' => 'post')) }}
 		<fieldset class="boxBody">
 		
 		<label> 學號 </label>

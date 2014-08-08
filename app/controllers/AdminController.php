@@ -2,63 +2,61 @@
 
 class AdminController extends BaseController {
 
-	public function All(){
-
+	public function show($date=null, $date2=null, $factor=null, $detail=null){
 		if(Session::get('user')!='admin')
-			return "<script>something wrong</script>".Redirect::to('form');
-		$Dept = DB::table('StudentCard')->select('department')->distinct()->get();
-		$Year = DB::table('StudentCard')->select('enrollment_year')->distinct()->get();
-		return View::make('pages.ListAll')->with('Dept', $Dept)->with('Year',$Year)->with('data',null);
-		
+			return "<script>something wrong</script>".Redirect::to('/');
+		$dateLimit = self::dateLimit();
+		/* 課程異動查詢 */
+		if(!$date) $date = date("Y-m-d");
+		$limit = DB::table('BorrowList') -> whereBetween('date', array($dateLimit['start']['all'],$dateLimit['end']['all']));
+		$list = $limit  ->where('date', $date)
+						->get();	
+		/****************/
+		/* classList */
+		$result = DB::table('classList')->get();
+		$className = array('no');
+		foreach($result as $tmpClass)
+			array_push($className, $tmpClass->name);
+		/*************/
+		return View::make('pages.admin')->with('date', $dateLimit)->with('list', $list)->with('className',$className);
+	}
+
+	public function deleteBorrow($_id){
+		if(Session::get('user')!='admin')
+			return "<script>something wrong</script>".Redirect::to('/');
+		DB::table('BorrowList')
+			->where('id', $_id)
+			->delete();
+		return "<script>alert('刪除成功');</script>".Redirect::to('Admin');
+	}
+
+	public function updateDate(){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$month1 = Input::get('month1');
+		$month2 = Input::get('month2');
+		$day1 = Input::get('day1');
+		$day2 = Input::get('day2');
+		$year1 = Input::get('year1');
+		$year2 = Input::get('year2');
+		$date1 = date("Y-m-d", mktime(0,0,0,$month1,$day1,$year1));
+		$date2 = date("Y-m-d", mktime(0,0,0,$month2,$day2,$year2));
+		if($date1 > $date2) return "<script>alert('日期選擇錯誤');</script>".Redirect::to("Admin"); 
+		else{
+			try{
+				$update1 = DB::table('Admin')
+							 ->where('name', 'date_start')
+							 ->update(array('detail' => $date1));
+				$update2 = DB::table('Admin')
+				  			 ->where('name', 'date_end')
+			  				 ->update(array('detail' => $date2));
+			}catch(\Exception $e){
+				return "<script>alert('更新失敗');</script>".Redirect::to("Admin");
+			
+			}
+			return "<script>alert('更新成功');</script>".Redirect::to("Admin");
+		}
 	
 	}
 
-	public function query(){
-		if(Session::get('user')!='admin')
-			return "<script>something wrong</script>".Redirect::to('form');
-		$Dept = DB::table('StudentCard')->select('department')->distinct()->get();
-		$Year = DB::table('StudentCard')->select('enrollment_year')->distinct()->get();
-		$QueryDept = htmlspecialchars( Input::get('dept') );
-		$QueryYear = htmlspecialchars( Input::get('year') );
-		$data = DB::table('StudentCard');
-		if($QueryDept != '不限') $data = $data->where('department', $QueryDept);
-		if($QueryYear != '不限') $data = $data->where('enrollment_year', $QueryYear);
-		$data = $data->orderBy('department')->orderBy('enrollment_year')->get();
-		$output = self::array_to_csv($data);
-		$output = "\"學號\", \"姓名\", \"系所\", \"入學年份\", \"學生證號碼\", \"手機號碼\"\n" . $output;
-		file_put_contents("StudentCard.csv", $output);
-		return View::make('pages.ListAll')->with('Dept', $Dept)->with('Year',$Year)->with('data',$data)->with('CSV',$output?true:false);
-	}
-
-	public function addnew(){
-		if(Session::get('user')!='admin')
-			return "<script>something wrong</script>".Redirect::to('form');
-		$StudentID = htmlspecialchars( Input::get('new') );
-		$QueryNew = DB::table('StudentCard')->where('student_id', htmlspecialchars( Input::get('new') ))->get();
-		if(!$QueryNew && $StudentID){
-			Session::put('id',$StudentID);
-			return View::make('pages.form')->with('id',$StudentID)->with('student',null);
-		}
-		$data = DB::table('StudentCard')->where('student_id', $StudentID)->get();
-		$Dept = DB::table('StudentCard')->select('department')->distinct()->get();
-		$Year = DB::table('StudentCard')->select('enrollment_year')->distinct()->get();
-		$output = self::array_to_csv($data);
-		$output = "\"學號\", \"姓名\", \"系所\", \"入學年份\", \"學生證號碼\", \"手機號碼\"\n" . $output;
-		file_put_contents("StudentCard.csv", $output);
-		return View::make('pages.ListAll')->with('Dept', $Dept)->with('Year',$Year)->with('data',$data)->with('CSV',$output?true:false);
-	}
-
-	public function queryCard(){
-		if(Session::get('user')!='admin')
-			return "<script>something wrong</script>".Redirect::to('form');
-		$StudentCard = htmlspecialchars( Input::get('new') );
-		$QueryNew = DB::table('StudentCard')->where('student_card', htmlspecialchars( Input::get('new') ))->get();
-		$data = DB::table('StudentCard')->where('student_card', $StudentCard)->get();
-		$Dept = DB::table('StudentCard')->select('department')->distinct()->get();
-		$Year = DB::table('StudentCard')->select('enrollment_year')->distinct()->get();
-		$output = self::array_to_csv($data);
-		$output = "\"學號\", \"姓名\", \"系所\", \"入學年份\", \"學生證號碼\", \"手機號碼\"\n" . $output;
-		file_put_contents("StudentCard.csv", $output);
-		return View::make('pages.ListAll')->with('Dept', $Dept)->with('Year',$Year)->with('data',$data)->with('CSV',$output?true:false);
-	}
 }

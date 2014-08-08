@@ -6,6 +6,7 @@
 {{HTML::style('css/main.css')}}
 {{HTML::style('css/Button.css')}}
 {{HTML::style('css/class.css')}}
+{{HTML::style('css/adminTable.css')}}
 {{HTML::style('css/navbar/styles.css')}}
 {{HTML::style('css/Login/reset.css')}}
 {{HTML::style('css/Login/structure.css')}}
@@ -17,9 +18,9 @@
 <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-<script src="js/jquery-1.9.1.js"></script>
-<script src="js/jquery-ui.js"></script>
-<script src="js/control.js"></script>
+{{HTML::script('js/jquery-1.9.1.js')}}
+{{HTML::script('js/jquery-ui.js')}}
+{{HTML::script('js/control.js')}}
 <script>
 	$(function() {	
 		$( ".datepicker" ).datepicker({
