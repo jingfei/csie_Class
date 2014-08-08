@@ -9,16 +9,15 @@ $(document).ready(function(){
 		var nowDate = $( ".datepicker" ).datepicker( "getDate" );
 		gotoDate();
 	});
-	$( "#dialog-form" ).dialog({ autoOpen: false });
-	$( ".inner_div" ).click(function() {
-		  $( "#dialog-form" ).dialog( "open" );
+	initClassform();
+	/*自動選取*/
+	$('.repeat1').on('change', function(){
+		$('#repeat1').prop('checked', true);
 	});
-	$( "#dialog-form" ).dialog({ closeText: "" });
-	$( "#dialog-form" ).dialog({ modal: true });
-	$( "#dialog-form" ).dialog({ show: true });
-	$( "#dialog-form" ).dialog({ hide: { effect: "explode", duration: 500 } });
-	$( "#dialog-form" ).dialog({ width: 340 });
-	$( "#dialog-form" ).dialog({ height: 650 });
+	$('.repeat2').on('change', function(){
+		$('#repeat2').prop('checked', true);
+	});
+	/**********/
 });
 
 </script>
@@ -28,57 +27,88 @@ $(document).ready(function(){
 		<hr/>
 		<!-- form-start -->
 		<div id="dialog-form" title="class">
-			{{ Form::open(array('class' => 'box login', 'url' => 'Login', 'method' => 'post')) }}
+			{{ Form::open(array('class' => 'box', 'url' => 'borrow', 'method' => 'post', 'id' => 'classForm')) }}
 			<fieldset class="boxBody">
 			
 			<label> 借用者 </label>
-			<input type="text" value="haha" readonly/>
+			<input type="text" value="haha" name="form_user" readonly/>
 			
-			<label> 課程 / 活動名稱 </label>
-			<input type="text" name="title" required/>
-			
-			<label> 日期 </label>
-			<input type="date" name="date_start" required>
-			<br/>
-			<input type="checkbox" name="form_repeat" value="Repeat" onClick="if(this.checked) $('.Repeat').show(); else $('.Repeat').hide();"/>連續借用
-			<div class="Repeat" style="display:none">
-				循環方式: 
-				<select>
-					<option>每天</option>
-					<option selected="selected">每週</option>
-					<option>每月</option>
+			<label style="display:inline"> 日期 </label>
+			&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="form_repeat" value="Repeat" style="text-align:right;vertical-align:middle" onClick="ShowCycle(this);"/>連續借用
+			<input type="text" value="{{$year.' 年 '.$month.' 月 '.$day.' 日'}}" readonly/>
+			<input type="hidden" name="date_start" value="{{date("Y-m-d", mktime(0,0,0,$month,$day,$year))}}" />
+
+			<div class="Repeat" style="display:none;padding:10px;">
+				間隔及循環方式:
+				<br/>
+				&nbsp;&nbsp;每隔&nbsp;
+				<select name="date_interval">
+					@for($i=1; $i<7; ++$i)
+					<option>{{$i}}</option>
+					@endfor
+				</select>
+				&nbsp;
+				<select name="date_intervalUnit">
+					<option>天</option>
+					<option selected="selected">週</option>
+					<option>月</option>
 				</select><br/><br/>
 				
-				間隔:
-				每隔 <br/><br/>
-				
 				循環次數:<br/>
-				<input type="radio" name="Repaet_end" value="occurence" required/>
-					<select>
+				&nbsp;&nbsp;<input type="radio" name="Repeat_end" value="occurence" id="repeat1" checked required/>
+					<select name="date_num" class="repeat1">
 						@for($i=1; $i<=20; $i++)
 						<option>{{$i}}</option>
 						@endfor
 					</select>
-					個循環後<br/>
-				<input type="radio" name="Repaet_end" value="date" required/>
-				<input type="date" name="date_end" /><br/>
+					個循環後結束<br/>
+				<!-- date_start -->
+				&nbsp;&nbsp;<input type="radio" name="Repeat_end" value="date" id="repeat2" required/>
+				直到
+				<select name="date_year" class="repeat2">
+					<option @if(date("Y")==$year) selected="selected" @endif>
+						{{date("Y")}}
+					</option>
+					<option @if(date("Y")+1==$year) selected="selected" @endif>
+						{{date("Y")+1}}
+					</option>
+				</select>
+				年
+				<select name="date_month" class="repeat2">
+					@for($i=1; $i<=12; ++$i)
+						<option @if($month==$i) selected="selected" @endif>
+							{{$i}}
+						</option>
+					@endfor
+				</select>
+				月
+				<select name="date_day" class="repeat2">
+					@for($i=1; $i<=date('d',mktime(0,0,0,$month,0,$year)); ++$i)
+						<option @if($day==$i) selected="selected" @endif>
+							{{$i}}
+						</option>
+					@endfor
+				</select>
+				日
+				<br/>
+				<!-- date_end -->
 			</div>
 			
+			<label> 課程 / 活動名稱 </label>
+			<input type="text" name="title" required/>
+			
 			<label> 教室 </label>
-			<select name="form_class">
+			<select name="form_class" id="form_class">
 				@for($i=0; $i<count($data); $i++)
-				<option>{{ $data[$i] }}</option>
+				<option>{{ $data[$i]->name.' '.$data[$i]->type }}</option>
 				@endfor
 			</select>
 
 			<label> 時間 </label>
-			<select name="time_start">
-				@for($i=8; $i<22; $i++)
-				<option>{{ $i }}:00</option>
-				@endfor
-			</select>
+			<input type="hidden" name="time_start" id="time_start_hidden" />
+			<span id="time_start"></span>:00
 			~
-			<select name="time_end">
+			<select name="time_end" id="time_end">
 				@for($i=9; $i<23; $i++)
 				<option>{{ $i }}:00</option>
 				@endfor
@@ -91,7 +121,7 @@ $(document).ready(function(){
 			<input type="text" name="form_tel" required/>
 			
 			<label> 借用事由 </label>
-			<input type="radio" name="form_reason" value="課程" required/>課程 &nbsp;&nbsp;
+			<input type="radio" name="form_reason" value="課程" checked required/>課程 &nbsp;&nbsp;
 			<input type="radio" name="form_reason" value="會議" required/>會議 &nbsp;&nbsp;
 			<input type="radio" name="form_reason" value="活動" required/>活動 &nbsp;&nbsp;
 
@@ -133,7 +163,9 @@ $(document).ready(function(){
 						<tr>
 							<th class="class_time"> </th>
 						@for($i=($classpage-1)*6; $i<$classpage*6 && $i<count($data); $i++)
-							<th class="class_name">{{$data[$i]}}</th>
+							<th class="class_name">
+								{{$data[$i]->name.'<br/>'.$data[$i]->type}}
+							</th>
 						@endfor
 						</tr>
 					</table>
@@ -145,7 +177,7 @@ $(document).ready(function(){
 							<th class="class_time">{{$time}}</th>
 						@for($i=($classpage-1)*6+1; $i<=$classpage*6 &&$i<=count($data); $i++)
 							@if($table[$time-8][$i][0]==-1)
-							<td class="class_inner no_event">
+							<td class="class_inner no_event" name="{{$time.';'.$data[$i-1]->name}}">
 								<div class="outer_div">
 								<div class="inner_div">
 								</div></div>

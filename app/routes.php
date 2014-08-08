@@ -27,6 +27,11 @@ Route::get('class', function(){
 	return View::make('pages.class')->with('data',$data)->with('table',$table)->with('date', $date)->with('month', $month)->with('year', $year)->with('day', $day);
 });
 
+Route::post('borrow', 'ClassController@Borrow');
+//Route::get('borrow', function(){
+//	return View::make('pages.test')->with('information' , 'haha');
+//});
+
 Route::get('Login', function(){
 	return View::make('pages.login');
 });
