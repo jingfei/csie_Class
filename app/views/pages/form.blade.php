@@ -21,12 +21,17 @@ $(document).ready(function(){
 			<fieldset class="boxBody">
 			
 			<label> 借用者 </label>
-			<input type="text" value="{{Session::get('user')}}" name="form_user" readonly/>
+			<input type="text" value="{{$user}}" name="form_user" readonly/>
 			
 			<label style="display:inline"> 日期 </label>
+			@if(!$old)
+			<!--新的資料才需要-->
 			&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="form_repeat" value="Repeat" style="text-align:right;vertical-align:middle" onClick="ShowCycle(this);"/>連續借用
+			@endif
 			<input type="text" value="{{$year.' 年 '.$month.' 月 '.$day.' 日'}}" readonly/>
 			<input type="hidden" name="date_start" value="{{date("Y-m-d", mktime(0,0,0,$month,$day,$year))}}" />
+			@if(!$old)
+			<!--新的資料才需要-->
 
 			<div class="Repeat" style="display:none;margin:10px;padding:5px;border:1px dashed black;">
 				間隔及循環方式:
@@ -83,14 +88,14 @@ $(document).ready(function(){
 				<br/>
 				<!-- date_end -->
 			</div>
-			
+			@endif
 			<label> 課程 / 活動名稱 </label>
-			<input type="text" name="title" required/>
+			<input type="text" name="title" @if($old) value="{{$old->reason}}" @endif required/>
 			
 			<label> 教室 </label>
 			<select name="form_class" id="form_class">
 				@for($i=0; $i<count($data); $i++)
-					@if(Input::get('className')==$data[$i]->name)
+					@if($className==$data[$i]->name)
 						<option selected="selected">{{ $data[$i]->name.' '.$data[$i]->type }}</option>
 					@else
 						<option>{{ $data[$i]->name.' '.$data[$i]->type }}</option>
@@ -99,32 +104,43 @@ $(document).ready(function(){
 			</select>
 
 			<label> 時間 </label>
-			<input type="hidden" name="time_start" val="{{Input::get('startTime')}}" />
-			<span id="time_start">{{Input::get('startTime')}}</span>:00
+			@if(!$old)
+			<input type="hidden" name="time_start" value="{{$startTime}}" />
+			<span id="time_start">{{$startTime}}</span>:00
+			@else
+			<select name="time_start">
+				@for($i=8; $i<22; ++$i)
+					<option @if($startTime==$i) selected="selected" @endif >{{ $i }}:00</option>
+				@endfor
+			</select>
+			@endif
 			~
 			<select name="time_end" id="time_end">
-				@for($i=9; $i<23; $i++)
-					@if($i>= Input::get('endTime'))
-					<option>{{ $i }}:00</option>
+				@for($i=9; $i<23; ++$i)
+					@if($old || $i>= $endTime)
+						<option @if($endTime==$i) selected="selected" @endif >{{ $i }}:00</option>
 					@endif
 				@endfor
 			</select>
 			
 			<label> email </label>
-			<input type="text" name="form_email" required/>
+			<input type="text" name="form_email" @if($old) value="{{$old->email}}" @endif required/>
 			
 			<label> 聯絡電話 </label>
-			<input type="text" name="form_tel" required/>
+			<input type="text" name="form_tel" @if($old) value="{{$old->phone}}" @endif required/>
 			
 			<label> 借用事由 </label>
-			<input type="radio" name="form_reason" value="課程" checked required/>課程 &nbsp;&nbsp;
-			<input type="radio" name="form_reason" value="會議" required/>會議 &nbsp;&nbsp;
-			<input type="radio" name="form_reason" value="活動" required/>活動 &nbsp;&nbsp;
+			<input type="radio" name="form_reason" value="課程" @if(!$old || $old->type==1) checked @endif required/>課程 &nbsp;&nbsp;
+			<input type="radio" name="form_reason" value="會議" @if($old && $old->type==2) checked @endif required/>會議 &nbsp;&nbsp;
+			<input type="radio" name="form_reason" value="活動" @if($old && $old->type==3) checked @endif required/>活動 &nbsp;&nbsp;
 
 			</fieldset>
 	
 			<footer>
-			<input type="submit" value="借用" class="btnLogin" tabindex="4">
+			@if($old)
+			<input type="hidden" name="old" value="{{$old->id}}" />
+			@endif
+			<input type="submit" value="@if($old)更新 @else借用 @endif" class="btnLogin" tabindex="4" />
 			</footer>
 		{{ Form::close() }}
 		</div>

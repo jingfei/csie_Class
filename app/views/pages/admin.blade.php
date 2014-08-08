@@ -147,7 +147,7 @@ function ShowForm1(){
 						@if($item->repeat)
 							<a href="{{URL::action('AdminController@show')}}">連續查詢</a> / 
 						@endif
-						修改 / 
+						<a href="{{URL::to('modifyForm/0/0/0/'.$item->id)}}">修改</a> / 
 						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('AdminDelete/'.$item->id)}}');">刪除</a>
 					</td>
 				</tr>

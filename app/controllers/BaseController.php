@@ -40,4 +40,20 @@ class BaseController extends Controller {
 		return $date;
 	}
 
+	protected function CheckUserSession($user){
+		if(!Session::has('user'))
+			return false;
+		if(Session::get('user')!='admin'){
+			$tmpUser = DB::table('userList')
+						->where('id', $user)
+						->first()
+						->userid;
+			if(!$tmpUser)
+				return false;
+			if($tmpUser!=Session::get('user'))
+				return false;
+		}
+		return true;
+	}
+
 }
