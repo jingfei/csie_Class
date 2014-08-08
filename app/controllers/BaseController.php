@@ -15,7 +15,7 @@ class BaseController extends Controller {
 		}
 	}
 
-	public function dateLimit(){
+	public static function dateLimit(){
 		/* 系統開放日期 */
 		$start = DB::table('Admin')
 						->where('name', 'date_start')

@@ -13,8 +13,8 @@
 
 Route::get('/', function()
 {
-//	return View::make('index');
-	return View::make('pages.home');
+	$dateLimit = BaseController::dateLimit();
+	return View::make('pages.home')->with('dateLimit', $dateLimit);
 });
 
 Route::get('class/{year?}/{month?}/{day?}', 'ClassController@getClass');
