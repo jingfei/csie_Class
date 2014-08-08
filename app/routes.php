@@ -19,7 +19,7 @@ Route::get('/', function()
 
 Route::get('class/{year?}/{month?}/{day?}', 'ClassController@getClass');
 
-Route::get('modifyForm/{year}/{month}/{day}/{old?}', 'ClassController@classForm');
+Route::match(array('POST', 'GET'), 'modifyForm/{year}/{month}/{day}/{old?}', 'ClassController@classForm');
 
 Route::post('borrow', 'ClassController@Borrow');
 

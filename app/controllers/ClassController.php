@@ -80,7 +80,7 @@ class ClassController extends \BaseController {
 			$endTime = $result->end_time;
 		}
 		else{
-			$className = htmlspecialchars( Input::get('ClassName') );
+			$className = htmlspecialchars( Input::get('className') );
 			$startTime = htmlspecialchars( Input::get('startTime') );
 			$endTime = htmlspecialchars( Input::get('endTime') );
 		}
