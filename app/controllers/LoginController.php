@@ -10,6 +10,15 @@ class LoginController extends BaseController {
 			Session::put('user', 'admin');
 			return Redirect::to('/');
 		}
+		$inTable = DB::table('userList')->where('userid', $user)->first()->password;
+		if($inTable){
+			if($inTable==md5($passwd)){
+				Session::put('user', $user);
+				return Redirect::to('/');
+			}
+			else
+				return '<script>alert("Wrong Password");</script>'.Redirect::to('Login');
+		}
 		$link = @imap_open("{mail.ncku.edu.tw:143/novalidate-cert}", $user, $passwd);
 	//	or die('Cannot connect to Friggin Server: ' . print_r(imap_errors()));
 //		imap_errors();
