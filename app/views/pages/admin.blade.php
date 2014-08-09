@@ -8,6 +8,35 @@ $(document).ready(function(){
 function ShowForm1(){
 	$( "#admin-form1" ).dialog( "open" );
 }
+
+function adminQuery(){
+	/*date1*/
+	var y1 = $('#y1').val();
+	var m1 = $('#m1').val();
+	if(m1.length==1) m1 = '0'+m1; //兩位數
+	var d1 = $('#d1').val();
+	if(d1.length==1) d1 = '0'+d1; //兩位數
+	var date1 = y1+"-"+m1+"-"+d1;
+	/*******/
+	/*date2*/
+	var y2 = $('#y2').val();
+	if(!y2) y2=y1;
+	var m2 = $('#m2').val();
+	if(!m2) m2=m1;
+	if(m2.length==1) m2 = '0'+m2; //兩位數
+	var d2 = $('#d2').val();
+	if(d2.length==1) d2 = '0'+d2; //兩位數
+	var date2 = y2+"-"+m2+"-"+d2;
+	if(!d2) date2 = date1; 
+	/*******/
+	var Class = $('#adminClass').val();
+	if(!Class) Class=0;
+	var User = $('#adminUser').val();
+	var Url = "/Class2014/Admin/"+date1+"/"+date2;
+	if(Class!==null) Url += "/"+Class;
+	if(User) Url += "/"+User;
+	location.href = Url;
+}
 </script>
 <style>
 .ui-dialog-titlebar-close{
@@ -120,28 +149,45 @@ function ShowForm1(){
 			<hr style="border-top: dashed black 1px;width:96%;margin:20px 2%;"/>
 			<div style="margin:10px">
 				<span style="font-size:1.5em">全部課程異動</span>
-				&nbsp;&nbsp;
-				<a href="" style="text-decoration:underline">查詢選項</a>
-				<br/><br/>
+				<div style="text-align:right;margin:8px 0;border:1px dotted #b0cdcb;padding:5px;line-height:2em;">
+					<form>
+					查詢: &nbsp;
+					<input type="text" size="5" id="y1" value="{{$date1['year']}}" />年
+					<input type="text" size="3" id="m1" value="{{$date1['month']}}"/>月
+					<input type="text" size="3" id="d1" value="{{$date1['day']}}"/>日
+					&nbsp;~&nbsp;
+					<input type="text" size="5" id="y2" value="{{$date2['year']}}"/>年
+					<input type="text" size="3" id="m2" value="{{$date2['month']}}"/>月
+					<input type="text" size="3" id="d2" value="{{$date2['day']}}"/>日
+					&nbsp;&nbsp;&nbsp;
+					教室編號 <input type="text" size="7" id="adminClass" placeholder="不限" 
+					@if($Class) value="{{$Class}}" @endif />
+					&nbsp;&nbsp;&nbsp;
+					借用者 <input type="text" size="20" id="adminUser" placeholder="不限" 
+					@if($User) value="{{$User}}" @endif />
+					&nbsp;&nbsp;&nbsp;
+					<button type="submit" onClick="adminQuery();return false;">送出</button>
+					</form>
+				</div>
 				<table class="bordered">
 				<tr>
 					<th>日期</th>
-					<th>教室</th>
+					<th>教室編號</th>
 					<th>時間</th>
 					<th>課程 / 活動名稱</th>
 					<th>借用者</th>
-					<th>email</th>
+					<th style="width:200px">email</th>
 					<th>聯絡電話</th>
 					<th>操作</th>
 				</tr>
 				@foreach($list as $item)
 				<tr>
 					<td>{{$item->date}}</td>
-					<td>{{$className[$item->classroom]}}</td>
+					<td>{{$item->classroom}}</td>
 					<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
 					<td>{{$item->reason}}</td>
 					<td>{{$item->username}}</td>
-					<td>{{$item->email}}</td>
+					<td style="width:200px;display:inline-block;overflow:auto;">{{$item->email}}</td>
 					<td>{{$item->phone}}</td>
 					<td>
 						@if($item->repeat)

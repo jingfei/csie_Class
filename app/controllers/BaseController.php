@@ -15,6 +15,16 @@ class BaseController extends Controller {
 		}
 	}
 
+	protected function eachDate($all=null){
+		if(!$all) $all=date("Y-m-d");
+		$date = array();
+		$date['all'] = $all;
+		$date['year'] = strtok($all, '-');
+		$date['month'] = strtok('-');
+		$date['day'] = strtok('-');
+		return $date;
+	}
+
 	public static function dateLimit(){
 		/* 系統開放日期 */
 		$start = DB::table('Admin')

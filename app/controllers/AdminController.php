@@ -2,23 +2,39 @@
 
 class AdminController extends BaseController {
 
-	public function show($date=null, $date2=null, $factor=null, $detail=null){
+	public function show($date=null, $date2=null, $Class=0, $User=null){
 		if(Session::get('user')!='admin')
 			return "<script>something wrong</script>".Redirect::to('/');
 		$dateLimit = self::dateLimit();
-		/* 課程異動查詢 */
-		if(!$date) $date = date("Y-m-d");
-		$limit = DB::table('BorrowList') -> whereBetween('date', array($dateLimit['start']['all'],$dateLimit['end']['all']));
-		$list = $limit  ->where('date', $date)
-						->get();	
-		/****************/
 		/* classList */
 		$result = DB::table('classList')->get();
-		$className = array('no');
-		foreach($result as $tmpClass)
-			array_push($className, $tmpClass->name);
+		$className = array();
+		$i = 0;
+		foreach($result as $tmpClass){
+			$className[++$i] = $tmpClass->name;
+			$className[$tmpClass->name] = $tmpClass->id;
+		}
 		/*************/
-		return View::make('pages.admin')->with('date', $dateLimit)->with('list', $list)->with('className',$className);
+		/* 課程異動查詢 */
+		if(!$date) $date = date("Y-m-d");
+		if(!$date2) $date2 = $date;
+		$limit = DB::table('BorrowList') 
+					->whereBetween('date', array($date, $date2));
+		if($Class && $Class!=0)
+			$limit = $limit->where('classroom', $className[$Class]);
+		if($User)
+			$limit = $limit->where('username', $User);
+		$limit = $limit->get();
+		foreach($limit as $tmp)
+			$tmp->classroom=$className[$tmp->classroom];
+		/****************/
+		return View::make('pages.admin')
+					->with('date', $dateLimit)		//系統開放時間
+					->with('list', $limit)			//查詢的資料
+					->with('date1', self::eachDate($date))	//查詢起始日期
+					->with('date2', self::eachDate($date2))	//查詢終止日期
+					->with('Class', $Class)			//查詢教室
+					->with('User', $User);			//查詢使用者
 	}
 
 	public function deleteBorrow($_id){
