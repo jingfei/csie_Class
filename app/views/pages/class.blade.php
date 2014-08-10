@@ -33,6 +33,9 @@ $(document).ready(function(){
 				</td>
 				<td style="width:50%;font-size:2.5em;vertical-align:middle">
 					{{$year." / ".$month." / ".$day}}
+					@if($warning)
+					({{$warning}})
+					@endif
 				</td>
 				<td style="width:25%">
 					<img src="{{asset('img/left.png')}}"  onClick="ClassPage(1)"/>
@@ -61,7 +64,9 @@ $(document).ready(function(){
 						<tr>
 							<th class="class_time">{{$time}}</th>
 						@for($i=($classpage-1)*6+1; $i<=$classpage*6 &&$i<=count($data); $i++)
-							@if($table[$time-8][$i][0]==-1)
+							@if($table[$time-8][$i][0]==-1 && $warning)
+							<td class="class_inner">
+							@elseif($table[$time-8][$i][0]==-1)
 							<td class="class_inner no_event" name="{{$time.';'.$data[$i-1]->name}}">
 								<div class="outer_div">
 								<div class="inner_div">
@@ -70,7 +75,17 @@ $(document).ready(function(){
 							@elseif($table[$time-8][$i][0]==1)
 							<td class="class_inner">
 								<div class="outer_div">
+								@if(!$warning && $table[$time-8][$i][3])
+								<div class="inner_div user_div">
+									<br/>
+									@if($table[$time-8][$i][4])
+										<img src="{{asset('img/query.ico')}}" width="25px" alt="連續查詢" onCLick="location.href='{{URL::to('Repeat/'.$table[$time-8][$i][4])}}';" />
+									@endif
+									<img src="{{asset('img/edit.ico')}}" width="25px" alt="修改" onClick="location.href='{{URL::to('modifyForm/0/0/0/'.$table[$time-8][$i][3])}}';" />
+									<img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除" onClick="if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/'.$table[$time-8][$i][3])}}');" />
+								@else
 								<div class="inner_div">
+								@endif
 									<br/>
 									{{$table[$time-8][$i][1]}}<br/>
 									<small>{{$table[$time-8][$i][2]}}</small>
@@ -79,7 +94,17 @@ $(document).ready(function(){
 							@elseif($table[$time-8][$i][0]>1)
 							<td class="class_inner" rowspan="{{$table[$time-8][$i][0]}}">
 								<div class="outer_div">
+								@if(!$warning && $table[$time-8][$i][3])
+								<div class="inner_div user_div">
+									<br/>
+									@if($table[$time-8][$i][4])
+										<img src="{{asset('img/query.ico')}}" width="25px" alt="連續查詢" onCLick="location.href='{{URL::to('Repeat/'.$table[$time-8][$i][4])}}';" />
+									@endif
+									<img src="{{asset('img/edit.ico')}}" width="25px" alt="修改" onClick="location.href='{{URL::to('modifyForm/0/0/0/'.$table[$time-8][$i][3])}}';" />
+									<img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除" onClick="if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/'.$table[$time-8][$i][3])}}');" />
+								@else
 								<div class="inner_div">
+								@endif
 									<br/>
 									{{$table[$time-8][$i][1]}}<br/>
 									<small>{{$table[$time-8][$i][2]}}</small>

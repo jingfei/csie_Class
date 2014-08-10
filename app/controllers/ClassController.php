@@ -13,7 +13,7 @@ class ClassController extends \BaseController {
 	public function FindDate($month, $day, $year){
 		$date = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		$date = DB::table('BorrowList')
-				->select('classroom', 'start_time', 'end_time', 'username', 'reason')
+				->select('id', 'classroom', 'start_time', 'end_time', 'username', 'reason', 'repeat')
 				->where('date', $date)
 				->orderBy('classroom')
 				->orderBy('start_time')
@@ -33,6 +33,15 @@ class ClassController extends \BaseController {
 			$table[$obj->start_time-8][$obj->classroom][0] = $during;
 			$table[$obj->start_time-8][$obj->classroom][1] = $obj->reason;
 			$table[$obj->start_time-8][$obj->classroom][2] = $obj->username;
+			/* 可否編輯/刪除 */
+			if(Session::get('user')=='admin')
+				$table[$obj->start_time-8][$obj->classroom][3] = $obj->id;
+			else if($obj->username==Session::get('username'))
+				$table[$obj->start_time-8][$obj->classroom][3] = $obj->id;
+			else
+				$table[$obj->start_time-8][$obj->classroom][3] = false;
+			/*****************/
+			$table[$obj->start_time-8][$obj->classroom][4] = $obj->repeat; /* 是否重複 */
 			for($i=$obj->start_time-8+1, $j=1; $j<$during; $j++, $i++)
 				$table[$i][$obj->classroom][0] = 0;
 		}
@@ -45,15 +54,17 @@ class ClassController extends \BaseController {
 		if(!$day) $day=date("d"); 
 		$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		$dateLimit = self::dateLimit();
+		$warning = null;
 		if($thisDate>$dateLimit['end']['all'] || $thisDate<$dateLimit['start']['all'])
-			return "<script>alert('日期錯誤');</script>".Redirect::to('/');
+			$warning = "不開放借用";
+		if(Session::get('user')=='admin') $warning=null;
 		$data = self::FindClass();
 		$date = self::FindDate($month, $day, $year);
 		$table = self::SetTable($date, count($data));
-		return View::make('pages.class')->with('data',$data)->with('table',$table)->with('date', $date)->with('month', $month)->with('year', $year)->with('day', $day);
+		return View::make('pages.class')->with('data',$data)->with('table',$table)->with('date', $date)->with('month', $month)->with('year', $year)->with('day', $day)->with('warning', $warning);
 	}
 
-	public function classForm($year, $month, $day, $old=null){
+	public function classForm($year, $month, $day, $old=null, $repeat=null){
 		if(!Session::has('user'))
 			return "<script>alert('請登入');</script>".Redirect::to('Login');
 		$diffUser=null;
@@ -62,8 +73,9 @@ class ClassController extends \BaseController {
 					->first()
 					->username;
 		$result = null;
-		if($old){
-			$result = DB::table('BorrowList')->where('id', $old)->first();
+		if($old || $repeat){
+			if($old) $result = DB::table('BorrowList')->where('id', $old)->first();
+			else $result = DB::table('BorrowList')->where('repeat', $repeat)->first();
 			if(!$result) 
 				return "<script>alert('something wrong...');</script>".Redirect::to('/');
 			if(!self::CheckUserSession($result->user_id))
@@ -85,12 +97,17 @@ class ClassController extends \BaseController {
 			$endTime = htmlspecialchars( Input::get('endTime') );
 		}
 		$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
+		/* 檢查日期 （管理者除外）*/
 		$dateLimit = self::dateLimit();
-		if($thisDate>$dateLimit['end']['all'] || $thisDate<$dateLimit['start']['all'])
+		if(!$repeat && Session::get('user')!='admin' && ($thisDate>$dateLimit['end']['all'] || $thisDate<$dateLimit['start']['all']) )
 			return "<script>alert('日期錯誤');</script>".Redirect::to('/');
+		/**************************/
 		$data = self::FindClass();
+		/* reason */
+		$reason = DB::table('typeList')->get();
 		return View::make('pages.form')
 					->with('data',$data)
+					->with('reason', $reason)
 					->with('month', $month)
 					->with('year', $year)
 					->with('day', $day)
@@ -98,14 +115,54 @@ class ClassController extends \BaseController {
 					->with('old', $result)
 					->with('className', $className)
 					->with('startTime', $startTime)
-					->with('endTime', $endTime);
+					->with('endTime', $endTime)
+					->with('repeat', $repeat);
+	}
+
+	public function deleteBorrow($_id, $repeatId=null){
+		if(!$repeatId) $data = DB::table('BorrowList')->where('id', $_id);
+		else $data = DB::table('BorrowList')->where('repeat', $repeatId);
+		if(!$data->first())
+			return "<script>something wrong</script>".Redirect::to('/');
+		if(Session::get('user')!='admin' && $data->first()->username!=Session::get('username'))
+			return "<script>something wrong</script>".Redirect::to('/');
+		$date = self::eachDate($data->first()->date);
+		$data->delete();
+		return "<script>alert('刪除成功');</script>".Redirect::to('class/'.$date['year'].'/'.$date['month'].'/'.$date['day']);
+	}
+
+	public function repeatQuery($_id){
+		$dateLimit = self::dateLimit();
+		/* classList */
+		$result = DB::table('classList')->get();
+		$className = array();
+		$i = 0;
+		foreach($result as $tmpClass){
+			$className[++$i] = $tmpClass->name;
+			$className[$tmpClass->name] = $tmpClass->id;
+		}
+		/*************/
+		$limit = DB::table('BorrowList')
+					->where('repeat', $_id)
+					->orderBy('date')
+					->get();
+		foreach($limit as $tmp)
+			$tmp->classroom=$className[$tmp->classroom];
+		/* 可否修改 */
+		$change = true;
+		if(Session::get('user')!='admin' && $limit[0]->username!=Session::get('username'))
+			$change = false;
+		/************/
+		return View::make('pages.repeatQuery')
+					->with('change', $change)
+					->with('list', $limit);
 	}
 
 	public function Borrow(){
 		if(!Session::has('user'))
 			return "<script>alert('請登入');</script>".Redirect::to('Login');
 		$user = htmlspecialchars( Input::get('form_user') );
-		$old = Input::get('old'); 
+		$old = htmlspecialchars( Input::get('old') ); 
 		if($old && Session::get('user')!='admin'){ //檢查post ID是否為本人
 			$result = DB::table('BorrowList')
 						->where('id', $old)
@@ -113,6 +170,7 @@ class ClassController extends \BaseController {
 			if(!self::CheckUserSession($result->user_id))
 				return "<script>alert('something wrong...');</script>".Redirect::to('/');
 		}
+		$old_repeat = htmlspecialchars( Input::get('old_repeat') );
 		$userInfo = DB::table('userList')
 						->where('username', $user)
 						->first();
@@ -131,11 +189,11 @@ class ClassController extends \BaseController {
 		$tel = htmlspecialchars( Input::get('form_tel') );
 		$type = htmlspecialchars( Input::get('form_reason') );
 		$typeId = -1;
-		/*檢查日期*/
+		/*檢查日期 (管理者除外) */
 		$dateLimit = self::dateLimit();
-		if($date_start>$dateLimit['end']['all'] || $date_start<$dateLimit['start']['all'])
+		if(!$old_repeat && Session::get('user')!='admin' && ($date_start>$dateLimit['end']['all'] || $date_start<$dateLimit['start']['all']) )
 			return "<script>alert('日期錯誤');</script>".Redirect::to('/');
-		/**********/
+		/************************/
 		/* repeat */
 		$Repeat = Input::get('form_repeat') ? true : false;
 		if($old) $Repeat=false;
@@ -175,9 +233,63 @@ class ClassController extends \BaseController {
 				$typeId = $tmpType->id;
 				break;
 			}
-		if($typeId == -1) return "<script>alert('請選擇借用事由');</script>".Redirect::to('class');
+		if($typeId == -1)
+			return "<script>alert('請選擇借用事由');</script>".Redirect::to('class');
 		/*************/
+		/* data */
+		$eachDate = self::eachDate($date_start);
+		$ar=array();
+		if(!$old_repeat) $ar['date'] = $date_start;
+		$ar['classroom'] = $classId;
+		$ar['start_time'] = $time_start;
+		$ar['end_time'] = $time_end;
+		$ar['user_id'] = $userInfo->id;
+		$ar['username'] = $userInfo->username;
+		$ar['phone'] = $tel;
+		$ar['email'] = $email;
+		$ar['reason'] = $title;
+		$ar['type'] = $typeId;
+		$ar['repeat'] = 0; //若有修改，返回預設
+		/********/
 		/* check */
+		$cannotClass = array();
+		$canClass = array();
+		if($old_repeat){
+			/* 更新連續資料 */
+			$dataTmp = DB::table('BorrowList')
+						->where('repeat', $old_repeat)
+						->get();
+			foreach($dataTmp as $tmp){
+				$tmp=$tmp->date;
+				$result = null;
+				if(Session::get('user')=='admin' || $tmp <= $dateLimit['end']['all']) //未超出日期範圍
+					$result = DB::table('BorrowList')
+								->select('start_time', 'end_time')
+								->where('date', $tmp)
+								->where('classroom', $classId)
+								->whereNotIn('repeat', array($old_repeat))
+								->get();
+				if(self::CheckRepeat($result,$time_start,$time_end)) //if someone borrow the class first
+					array_push($cannotClass, $tmp);
+				else
+					array_push($canClass, $tmp);
+			}
+			if(!empty($cannotClass)){
+				$warning = "更新失敗\\n";
+				foreach($cannotClass as $tmp)
+					$warning .= " ".$tmp."\\n";
+				$warning .= "以上日期有誤 請檢查";
+			}
+			else{
+				$ar['repeat'] = $old_repeat;
+				unset($ar['date']);
+				$result = DB::table('BorrowList')
+						->where('repeat', $old_repeat)
+						->update($ar);
+				$warning = "更改成功！！";
+			}
+			return "<script>alert('$warning');</script>".Redirect::to('Repeat/'.$old_repeat);
+		}
 		else if(!$Repeat){
 			$result = DB::table('BorrowList')
 						->where('date', $date_start)
@@ -189,49 +301,34 @@ class ClassController extends \BaseController {
 			/* if someone has borrowed the class first */
 			if(count($result)){ 
 				$warning = $class."教室已於".$date_start." ".$result[0]->start_time.":00借出，\\n請確認後重新借用";
-				return "<script>alert('$warning');</script>".Redirect::to('class');
+				return "<script>alert('$warning');</script>".Redirect::to('class/'.$eachDate['year'].'/'.$eachDate['month'].'/'.$eachDate['day']);
 			}
 			/*******************************************/
 			/* 更新資料 */
 			else if($old){  
-				$ar=array();
-				$ar['date'] = $date_start;
-				$ar['classroom'] = $classId;
-				$ar['start_time'] = $time_start;
-				$ar['end_time'] = $time_end;
-				$ar['user_id'] = $userInfo->id;
-				$ar['username'] = $userInfo->username;
-				$ar['phone'] = $tel;
-				$ar['email'] = $email;
-				$ar['reason'] = $title;
-				$ar['type'] = $typeId;
 				$result = DB::table('BorrowList')
 							->where('id', $old)
 							->update($ar);
-				$year = strtok($date_start, '-');
-				$month = strtok('-');
-				$day = strtok('-');
-				return "<script>alert('更新成功');</script>".Redirect::to('class/'.$year.'/'.$month.'/'.$day);
+				return "<script>alert('更新成功');</script>".Redirect::to('class/'.$eachDate['year'].'/'.$eachDate['month'].'/'.$eachDate['day']);
 			}
 			/************/
 			else{
+				$result = DB::table('BorrowList')->insert($ar);
 				$warning = $class."教室於".$date_start."   ".$time_start.":00 ~ ".$time_end.":00 成功借用!!";
-				return "<script>alert('$warning');</script>".Redirect::to('class');
+				return "<script>alert('$warning');</script>".Redirect::to('class/'.$eachDate['year'].'/'.$eachDate['month'].'/'.$eachDate['day']);
 			}
 		}
-		else{
-			$cannotClass = array();
-			$canClass = array();
+		else{  //Repeat
 			if($dateWay == 1){ //循環方式為日期
 				for( $tmp=$date_start; $tmp<=$dateTmp; $tmp=self::NextDate($intervalUnit, $interval, $tmp) ){
 					$result = null;
-					if($tmp <= $dateLimit['end']['all']) //未超出日期範圍
+					if(Session::get('user')=='admin' || $tmp <= $dateLimit['end']['all']) //未超出日期範圍
 						$result = DB::table('BorrowList')
+									->select('start_time', 'end_time')
 									->where('date', $tmp)
 									->where('classroom', $classId)
-									->whereBetween('start_time', array($time_start,$time_end-1))
 									->get();
-					if(count($result)) //if someone borrow the class first
+					if(self::CheckRepeat($result,$time_start,$time_end)) //if someone borrow the class first
 						array_push($cannotClass, $tmp);
 					else
 						array_push($canClass, $tmp);
@@ -241,13 +338,13 @@ class ClassController extends \BaseController {
 				$tmp=$date_start;
 				for($i=0; $i<$dateTmp; ++$i){
 					$result = null;
-					if($tmp <= $dateLimit['end']['all']) //未超出日期範圍
+					if(Session::get('user')=='admin' || $tmp <= $dateLimit['end']['all']) //未超出日期範圍
 						$result = DB::table('BorrowList')
+									->select('start_time', 'end_time')
 									->where('date', $tmp)
 									->where('classroom', $classId)
-									->whereBetween('start_time', array($time_start,$time_end-1))
 									->get();
-					if(count($result)) //if someone borrow the class first
+					if(self::CheckRepeat($result,$time_start,$time_end)) //if someone borrow the class first
 						array_push($cannotClass, $tmp);
 					else
 						array_push($canClass, $tmp);
@@ -262,18 +359,31 @@ class ClassController extends \BaseController {
 				$warning .= "無法借用或借出;\\n\\n";
 			}
 			if(!empty($canClass)){
+				$FirstId = 0;
 				$warning .= "於\\n";
-				foreach($canClass as $tmp)
+				foreach($canClass as $tmp){
+					if($FirstId==0){
+						$FirstId = DB::table('BorrowList')->insertGetId($ar);
+						$ar['repeat']=$FirstId;
+						$result = DB::table('BorrowList')
+							->where('id', $FirstId)
+							->update($ar);
+					}
+					else{
+						$ar['date'] = $tmp;
+						$result = DB::table('BorrowList')->insert($ar);
+					}
 					$warning .= " ".$tmp."\\n";
+				}
 				$warning .= "成功借用!!";
 			}
 			else
 				$warning .= "借用未成功";
-			return "<script>alert('$warning');</script>".Redirect::to('class');
+			return "<script>alert('$warning');</script>".Redirect::to('class/'.$eachDate['year'].'/'.$eachDate['month'].'/'.$eachDate['day']);
 		}
 	}
 
-	function NextDate($way, $interval, $date){
+	private function NextDate($way, $interval, $date){
 		$tmp = "";
 		if($way == "天")
 			$tmp = strtotime(date("Y-m-d", strtotime($date)) . " +".$interval." day");
@@ -282,6 +392,36 @@ class ClassController extends \BaseController {
 		else
 			$tmp = strtotime(date("Y-m-d", strtotime($date)) . " +".$interval." month");
 		return date("Y-m-d", $tmp);
+	}
+
+	private function CheckRepeat($other, $start, $end){
+		$Repeat = false;
+		$time=array();
+		$time[0]=$start;
+		$time[1]=$end;
+		foreach($other as $tmp){
+			$time1=array();
+			$time2=array();
+			if($time[0] < $tmp->start_time){
+				$time1 = $time;
+				$time2[0] = $tmp->start_time;
+				$time2[1] = $tmp->end_time;
+			}
+			else if($time[0] > $tmp->start_time){
+				$time2 = $time;
+				$time1[0] = $tmp->start_time;
+				$time1[1] = $tmp->end_time;
+			}
+			else{ //start time same
+				$Repeat=true;
+				break;
+			}
+			if($time1[1]>$time2[0]){ //conflict
+				$Repeat=true;
+				break;
+			}
+		}
+		return $Repeat;
 	}
 
 }

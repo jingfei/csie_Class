@@ -8,12 +8,14 @@ class LoginController extends BaseController {
 		$user = htmlspecialchars( Input::get('studentid') );
 		if($user == "admin" && md5($passwd)=="1080ff5e02a6b1b0292325f0e7eae8ec"){
 			Session::put('user', 'admin');
+			Session::put('username', '最高管理者');
 			return Redirect::to('/');
 		}
-		$inTable = DB::table('userList')->where('userid', $user)->first()->password;
-		if($inTable){
-			if($inTable==md5($passwd)){
+		$inTable = DB::table('userList')->where('userid', $user)->first();
+		if($inTable->password){
+			if($inTable->password==md5($passwd)){
 				Session::put('user', $user);
+				Session::put('username', $inTable->username);
 				return Redirect::to('/');
 			}
 			else
@@ -38,6 +40,7 @@ class LoginController extends BaseController {
 	public function logout(){
 		if (Session::has('user')){
 			Session::forget('user');
+			Session::forget('username');
 			return '<script>alert("Logout success!!");</script>'.Redirect::to('/');
 		}
 		else

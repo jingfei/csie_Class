@@ -23,6 +23,7 @@ $(document).ready(function(){
 			<label> 借用者 </label>
 			<input type="text" value="{{$user}}" name="form_user" readonly/>
 			
+			@if(!$repeat)
 			<label style="display:inline"> 日期 </label>
 			@if(!$old)
 			<!--新的資料才需要-->
@@ -89,6 +90,7 @@ $(document).ready(function(){
 				<!-- date_end -->
 			</div>
 			@endif
+			@endif
 			<label> 課程 / 活動名稱 </label>
 			<input type="text" name="title" @if($old) value="{{$old->reason}}" @endif required/>
 			
@@ -130,15 +132,18 @@ $(document).ready(function(){
 			<input type="text" name="form_tel" @if($old) value="{{$old->phone}}" @endif required/>
 			
 			<label> 借用事由 </label>
-			<input type="radio" name="form_reason" value="課程" @if(!$old || $old->type==1) checked @endif required/>課程 &nbsp;&nbsp;
-			<input type="radio" name="form_reason" value="會議" @if($old && $old->type==2) checked @endif required/>會議 &nbsp;&nbsp;
-			<input type="radio" name="form_reason" value="活動" @if($old && $old->type==3) checked @endif required/>活動 &nbsp;&nbsp;
+			@foreach($reason as $type)
+				<input type="radio" name="form_reason" value="{{$type->type}}" @if($old && $old->type==$type->id) checked @endif required/> {{$type->type}} &nbsp;&nbsp;
+			@endforeach
 
 			</fieldset>
 	
 			<footer>
 			@if($old)
 			<input type="hidden" name="old" value="{{$old->id}}" />
+			@endif
+			@if($repeat)
+			<input type="hidden" name="old_repeat" value="{{$repeat}}" />
 			@endif
 			<input type="submit" value="@if($old)更新 @else借用 @endif" class="btnLogin" tabindex="4" />
 			</footer>

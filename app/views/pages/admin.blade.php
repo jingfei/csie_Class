@@ -49,7 +49,7 @@ function adminQuery(){
 }
 </style>
 
-		<h1 class="content_title" style="font-size:220%;">系統設定 <small>管理者專用</small></h1>
+		<h1 class="content_title" style="font-size:220%;">課程管理 <small>管理者專用</small></h1>
 		<hr/>
 		<!-- form-start -->
 		<div id="admin-form1" title="class">
@@ -139,7 +139,7 @@ function adminQuery(){
 		<!-- form-end -->
 		<div style="font-size:1.3em">
 			<div style="margin:10px">
-				<span style="font-size:1.5em">系統開放日期：</span>
+				<span style="font-size:1.5em">開放登記日期：</span>
 				<span style="color:red" style="vertical-align:middle">
 					{{$date['start']['year']."年".$date['start']['month']."月".$date['start']['day']."日"}} ~ {{$date['end']['year']."年".$date['end']['month']."月".$date['end']['day']."日"}}
 				</span>
@@ -148,7 +148,7 @@ function adminQuery(){
 			</div>
 			<hr style="border-top: dashed black 1px;width:96%;margin:20px 2%;"/>
 			<div style="margin:10px">
-				<span style="font-size:1.5em">全部課程異動</span>
+				<span style="font-size:1.5em">課程異動</span>
 				<div style="text-align:right;margin:8px 0;border:1px dotted #b0cdcb;padding:5px;line-height:2em;">
 					<form>
 					查詢: &nbsp;
@@ -189,12 +189,12 @@ function adminQuery(){
 					<td>{{$item->username}}</td>
 					<td style="width:200px;display:inline-block;overflow:auto;">{{$item->email}}</td>
 					<td>{{$item->phone}}</td>
-					<td>
+					<td style="width:100px">
 						@if($item->repeat)
-							<a href="{{URL::action('AdminController@show')}}">連續查詢</a> / 
+							<a href="{{URL::to('Repeat/'.$item->repeat)}}"><img src="{{asset('img/query.ico')}}" width="25px" alt="連續查詢"/></a>
 						@endif
-						<a href="{{URL::to('modifyForm/0/0/0/'.$item->id)}}">修改</a> / 
-						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('AdminDelete/'.$item->id)}}');">刪除</a>
+						<a href="{{URL::to('modifyForm/0/0/0/'.$item->id)}}"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>
+						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/'.$item->id)}}');"><img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除"/></a>
 					</td>
 				</tr>
 				@endforeach

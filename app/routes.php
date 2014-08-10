@@ -19,16 +19,21 @@ Route::get('/', function()
 
 Route::get('class/{year?}/{month?}/{day?}', 'ClassController@getClass');
 
-Route::match(array('POST', 'GET'), 'modifyForm/{year}/{month}/{day}/{old?}', 'ClassController@classForm');
+Route::match(array('POST', 'GET'), 'modifyForm/{year}/{month}/{day}/{old?}/{repeat?}', 'ClassController@classForm');
 
 Route::post('borrow', 'ClassController@Borrow');
+
+Route::get('Delete/{_id}/{repeatId?}', 'ClassController@deleteBorrow');
+
+Route::get('Repeat/{_id}', 'ClassController@repeatQuery');
 
 /* admin */
 
 Route::get('Admin/{date?}/{date2?}/{factor?}/{detail?}', 'AdminController@show');
-Route::get('AdminDelete/{_id}', 'AdminController@deleteBorrow');
 
 Route::post('adminDate', 'AdminController@updateDate');
+
+Route::get('adminSetting', 'AdminController@adminSetting');
 
 /*********/
 

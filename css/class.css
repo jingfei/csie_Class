@@ -61,6 +61,8 @@
 	border-left: 0;
 }
 
+.user_div{background: #ff9aae;}
+
 .no_event{ cursor: pointer; }
 .no_event .inner_div{
 	width: 93px;

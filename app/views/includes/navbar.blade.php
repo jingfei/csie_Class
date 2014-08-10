@@ -1,7 +1,8 @@
 <nav>
 	<ul>
 		@if(Session::get('user')=='admin')
-			<li id="news"><a href="/Class2014/Admin" class="myButton">管理</a></li>
+			<li id="news"><a href="/Class2014/Admin" class="myButton">課程管理</a></li>
+			<li id="news"><a href="/Class2014/adminSetting" class="myButton">設定</a></li>
 		@endif
 		<li id="news"><a href="/Class2014/" class="myButton">查詢</a></li>
 		@if(Session::has('user'))

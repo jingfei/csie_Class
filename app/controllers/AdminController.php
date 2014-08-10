@@ -19,7 +19,8 @@ class AdminController extends BaseController {
 		if(!$date) $date = date("Y-m-d");
 		if(!$date2) $date2 = $date;
 		$limit = DB::table('BorrowList') 
-					->whereBetween('date', array($date, $date2));
+					->whereBetween('date', array($date, $date2))
+					->orderBy('date') ->orderBy('classroom') ->orderBy('start_time');
 		if($Class && $Class!=0)
 			$limit = $limit->where('classroom', $className[$Class]);
 		if($User)
@@ -35,15 +36,6 @@ class AdminController extends BaseController {
 					->with('date2', self::eachDate($date2))	//查詢終止日期
 					->with('Class', $Class)			//查詢教室
 					->with('User', $User);			//查詢使用者
-	}
-
-	public function deleteBorrow($_id){
-		if(Session::get('user')!='admin')
-			return "<script>something wrong</script>".Redirect::to('/');
-		DB::table('BorrowList')
-			->where('id', $_id)
-			->delete();
-		return "<script>alert('刪除成功');</script>".Redirect::to('Admin');
 	}
 
 	public function updateDate(){
@@ -73,6 +65,15 @@ class AdminController extends BaseController {
 			return "<script>alert('更新成功');</script>".Redirect::to("Admin");
 		}
 	
+	}
+
+	public function adminSetting(){
+		/* classList */
+		$limit = DB::table('classList')->get();
+		$reason = DB::table('typeList')->get();
+		return View::make('pages.adminSetting')
+					->with('reason', $reason)
+					->with('list', $limit);
 	}
 
 }

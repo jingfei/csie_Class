@@ -8,7 +8,7 @@
 			教室登記 / 查詢開放時間：{{$dateLimit['start']['all']." ~ ".$dateLimit['end']['all']}}
 			</div>
 			<button class="innerButton" onClick="ClickToday()" >today</button>
-			<button class="innerButton" onClick="gotoDate()">登記</button>
+			<button class="innerButton" onClick="gotoDate()">選擇</button>
 		</div>
 {{HTML::style('css/date/jquery-ui-1.10.1.css')}}
 		<div class="datepicker ll-skin-lugo"></div>
