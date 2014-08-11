@@ -13,7 +13,7 @@ class ClassController extends \BaseController {
 	public function FindDate($month, $day, $year){
 		$date = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		$date = DB::table('BorrowList')
-				->select('id', 'classroom', 'start_time', 'end_time', 'username', 'reason', 'repeat')
+				->select('id', 'classroom', 'start_time', 'end_time', 'username', 'reason', 'repeat', 'type')
 				->where('date', $date)
 				->orderBy('classroom')
 				->orderBy('start_time')
@@ -28,6 +28,12 @@ class ClassController extends \BaseController {
 		$table = array();
 		for($i=8; $i<22; $i++) array_push($table, $tmp);
 		/******************/
+		/* find Type */
+		$result = DB::table('typeList') ->get();
+		$typeAr = array();
+		foreach($result as $tmp)
+			$typeAr[$tmp->id]=$tmp->color;
+		/*************/
 		foreach($date as $obj){
 			$during = $obj->end_time - $obj->start_time;
 			$table[$obj->start_time-8][$obj->classroom][0] = $during;
@@ -42,6 +48,7 @@ class ClassController extends \BaseController {
 				$table[$obj->start_time-8][$obj->classroom][3] = false;
 			/*****************/
 			$table[$obj->start_time-8][$obj->classroom][4] = $obj->repeat; /* 是否重複 */
+			$table[$obj->start_time-8][$obj->classroom][5] = $typeAr[$obj->type]; //type color
 			for($i=$obj->start_time-8+1, $j=1; $j<$during; $j++, $i++)
 				$table[$i][$obj->classroom][0] = 0;
 		}
@@ -61,7 +68,16 @@ class ClassController extends \BaseController {
 		$data = self::FindClass();
 		$date = self::FindDate($month, $day, $year);
 		$table = self::SetTable($date, count($data));
-		return View::make('pages.class')->with('data',$data)->with('table',$table)->with('date', $date)->with('month', $month)->with('year', $year)->with('day', $day)->with('warning', $warning);
+		$type = DB::table('typeList')->get();
+		return View::make('pages.class')
+					->with('data',$data)
+					->with('table',$table)
+					->with('type', $type)
+					->with('date', $date)
+					->with('month', $month)
+					->with('year', $year)
+					->with('day', $day)
+					->with('warning', $warning);
 	}
 
 	public function classForm($year, $month, $day, $old=null, $repeat=null){

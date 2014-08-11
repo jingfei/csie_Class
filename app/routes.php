@@ -35,6 +35,14 @@ Route::post('adminDate', 'AdminController@updateDate');
 
 Route::get('adminSetting', 'AdminController@adminSetting');
 
+Route::get('adminSettingType/{old?}', 'AdminController@adminSettingType');
+Route::match(array('POST', 'GET'), 'SettingType/{id?}', 'AdminController@SettingType');
+Route::get('DeleteType/{id}', 'AdminController@DeleteType');
+
+Route::get('adminSettingClassroom/{old?}', 'AdminController@adminSettingClassroom');
+Route::match(array('POST', 'GET'), 'SettingClassroom/{id?}', 'AdminController@SettingClassroom');
+Route::get('DeleteClassroom/{id}', 'AdminController@DeleteClassroom');
+
 /*********/
 
 /* login & logout */

@@ -15,20 +15,25 @@ td{vertical-align:middle;}
 				<tr>
 					<th>id</th>
 					<th>事由名稱</th>
+					<th>顏色</th>
 					<th>操作</th>
 				</tr>
 				@foreach($reason as $item)
-				<tr>
+				<tr id="{{'type'.$item->id}}">
 					<td>{{$item->id}}</td>
 					<td>{{$item->type}}</td>
+					<td>
+						<div style="display:inline-block;background:{{$item->color}};width:15px; height:15px;"></div>
+						{{$item->color}}
+					</td>
 					<td style="width:100px">
-						<a href="{{URL::to('modifyForm/0/0/0/'.$item->id)}}"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>
-						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/'.$item->id)}}');"><img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除"/></a>
+						<a href="{{URL::to('adminSettingType/'.$item->id)}}"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>
+						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('DeleteType/'.$item->id)}}');"><img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除"/></a>
 					</td>
 				</tr>
 				@endforeach
 				<tr>
-					<td colspan="3" style="text-align:right"><button>新增</button></td>
+					<td colspan="4" style="text-align:right"><button onClick="location.href='{{URL::to('adminSettingType')}}';">新增</button></td>
 				</tr>
 				</table>
 			</div>
@@ -44,18 +49,18 @@ td{vertical-align:middle;}
 					<th>操作</th>
 				</tr>
 				@foreach($list as $item)
-				<tr>
+				<tr id="{{'class'.$item->id}}">
 					<td>{{$item->id}}</td>
 					<td>{{$item->name}}</td>
 					<td>{{$item->type}}</td>
 					<td style="width:100px">
-						<a href="{{URL::to('modifyForm/0/0/0/'.$item->id)}}"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>
-						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/'.$item->id)}}');"><img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除"/></a>
+						<a href="{{URL::to('adminSettingClassroom/'.$item->id)}}"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>
+						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('DeleteClassroom/'.$item->id)}}');"><img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除"/></a>
 					</td>
 				</tr>
 				@endforeach
 				<tr>
-					<td colspan="4" style="text-align:right"><button>新增</button></td>
+					<td colspan="4" style="text-align:right"><button onClick="location.href='{{URL::to('adminSettingClassroom')}}';">新增</button></td>
 				</tr>
 				</table>
 			</div>

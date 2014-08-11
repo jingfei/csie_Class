@@ -34,7 +34,7 @@ $(document).ready(function(){
 				<td style="width:50%;font-size:2.5em;vertical-align:middle">
 					{{$year." / ".$month." / ".$day}}
 					@if($warning)
-					({{$warning}})
+					<span style="font-size:0.8em;">({{$warning}})</span>
 					@endif
 				</td>
 				<td style="width:25%">
@@ -43,6 +43,13 @@ $(document).ready(function(){
 				</tr></table>
 			</div>
 			<!-- class page -->
+			<div style="margin:5px;text-align:right;">
+				@foreach($type as $tmp)
+				<div style="background:{{$tmp->color}};display:inline-block;padding:3px" >{{$tmp->type}}</div>
+				@endforeach
+				<div style="background:#ff9aae;display:inline-block;padding:3px" >可修改</div>
+			</div>
+			<!-- table -->
 			@for($classpage=1; $classpage<=ceil(count($data)/6.0); $classpage++)
 			<div id="classpage{{$classpage}}" 
 						class="classpage @if($classpage==1) active @endif">
@@ -84,7 +91,7 @@ $(document).ready(function(){
 									<img src="{{asset('img/edit.ico')}}" width="25px" alt="修改" onClick="location.href='{{URL::to('modifyForm/0/0/0/'.$table[$time-8][$i][3])}}';" />
 									<img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除" onClick="if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/'.$table[$time-8][$i][3])}}');" />
 								@else
-								<div class="inner_div">
+								<div style="background:{{$table[$time-8][$i][5]}}" class="inner_div">
 								@endif
 									<br/>
 									{{$table[$time-8][$i][1]}}<br/>
@@ -103,7 +110,7 @@ $(document).ready(function(){
 									<img src="{{asset('img/edit.ico')}}" width="25px" alt="修改" onClick="location.href='{{URL::to('modifyForm/0/0/0/'.$table[$time-8][$i][3])}}';" />
 									<img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除" onClick="if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/'.$table[$time-8][$i][3])}}');" />
 								@else
-								<div class="inner_div">
+								<div style="background:{{$table[$time-8][$i][5]}}" class="inner_div">
 								@endif
 									<br/>
 									{{$table[$time-8][$i][1]}}<br/>

@@ -14,7 +14,7 @@
 .small_date{
 	position: fixed;
 	top: 200px;
-	left: 200px;
+	left: 13%;
 }
 
 .class_outer {
@@ -31,10 +31,10 @@
 	overflow-y: scroll;
 }
 
-.class_time{ width: 45px; height: 70px;}
+.class_time{ width: 45px; height: 70px; font-size: 1.2em; }
 
-.class_name{ height: 50px; }
-.class_inner{ height: 70px; }
+.class_name{ height: 50px; font-size: 1.2em; }
+.class_inner{ height: 70px; font-size: 1.2em; }
 
 .class_name,
 .class_inner {

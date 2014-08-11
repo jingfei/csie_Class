@@ -68,12 +68,84 @@ class AdminController extends BaseController {
 	}
 
 	public function adminSetting(){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
 		/* classList */
 		$limit = DB::table('classList')->get();
 		$reason = DB::table('typeList')->get();
 		return View::make('pages.adminSetting')
 					->with('reason', $reason)
 					->with('list', $limit);
+	}
+
+	public function adminSettingType($old=null){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$url = "SettingType";
+		if($old){
+			$old = DB::table('typeList')->where('id', $old)->first();
+			$url .= "/".$old->id;
+		}
+		return View::make('pages.adminTypeForm')
+					->with('old', $old)
+					->with('Url', $url);
+	}
+
+	public function DeleteType($id){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		DB::table('typeList')->where('id', $id)->delete();
+		return "<script>alert('刪除成功');</script>".Redirect::to('adminSetting');
+	}
+
+	public function SettingType($id=null){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$name = htmlspecialchars( Input::get('name') );
+		$color = htmlspecialchars( Input::get('color') );
+		$ar = array();
+		$ar['type'] = $name;
+		$ar['color'] = $color;
+		if($id)
+			DB::table('typeList')->where('id', $id)->update($ar);
+		else
+			DB::table('typeList')->insert($ar);
+		return "<script>alert('更新成功');</script>".Redirect::to('adminSetting');
+	}
+
+	public function adminSettingClassroom($old=null){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$url = "SettingClassroom";
+		if($old){
+			$old = DB::table('classList')->where('id', $old)->first();
+			$url .= "/".$old->id;
+		}
+		return View::make('pages.adminClassroomForm')
+					->with('old', $old)
+					->with('Url', $url);
+	}
+
+	public function DeleteClassroom($id){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		DB::table('classList')->where('id', $id)->delete();
+		return "<script>alert('刪除成功');</script>".Redirect::to('adminSetting');
+	}
+
+	public function SettingClassroom($id=null){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$name = htmlspecialchars( Input::get('name') );
+		$type = htmlspecialchars( Input::get('type') );
+		$ar = array();
+		$ar['name'] = $name;
+		$ar['type'] = $type;
+		if($id)
+			DB::table('classList')->where('id', $id)->update($ar);
+		else
+			DB::table('classList')->insert($ar);
+		return "<script>alert('更新成功');</script>".Redirect::to('adminSetting');
 	}
 
 }
