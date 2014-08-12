@@ -56,11 +56,18 @@ class BaseController extends Controller {
 		if(Session::get('user')!='admin'){
 			$tmpUser = DB::table('userList')
 						->where('id', $user)
-						->first()
-						->userid;
-			if(!$tmpUser)
+						->first();
+			if($tmpUser)
+				$tmpUser = $tmpUser->userid;
+			else
+				$tmpUser = DB::table('StudentCard')
+							->where('id', $user)
+							->first();
+			if($tmpUser)			
+				$tmpUser = $tmpUser->student_id;
+			else
 				return false;
-			if($tmpUser!=Session::get('user'))
+			if($tmpUser!=Session::get('user')) 
 				return false;
 		}
 		return true;

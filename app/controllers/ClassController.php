@@ -84,10 +84,18 @@ class ClassController extends \BaseController {
 		if(!Session::has('user'))
 			return "<script>alert('請登入');</script>".Redirect::to('Login');
 		$diffUser=null;
+		/*get username*/
 		$User = DB::table('userList')
 					->where('userid', Session::get('user'))
-					->first()
-					->username;
+					->first();
+		if($User)
+			$User = $User->username;
+		else
+			$User = DB::table('StudentCard')
+						->where('student_id', Session::get('user'))
+						->first()
+						->name;
+		/**************/
 		$result = null;
 		if($old || $repeat){
 			if($old) $result = DB::table('BorrowList')->where('id', $old)->first();
@@ -187,11 +195,26 @@ class ClassController extends \BaseController {
 				return "<script>alert('something wrong...');</script>".Redirect::to('/');
 		}
 		$old_repeat = htmlspecialchars( Input::get('old_repeat') );
+		/* 檢查使用者 */
 		$userInfo = DB::table('userList')
 						->where('username', $user)
 						->first();
-		if(Session::get('user')!='admin' && $userInfo->userid!=Session::get('user')) //登入與表單使用者不同
+		if($userInfo){
+			$user_id = $userInfo->id;
+			$username = $userInfo->username;
+			$userid = $userInfo->userid;
+		}
+		else{
+			$userInfo = DB::table('StudentCard')
+							->where('name', $user)
+							->first();
+			$user_id = $userInfo->id;
+			$username = $userInfo->name;
+			$userid = $userInfo->student_id;
+		}
+		if(Session::get('user')!='admin' && $userid!=Session::get('user')) //登入與表單使用者不同
 				return "<script>alert('something wrong...');</script>".Redirect::to('/');
+		/**************/
 		$date_start = htmlspecialchars( Input::get('date_start') );
 		$title = htmlspecialchars( Input::get('title') );
 		$class = htmlspecialchars( Input::get('form_class') );
@@ -259,8 +282,8 @@ class ClassController extends \BaseController {
 		$ar['classroom'] = $classId;
 		$ar['start_time'] = $time_start;
 		$ar['end_time'] = $time_end;
-		$ar['user_id'] = $userInfo->id;
-		$ar['username'] = $userInfo->username;
+		$ar['user_id'] = $user_id;
+		$ar['username'] = $username;
 		$ar['phone'] = $tel;
 		$ar['email'] = $email;
 		$ar['reason'] = $title;

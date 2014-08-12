@@ -12,7 +12,7 @@ class LoginController extends BaseController {
 			return Redirect::to('/');
 		}
 		$inTable = DB::table('userList')->where('userid', $user)->first();
-		if($inTable->password){
+		if($inTable && $inTable->password){
 			if($inTable->password==md5($passwd)){
 				Session::put('user', $user);
 				Session::put('username', $inTable->username);
@@ -30,13 +30,13 @@ class LoginController extends BaseController {
 //			imap_close($link); //Close the connection
 			$user = strtoupper($user);
 			$inTable = DB::table('StudentCard')->where('student_id', $user)->first();
-			if($inTable->name){
+			if($inTable && $inTable->name){
 				Session::put('user', $user);
-				Session::put('username', $inTable->username);
+				Session::put('username', $inTable->name);
 				return Redirect::to('/');
 			}
 			else
-				return "<script>alert('');</script>".Redirect::to('Login');
+				return "<script>alert('請先至學生證管理系統登記個人資料');</script>".Redirect::to('Login');
 		}
 		else{
 //			imap_close($link);
