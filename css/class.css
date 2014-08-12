@@ -45,6 +45,8 @@ br{
 .class_inner {
 	width: 105px;
 	vertical-align: middle;
+	border-left: none;
+	border-top: none;
 }
 
 .outer_div{
@@ -64,6 +66,7 @@ br{
 	border-bottom: 1px solid gray;
 	border-top: 0;
 	border-left: 0;
+	overflow: auto;
 }
 
 .user_div{background: #ff9aae;}

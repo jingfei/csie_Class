@@ -99,7 +99,7 @@ $(document).ready(function(){
 								</div></div>
 							</td>
 							@elseif($table[$time-8][$i][0]>1)
-							<td class="class_inner" rowspan="{{$table[$time-8][$i][0]}}">
+							<td class="class_inner" rowspan="{{$table[$time-8][$i][0]}}" style="height:{{70*$table[$time-8][$i][0]}}px;">
 								<div class="outer_div">
 								@if(!$warning && $table[$time-8][$i][3])
 								<div class="inner_div user_div">

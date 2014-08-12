@@ -78,6 +78,59 @@ class AdminController extends BaseController {
 					->with('list', $limit);
 	}
 
+	public function adminUser(){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		/* userList */
+		$limit = DB::table('userList')->get();
+		return View::make('pages.adminUser')
+					->with('list', $limit);
+	}
+
+	public function adminSettingUser($old=null){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$url = "SettingUser";
+		if($old){
+			$old = DB::table('userList')->where('id', $old)->first();
+			$url .= "/".$old->id;
+		}
+		return View::make('pages.adminUserForm')
+					->with('old', $old)
+					->with('Url', $url);
+	}
+
+	public function ResetUser($id){
+		if(Session::get('user')!='admin' || $id==0)
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		DB::table('userList')->where('id', $id)->update(array('password'=> md5('csie')));
+		return "<script>alert('密碼已重設為csie');</script>".Redirect::to('adminUser');
+	}
+
+	public function DeleteUser($id){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		DB::table('userList')->where('id', $id)->delete();
+		return "<script>alert('刪除成功');</script>".Redirect::to('adminUser');
+	}
+
+	public function SettingUser($id=null){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$userid = htmlspecialchars( Input::get('userid') );
+		$username = htmlspecialchars( Input::get('username') );
+		$ar = array();
+		$ar['userid'] = $userid;
+		$ar['username'] = $username;
+		if($id)
+			DB::table('userList')->where('id', $id)->update($ar);
+		else{
+			$ar['password'] = '1575b02452c2682e6f79db042a18a78d';
+			DB::table('userList')->insert($ar);
+		}
+		return "<script>alert('更新成功');</script>".Redirect::to('adminUser');
+	}
+
 	public function adminSettingType($old=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');

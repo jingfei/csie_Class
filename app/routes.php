@@ -35,6 +35,12 @@ Route::post('adminDate', 'AdminController@updateDate');
 
 Route::get('adminSetting', 'AdminController@adminSetting');
 
+Route::get('adminUser', 'AdminController@adminUser');
+Route::get('adminSettingUser/{old?}', 'AdminController@adminSettingUser');
+Route::match(array('POST', 'GET'), 'SettingUser/{id?}', 'AdminController@SettingUser');
+Route::get('DeleteUser/{id}', 'AdminController@DeleteUser');
+Route::get('ResetUser/{id}', 'AdminController@ResetUser');
+
 Route::get('adminSettingType/{old?}', 'AdminController@adminSettingType');
 Route::match(array('POST', 'GET'), 'SettingType/{id?}', 'AdminController@SettingType');
 Route::get('DeleteType/{id}', 'AdminController@DeleteType');

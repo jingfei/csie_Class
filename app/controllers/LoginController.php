@@ -25,10 +25,18 @@ class LoginController extends BaseController {
 	//	or die('Cannot connect to Friggin Server: ' . print_r(imap_errors()));
 //		imap_errors();
 //		imap_alerts();
-		if($link){
+		if($link)  //成功入口登入成功
+		{ 
 //			imap_close($link); //Close the connection
-			Session::put('user', strtoupper($user));
-			return Redirect::to('/');
+			$user = strtoupper($user);
+			$inTable = DB::table('StudentCard')->where('student_id', $user)->first();
+			if($inTable->name){
+				Session::put('user', $user);
+				Session::put('username', $inTable->username);
+				return Redirect::to('/');
+			}
+			else
+				return "<script>alert('');</script>".Redirect::to('Login');
 		}
 		else{
 //			imap_close($link);
