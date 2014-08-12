@@ -59,13 +59,14 @@ class BaseController extends Controller {
 						->first();
 			if($tmpUser)
 				$tmpUser = $tmpUser->userid;
-			else
+			else{
 				$tmpUser = DB::table('StudentCard')
 							->where('id', $user)
 							->first();
-			if($tmpUser)			
-				$tmpUser = $tmpUser->student_id;
-			else
+				if($tmpUser)			
+					$tmpUser = $tmpUser->student_id;
+			}
+			if(!$tmpUser)
 				return false;
 			if($tmpUser!=Session::get('user')) 
 				return false;
