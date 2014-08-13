@@ -31,6 +31,9 @@ Route::get('Repeat/{_id}', 'ClassController@repeatQuery');
 
 Route::get('Admin/{date?}/{date2?}/{factor?}/{detail?}', 'AdminController@show');
 
+Route::get('adminKey/{date?}/{date2?}/{factor?}/{detail?}', 'AdminController@adminKey');
+Route::post('keyState', 'AdminController@keyState');
+
 Route::post('adminDate', 'AdminController@updateDate');
 
 Route::get('adminSetting', 'AdminController@adminSetting');

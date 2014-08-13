@@ -28,7 +28,7 @@ $(document).ready(function(){
 				<table class="bordered">
 				@if($change)
 				<tr>
-					<td colspan="8">
+					<td colspan="9">
 						<a href="{{URL::to('modifyForm/0/0/0/0/'.$list[0]->repeat)}}">全部修改</a>
 						&nbsp;&nbsp;
 						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/0/'.$list[0]->repeat)}}');">全部刪除</a>
@@ -41,7 +41,8 @@ $(document).ready(function(){
 					<th>時間</th>
 					<th>課程 / 活動名稱</th>
 					<th>借用者</th>
-					<th style="width:200px">email</th>
+					<th style="width:50px"><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
+					<th style="width:180px">email</th>
 					<th>聯絡電話</th>
 					<th>操作</th>
 				</tr>
@@ -51,6 +52,7 @@ $(document).ready(function(){
 					<td rowspan="{{count($list)}}">{{$list[0]->start_time}}:00~{{$list[0]->end_time}}:00</td>
 					<td rowspan="{{count($list)}}">{{$list[0]->reason}}</td>
 					<td rowspan="{{count($list)}}">{{$list[0]->username}}</td>
+					<td>{{$list[0]->key}}</td>
 					<td rowspan="{{count($list)}}">{{$list[0]->email}}</td>
 					<td rowspan="{{count($list)}}">{{$list[0]->phone}}</td>
 					<td>
@@ -62,6 +64,7 @@ $(document).ready(function(){
 				@if($key!=0)
 				<tr>
 					<td>{{$item->date}}</td>
+					<td>{{$item->key}}</td>
 					<td>
 						<a href="{{URL::to('modifyForm/0/0/0/'.$item->id)}}"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>
 						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/'.$item->id)}}');"><img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除"/></a>

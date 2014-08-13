@@ -26,8 +26,13 @@ class AdminController extends BaseController {
 		if($User)
 			$limit = $limit->where('username', $User);
 		$limit = $limit->get();
-		foreach($limit as $tmp)
+		foreach($limit as $tmp){
 			$tmp->classroom=$className[$tmp->classroom];
+			if($tmp->key == 1) $tmp->key='未借用';
+			else if($tmp->key==2) $tmp->key='借出';
+			else if($tmp->key==3) $tmp->key='歸還';
+			else $tmp->key='未知';
+		}
 		/****************/
 		return View::make('pages.admin')
 					->with('date', $dateLimit)		//系統開放時間
@@ -36,6 +41,51 @@ class AdminController extends BaseController {
 					->with('date2', self::eachDate($date2))	//查詢終止日期
 					->with('Class', $Class)			//查詢教室
 					->with('User', $User);			//查詢使用者
+	}
+
+	public function adminKey($date=null, $date2=null, $Class=0, $User=null){
+		if(Session::get('user')!='admin')
+			return "<script>something wrong</script>".Redirect::to('/');
+		$dateLimit = self::dateLimit();
+		/* classList */
+		$result = DB::table('classList')->get();
+		$className = array();
+		$i = 0;
+		foreach($result as $tmpClass){
+			$className[++$i] = $tmpClass->name;
+			$className[$tmpClass->name] = $tmpClass->id;
+		}
+		/*************/
+		/* 課程異動查詢 */
+		if(!$date) $date = date("Y-m-d");
+		if(!$date2) $date2 = $date;
+		$limit = DB::table('BorrowList') 
+					->whereBetween('date', array($date, $date2))
+					->orderBy('date') ->orderBy('classroom') ->orderBy('start_time');
+		if($Class && $Class!=0)
+			$limit = $limit->where('classroom', $className[$Class]);
+		if($User)
+			$limit = $limit->where('username', $User);
+		$limit = $limit->get();
+		foreach($limit as $tmp)
+			$tmp->classroom=$className[$tmp->classroom];
+		/****************/
+		return View::make('pages.adminKey')
+					->with('list', $limit)			//查詢的資料
+					->with('date1', self::eachDate($date))	//查詢起始日期
+					->with('date2', self::eachDate($date2))	//查詢終止日期
+					->with('Class', $Class)			//查詢教室
+					->with('User', $User);			//查詢使用者
+	}
+
+	public function keyState(){
+		if(Session::get('user')!='admin')
+			return "<script>something wrong</script>".Redirect::to('/');
+		$id = htmlspecialchars( Input::get('id') );
+		$state = htmlspecialchars( Input::get('state') );
+		DB::table('BorrowList')
+			->where('id', $id)
+			->update(array('key' => $state));
 	}
 
 	public function updateDate(){

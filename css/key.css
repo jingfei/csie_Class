@@ -1,0 +1,64 @@
+.key label {
+	width: 80px;
+    border-radius: 3px;
+	border: 1px solid #D1D3D4
+}
+
+/* hide input */
+.key input.radio:empty {
+		margin-left: -999px;
+}
+
+/* style label */
+.key input.radio:empty ~ label {
+	position: relative;
+	float: left;
+	line-height: 1.5em;
+	text-indent: 1.6em;
+	margin-top: .1em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.key input.radio:empty ~ label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 1.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+/* toggle hover */
+.key input.radio:hover:not(:checked) ~ label:before {
+	content:'\2714';
+	text-indent: .3em;
+	color: #C2C2C2;
+}
+
+.key input.radio:hover:not(:checked) ~ label {
+	color: #888;
+}
+
+/* toggle on */
+.key input.radio:checked ~ label:before {
+	content:'\2714';
+	text-indent: .3em;
+	color: #9CE2AE;
+	background-color: #4DCB6D;
+}
+
+.key input.radio:checked ~ label {
+	color: #777;
+}
+
+/* radio focus */
+.key input.radio:focus ~ label:before {
+	box-shadow: 0 0 0 1px #999;
+}

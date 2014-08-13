@@ -176,7 +176,8 @@ function adminQuery(){
 					<th>時間</th>
 					<th>課程 / 活動名稱</th>
 					<th>借用者</th>
-					<th style="width:200px">email</th>
+					<th style="width:50px"><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
+					<th style="width:180px">email</th>
 					<th>聯絡電話</th>
 					<th>操作</th>
 				</tr>
@@ -184,10 +185,11 @@ function adminQuery(){
 				<tr>
 					<td>{{$item->date}}</td>
 					<td>{{$item->classroom}}</td>
-					<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
+					<td>{{$item->start_time}}:00 ~ {{$item->end_time}}:00</td>
 					<td>{{$item->reason}}</td>
 					<td>{{$item->username}}</td>
-					<td style="width:200px;display:inline-block;overflow:auto;">{{$item->email}}</td>
+					<td>{{$item->key}}</td>
+					<td style="width:180px;display:inline-block;overflow:auto;">{{$item->email}}</td>
 					<td>{{$item->phone}}</td>
 					<td style="width:100px">
 						@if($item->repeat)

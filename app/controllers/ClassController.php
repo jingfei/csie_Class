@@ -170,8 +170,13 @@ class ClassController extends \BaseController {
 					->where('repeat', $_id)
 					->orderBy('date')
 					->get();
-		foreach($limit as $tmp)
+		foreach($limit as $tmp){
 			$tmp->classroom=$className[$tmp->classroom];
+			if($tmp->key == 1) $tmp->key='未借用';
+			else if($tmp->key==2) $tmp->key='借出';
+			else if($tmp->key==3) $tmp->key='歸還';
+			else $tmp->key='未知';
+		}
 		/* 可否修改 */
 		$change = true;
 		if(Session::get('user')!='admin' && $limit[0]->username!=Session::get('username'))
