@@ -3,6 +3,36 @@
 
 <style>
 td{vertical-align:middle;}
+.nav {
+	margin-left: 0;
+	list-style: none;
+	font-size: 20px;
+	white-space: nowrap;
+	float: left;
+}
+.nav-tabs {
+	border-bottom: 1px solid #ddd;
+}
+.nav-tabs>li {
+	float: left;
+	margin-bottom: -3px;
+}
+.nav-tabs>.active>a {
+	color: #555555;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+	cursor: default;
+}
+.nav-tabs>li>a {
+	cursor: pointer;
+	padding: 5px 12px;
+	margin-right: 2px;
+	line-height: 14px;
+}
+.float-scroll {
+	position: fixed;
+	top: 0;
+}
 </style>
 {{HTML::style('css/key.css')}}
 <script>
@@ -51,7 +81,32 @@ $(document).ready(function(){
 	});
 });
 
-</script>
+var NavTop,Nav;
+window.onload = function(){
+	Nav=document.getElementById('Fauc-nav');
+	var tmp1=Nav.getElementsByTagName('ul')[0];
+	var tmp2=document.getElementById('Fauc-content');
+	NavTop=tmp2.offsetTop+tmp1.offsetHeight;
+	Nav.style.width=Nav.offsetWidth+"px";
+	tmp1.style.width=Nav.offsetWidth-25+"px";
+}
+window.onscroll = function(){
+	var t=document.documentElement.scrollTop || document.body.scrollTop;
+	if(t>NavTop){
+		Nav.className="float-scroll";
+	}
+	else{
+		Nav.className="";
+	}
+}
+
+function Active(obj, tab){
+	$('.bordered').hide(); 
+	$('#'+tab).show(); 
+	$('.nav-tabs>li').attr('class', ''); 
+	$(obj).parent().attr('class', 'active');
+}
+</script>	
 
 		<h1 class="content_title" style="font-size:220%;">鑰匙管理 <small>管理者專用</small></h1>
 		<hr/>
@@ -77,8 +132,21 @@ $(document).ready(function(){
 					<button type="submit" onClick="adminQuery();return false;">送出</button>
 					</form>
 				</div>
-				<div style="overflow:auto;height:600px">
-				<table class="bordered" style="width:1500px;">
+				<div style="overflow:auto;height:600px;">
+<div id="Fauc-nav" style="width:100%;line-height:1.5em;font-size:1.5em;">
+	<ul class="nav nav-tabs" style="padding-left:20px;">
+		<li class="active"; style="display:list-item;list-style:none">
+			<a href="#tab1" onClick="Active(this,'tab1');" data-toggle="tab">借出</a>
+		</li>
+		<li style="display:list-item;list-style:none">
+			<a href="#tab2" onClick="Active(this,'tab2');" data-toggle="tab">歸還</a>
+		</li>
+		<li style="display:list-item;list-style:none;">
+			<a href="#tab3" onClick="Active(this,'tab3');" data-toggle="tab">未借用</a>
+		</li>
+	</ul>
+</div>
+				<table class="bordered" id="tab1" style="width:1500px;">
 				<tr>
 					<th>日期</th>
 					<th>教室編號</th>
@@ -90,6 +158,7 @@ $(document).ready(function(){
 					<th>聯絡電話</th>
 				</tr>
 				@foreach($list as $key => $item)
+				@if($item->key==2)
 				<tr>
 					<td>{{$item->date}}</td>
 					<td>{{$item->classroom}}</td>
@@ -113,6 +182,85 @@ $(document).ready(function(){
 					<td>{{$item->email}}</td>
 					<td>{{$item->phone}}</td>
 				</tr>
+				@endif
+				@endforeach
+				</table>
+				<table class="bordered" id="tab2" style="width:1500px;display:none">
+				<tr>
+					<th>日期</th>
+					<th>教室編號</th>
+					<th>時間</th>
+					<th style="width:150px">課程 / 活動名稱</th>
+					<th>借用者</th>
+					<th><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
+					<th>email</th>
+					<th>聯絡電話</th>
+				</tr>
+				@foreach($list as $key => $item)
+				@if($item->key==3)
+				<tr>
+					<td>{{$item->date}}</td>
+					<td>{{$item->classroom}}</td>
+					<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
+					<td>{{$item->reason}}</td>
+					<td>{{$item->username}}</td>
+					<td class="key">
+						<div>
+						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-1" class="radio" @if($item->key==1) checked @endif />
+						<label for="{{$item->id}}-1">未借用</label>
+						</div>
+						<div>
+						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-2" class="radio" @if($item->key==2) checked @endif />
+						<label for="{{$item->id}}-2">借出</label>
+						</div>
+						<div>
+						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-3" class="radio" @if($item->key==3) checked @endif />
+						<label for="{{$item->id}}-3">歸還</label>
+						</div>
+					</td>
+					<td>{{$item->email}}</td>
+					<td>{{$item->phone}}</td>
+				</tr>
+				@endif
+				@endforeach
+				</table>
+				<table class="bordered" id="tab3" style="width:1500px;display:none">
+				<tr>
+					<th>日期</th>
+					<th>教室編號</th>
+					<th>時間</th>
+					<th style="width:150px">課程 / 活動名稱</th>
+					<th>借用者</th>
+					<th><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
+					<th>email</th>
+					<th>聯絡電話</th>
+				</tr>
+				@foreach($list as $key => $item)
+				@if($item->key==1)
+				<tr>
+					<td>{{$item->date}}</td>
+					<td>{{$item->classroom}}</td>
+					<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
+					<td>{{$item->reason}}</td>
+					<td>{{$item->username}}</td>
+					<td class="key">
+						<div>
+						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-1" class="radio" @if($item->key==1) checked @endif />
+						<label for="{{$item->id}}-1">未借用</label>
+						</div>
+						<div>
+						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-2" class="radio" @if($item->key==2) checked @endif />
+						<label for="{{$item->id}}-2">借出</label>
+						</div>
+						<div>
+						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-3" class="radio" @if($item->key==3) checked @endif />
+						<label for="{{$item->id}}-3">歸還</label>
+						</div>
+					</td>
+					<td>{{$item->email}}</td>
+					<td>{{$item->phone}}</td>
+				</tr>
+				@endif
 				@endforeach
 				</table>
 				</div>

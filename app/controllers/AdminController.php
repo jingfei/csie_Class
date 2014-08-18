@@ -6,6 +6,12 @@ class AdminController extends BaseController {
 		if(Session::get('user')!='admin')
 			return "<script>something wrong</script>".Redirect::to('/');
 		$dateLimit = self::dateLimit();
+		/* check special chars */
+		if($date) $date = htmlspecialchars($date);
+		if($date2) $date2 = htmlspecialchars($date2);
+		if($Class) $Class = htmlspecialchars($Class);
+		if($User) $User = htmlspecialchars($User);
+		/***********************/
 		/* classList */
 		$result = DB::table('classList')->get();
 		$className = array();
@@ -47,6 +53,12 @@ class AdminController extends BaseController {
 		if(Session::get('user')!='admin')
 			return "<script>something wrong</script>".Redirect::to('/');
 		$dateLimit = self::dateLimit();
+		/* check special chars */
+		if($date) $date = htmlspecialchars($date);
+		if($date2) $date2 = htmlspecialchars($date2);
+		if($Class) $Class = htmlspecialchars($Class);
+		if($User) $User = htmlspecialchars($User);
+		/***********************/
 		/* classList */
 		$result = DB::table('classList')->get();
 		$className = array();
@@ -91,12 +103,12 @@ class AdminController extends BaseController {
 	public function updateDate(){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$month1 = Input::get('month1');
-		$month2 = Input::get('month2');
-		$day1 = Input::get('day1');
-		$day2 = Input::get('day2');
-		$year1 = Input::get('year1');
-		$year2 = Input::get('year2');
+		$month1 = htmlspecialchars(Input::get('month1'));
+		$month2 = htmlspecialchars(Input::get('month2'));
+		$day1 = htmlspecialchars(Input::get('day1'));
+		$day2 = htmlspecialchars(Input::get('day2'));
+		$year1 = htmlspecialchars(Input::get('year1'));
+		$year2 = htmlspecialchars(Input::get('year2'));
 		$date1 = date("Y-m-d", mktime(0,0,0,$month1,$day1,$year1));
 		$date2 = date("Y-m-d", mktime(0,0,0,$month2,$day2,$year2));
 		if($date1 > $date2) return "<script>alert('日期選擇錯誤');</script>".Redirect::to("Admin"); 
@@ -140,6 +152,7 @@ class AdminController extends BaseController {
 	public function adminSettingUser($old=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$old = htmlspecialchars($old);
 		$url = "SettingUser";
 		if($old){
 			$old = DB::table('userList')->where('id', $old)->first();
@@ -153,6 +166,7 @@ class AdminController extends BaseController {
 	public function ResetUser($id){
 		if(Session::get('user')!='admin' || $id==0)
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$id = htmlspecialchars($id);
 		DB::table('userList')->where('id', $id)->update(array('password'=> md5('csie')));
 		return "<script>alert('密碼已重設為csie');</script>".Redirect::to('adminUser');
 	}
@@ -160,6 +174,7 @@ class AdminController extends BaseController {
 	public function DeleteUser($id){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$id = htmlspecialchars($id);
 		DB::table('userList')->where('id', $id)->delete();
 		return "<script>alert('刪除成功');</script>".Redirect::to('adminUser');
 	}
@@ -167,6 +182,7 @@ class AdminController extends BaseController {
 	public function SettingUser($id=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$id = htmlspecialchars($id);
 		$userid = htmlspecialchars( Input::get('userid') );
 		$username = htmlspecialchars( Input::get('username') );
 		$ar = array();
@@ -184,6 +200,7 @@ class AdminController extends BaseController {
 	public function adminSettingType($old=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$old = htmlspecialchars($old);
 		$url = "SettingType";
 		if($old){
 			$old = DB::table('typeList')->where('id', $old)->first();
@@ -197,6 +214,7 @@ class AdminController extends BaseController {
 	public function DeleteType($id){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$id = htmlspecialchars($id);
 		DB::table('typeList')->where('id', $id)->delete();
 		return "<script>alert('刪除成功');</script>".Redirect::to('adminSetting');
 	}
@@ -204,6 +222,7 @@ class AdminController extends BaseController {
 	public function SettingType($id=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$id = htmlspecialchars($id);
 		$name = htmlspecialchars( Input::get('name') );
 		$color = htmlspecialchars( Input::get('color') );
 		$ar = array();
@@ -219,6 +238,7 @@ class AdminController extends BaseController {
 	public function adminSettingClassroom($old=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$old = htmlspecialchars($old);
 		$url = "SettingClassroom";
 		if($old){
 			$old = DB::table('classList')->where('id', $old)->first();
@@ -232,6 +252,7 @@ class AdminController extends BaseController {
 	public function DeleteClassroom($id){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$id = htmlspecialchars($id);
 		DB::table('classList')->where('id', $id)->delete();
 		return "<script>alert('刪除成功');</script>".Redirect::to('adminSetting');
 	}
@@ -239,6 +260,7 @@ class AdminController extends BaseController {
 	public function SettingClassroom($id=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$id = htmlspecialchars($id);
 		$name = htmlspecialchars( Input::get('name') );
 		$type = htmlspecialchars( Input::get('type') );
 		$ar = array();

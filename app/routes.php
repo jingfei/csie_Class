@@ -14,7 +14,24 @@
 Route::get('/', function()
 {
 	$dateLimit = BaseController::dateLimit();
-	return View::make('pages.home')->with('dateLimit', $dateLimit);
+	/* classList */
+	$result = DB::table('classList')->get();
+	$className = array();
+	$i = 0;
+	foreach($result as $tmpClass)
+		$className[++$i] = $tmpClass->name;
+	/*************/
+	$key = DB::table('BorrowList') 
+			->select(array('date', 'classroom', 'username'))
+			->where('key', 2)
+			->orderBy('date')
+			->orderBy('classroom')
+			->orderBy('start_time')
+			->get();
+	foreach($key as $item) $item->classroom = $className[$item->classroom];
+	return View::make('pages.home')
+			->with('dateLimit', $dateLimit)
+			->with('key', $key);
 });
 
 Route::get('class/{year?}/{month?}/{day?}', 'ClassController@getClass');
@@ -26,6 +43,14 @@ Route::post('borrow', 'ClassController@Borrow');
 Route::get('Delete/{_id}/{repeatId?}', 'ClassController@deleteBorrow');
 
 Route::get('Repeat/{_id}', 'ClassController@repeatQuery');
+
+/* personal */
+
+Route::get('Personal', 'PersonalController@personalInfo');
+
+Route::post('changePW', 'PersonalController@changePW');
+
+/************/
 
 /* admin */
 

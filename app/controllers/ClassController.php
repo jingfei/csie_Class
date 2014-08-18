@@ -10,7 +10,7 @@ class ClassController extends \BaseController {
 		return $tmp;
 	}
 
-	public function FindDate($month, $day, $year){
+	private function FindDate($month, $day, $year){
 		$date = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		$date = DB::table('BorrowList')
 				->select('id', 'classroom', 'start_time', 'end_time', 'username', 'reason', 'repeat', 'type')
@@ -21,7 +21,7 @@ class ClassController extends \BaseController {
 		return $date;
 	}
 
-	public function SetTable($date, $count){
+	private function SetTable($date, $count){
 		/*initialize array*/
 		$tmp = array();
 		for($i=0; $i<=$count; $i++) array_push($tmp, array(-1,"","") );
@@ -57,8 +57,11 @@ class ClassController extends \BaseController {
 
 	public function getClass($year=null, $month=null, $day=null){
 		if(!$year) $year=date("Y"); 
+		else $year = htmlspecialchars($year);
 		if(!$month) $month=date("m");
+		else $month = htmlspecialchars($month);
 		if(!$day) $day=date("d"); 
+		else $day = htmlspecialchars($day);
 		$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		$dateLimit = self::dateLimit();
 		$warning = null;
@@ -69,6 +72,8 @@ class ClassController extends \BaseController {
 		$date = self::FindDate($month, $day, $year);
 		$table = self::SetTable($date, count($data));
 		$type = DB::table('typeList')->get();
+		$nowDate = date("Y-m-d");
+		$disable = $nowDate > $thisDate; 
 		return View::make('pages.class')
 					->with('data',$data)
 					->with('table',$table)
@@ -77,12 +82,26 @@ class ClassController extends \BaseController {
 					->with('month', $month)
 					->with('year', $year)
 					->with('day', $day)
-					->with('warning', $warning);
+					->with('warning', $warning)
+					->with('disable', $disable);
 	}
 
 	public function classForm($year, $month, $day, $old=null, $repeat=null){
 		if(!Session::has('user'))
 			return "<script>alert('請登入');</script>".Redirect::to('Login');
+		/* check special chars */
+		$month = htmlspecialchars($month);
+		$day = htmlspecialchars($day);
+		$year = htmlspecialchars($year);
+		if($old) $old = htmlspecialchars($old);
+		if($repeat) $repeat = htmlspecialchars($repeat);
+		/***********************/
+		/* 檢查日期是否過了 */
+		$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
+		$nowDate = date("Y-m-d");
+		if($thisDate < $nowDate)
+			return "<script>alert('日期已過，無法修改');</script>".Redirect::to('class/'.$year.'/'.$month.'/'.$day);
+		/********************/
 		$diffUser=null;
 		/*get username*/
 		$User = DB::table('userList')
@@ -144,18 +163,23 @@ class ClassController extends \BaseController {
 	}
 
 	public function deleteBorrow($_id, $repeatId=null){
+		$_id = htmlspecialchars($_id);
 		if(!$repeatId) $data = DB::table('BorrowList')->where('id', $_id);
-		else $data = DB::table('BorrowList')->where('repeat', $repeatId);
-		if(!$data->first())
+		else $data = DB::table('BorrowList')->where('repeat', htmlspecialchars($repeatId));
+		if(!$data)
 			return "<script>something wrong</script>".Redirect::to('/');
 		if(Session::get('user')!='admin' && $data->first()->username!=Session::get('username'))
 			return "<script>something wrong</script>".Redirect::to('/');
 		$date = self::eachDate($data->first()->date);
+		$nowdate = date("Y-m-d");
+		if($data->first()->date < $nowdate)
+			return "<script>alert('日期已過，無法刪除');</script>".Redirect::to('class/'.$date['year'].'/'.$date['month'].'/'.$date['day']);
 		$data->delete();
 		return "<script>alert('刪除成功');</script>".Redirect::to('class/'.$date['year'].'/'.$date['month'].'/'.$date['day']);
 	}
 
 	public function repeatQuery($_id){
+		$_id = htmlspecialchars($_id);
 		$dateLimit = self::dateLimit();
 		/* classList */
 		$result = DB::table('classList')->get();
@@ -238,6 +262,11 @@ class ClassController extends \BaseController {
 		if(!$old_repeat && Session::get('user')!='admin' && ($date_start>$dateLimit['end']['all'] || $date_start<$dateLimit['start']['all']) )
 			return "<script>alert('日期錯誤');</script>".Redirect::to('/');
 		/************************/
+		/* 檢查日期是否過了 */
+		$nowDate = date("Y-m-d");
+		if($date_start < $nowDate)
+			return "<script>alert('日期已過，無法修改');</script>".Redirect::to('/');
+		/********************/
 		/* repeat */
 		$Repeat = Input::get('form_repeat') ? true : false;
 		if($old) $Repeat=false;

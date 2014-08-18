@@ -74,9 +74,9 @@ $(document).ready(function(){
 							@if($table[$time-8][$i][0]==-1 && $warning)
 							<td class="class_inner">
 							@elseif($table[$time-8][$i][0]==-1)
-							<td class="class_inner no_event" name="{{$time.';'.$data[$i-1]->name}}">
+							<td class="class_inner {{$disable}} @if(!$disable) no_event @endif" name="{{$time.';'.$data[$i-1]->name}}">
 								<div class="outer_div">
-								<div class="inner_div">
+								<div class="inner_div" @if($disable) style="border:none" @endif>
 								</div></div>
 							</td>
 							@elseif($table[$time-8][$i][0]==1)
