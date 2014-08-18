@@ -1,7 +1,7 @@
 <nav>
 	<ul>
 		@if(Session::get('user')=='admin')
-			<li><a href="/Class2014/Admin" class="myButton">學生證</a></li>
+			<li><a href="/Class2014/query" class="myButton">學生證</a></li>
 			<li><a href="/Class2014/adminKey" class="myButton">鑰匙</a></li>
 			<li><a href="/Class2014/adminUser" class="myButton">使用者</a></li>
 			<li><a href="/Class2014/Admin" class="myButton">課程</a></li>

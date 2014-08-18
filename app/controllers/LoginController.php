@@ -35,8 +35,10 @@ class LoginController extends BaseController {
 				Session::put('username', $inTable->name);
 				return Redirect::to('/');
 			}
-			else
-				return "<script>alert('請先至學生證管理系統登記個人資料');</script>".Redirect::to('Login');
+			else{
+				Session::put('new', $user);
+				return "<script>alert('請先填寫個人資料以利系辦審查');</script>".Redirect::to('form');
+			}
 		}
 		else{
 //			imap_close($link);

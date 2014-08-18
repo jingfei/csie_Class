@@ -44,6 +44,41 @@ Route::get('Delete/{_id}/{repeatId?}', 'ClassController@deleteBorrow');
 
 Route::get('Repeat/{_id}', 'ClassController@repeatQuery');
 
+/* StudentCard */
+
+Route::get('DownloadCSV', function(){
+	return View::make('pages.DownloadCSV');
+});
+
+Route::get('form', 'AdminCardController@check');
+Route::get('form_admin/{dept}/{year}/{id}', function($dept, $year, $id){
+	if(Session::get('user')!='admin')
+		return "<script>something wrong</script>".Redirect::to('/');
+	else{
+		Session::put('dept',$dept);
+		Session::put('year',$year);
+		Session::put('id',$id);
+		$user = DB::table('StudentCard')
+					->where('student_id',$id)
+					->get();
+		return View::make('pages.formCard')->with('id',$id)->with('student',$user[0]);
+	}
+});
+
+Route::get('query', 'AdminCardController@query');
+Route::get('addnew', 'AdminCardController@addnew');
+Route::get('queryCard', 'AdminCardController@queryCard');
+Route::get('queryName', 'AdminCardController@queryName');
+
+Route::post('Modify', 'AdminCardController@Modify');
+
+Route::get('form_delete/{dept}/{year}/{id}', function($dept, $year, $id){
+	DB::table('StudentCard')->where('student_id', $id)->delete();
+	return "<script>alert('finished');</script>".Redirect::to('query?dept='.$dept.'&year='.$year);
+});
+
+/***************/
+
 /* personal */
 
 Route::get('Personal', 'PersonalController@personalInfo');

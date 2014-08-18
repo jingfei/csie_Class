@@ -4,6 +4,7 @@
 <style>
 .round-div{
 	border:1px solid gray;
+	color: #0e2d66;
 	padding:10px;
 	float:left;
 	margin:5px;

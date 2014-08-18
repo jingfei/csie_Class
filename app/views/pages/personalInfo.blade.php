@@ -5,10 +5,6 @@ $(document).ready(function(){
 	initAdmin();
 });
 
-function ShowForm1(){
-	$( "#admin-form1" ).dialog( "open" );
-}
-
 function changePW(){
 	var old = $("#old").val();
 	var new1 = $("#new1").val();
@@ -62,24 +58,6 @@ function changePW(){
 
 		<h1 class="content_title" style="font-size:220%;">修改 / 查詢 <small>個人資料</small></h1>
 		<hr/>
-		<!-- form-start -->
-		<div id="admin-form1" title="class">
-			{{ Form::open(array('class' => 'box', 'url' => 'adminDate', 'method' => 'post')) }}
-			<label style="font-size:1.5em"> 開放日期修改 </label>
-				<!-- date_start -->
-				<div style="margin: 5px 5px 5px 25px">
-				</div>
-				<!-- date_end -->
-
-			</fieldset>
-	
-			<footer>
-			<input type="submit" value="確認修改" class="btnLogin" tabindex="4">
-			</footer>
-			
-		{{ Form::close() }}
-		</div>
-		<!-- form-end -->
 		<div style="font-size:1.3em">
 			<div style="margin:10px">
 				@if($Lab)
@@ -92,7 +70,7 @@ function changePW(){
 				</form>
 				@elseif($student)
 				<span style="font-size:1.5em">個人資料：</span>
-				<span style="font-size:1.3em" style="vertical-align:middle">
+				<span style="font-size:1.3em;color:#0e2d66" style="vertical-align:middle">
 					{{ $student->student_id }} / 
 					{{ $student->name }} / 
 					{{ $student->department }} /
@@ -101,7 +79,7 @@ function changePW(){
 					手機 {{ $student->phone }} 
 				</span>
 				&nbsp;&nbsp;
-				<button onClick="ShowForm1();">修改</button>
+				<button onClick="location.href='{{URL::to('form')}}';">修改</button>
 				@endif
 			</div>
 			<hr style="border-top: dashed black 1px;width:96%;margin:20px 2%;"/>

@@ -12,7 +12,7 @@ td{vertical-align:middle;}
 				<ol>
 				<li>
 					<span style="font-size:1.5em">學生：</span>
-					請至<a href="http://www.csie.ncku.edu.tw/StudentCard/" target="_blank">學生證管理系統</a>查看
+					請至<a href="{{URL::to('query')}}">學生證管理</a>查看
 				</li>
 				<br/>
 				<li><span style="font-size:1.5em">實驗室 / 其他：</span>
