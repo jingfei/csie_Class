@@ -152,20 +152,20 @@ function adminQuery(){
 				<div style="text-align:right;margin:8px 0;border:1px dotted #b0cdcb;padding:5px;line-height:2em;">
 					<form>
 					查詢: &nbsp;
-					<input type="text" size="5" id="y1" value="{{$date1['year']}}" />年
-					<input type="text" size="3" id="m1" value="{{$date1['month']}}"/>月
-					<input type="text" size="3" id="d1" value="{{$date1['day']}}"/>日
-					&nbsp;~&nbsp;
-					<input type="text" size="5" id="y2" value="{{$date2['year']}}"/>年
-					<input type="text" size="3" id="m2" value="{{$date2['month']}}"/>月
-					<input type="text" size="3" id="d2" value="{{$date2['day']}}"/>日
-					&nbsp;&nbsp;&nbsp;
-					教室編號 <input type="text" size="7" id="adminClass" placeholder="不限" 
+					<input type="text" size="4" id="y1" value="{{$date1['year']}}" />年
+					<input type="text" size="2" id="m1" value="{{$date1['month']}}"/>月
+					<input type="text" size="2" id="d1" value="{{$date1['day']}}"/>日
+					~
+					<input type="text" size="4" id="y2" value="{{$date2['year']}}"/>年
+					<input type="text" size="2" id="m2" value="{{$date2['month']}}"/>月
+					<input type="text" size="2" id="d2" value="{{$date2['day']}}"/>日
+					&nbsp;
+					教室編號 <input type="text" size="5" id="adminClass" placeholder="不限" 
 					@if($Class) value="{{$Class}}" @endif />
-					&nbsp;&nbsp;&nbsp;
-					借用者 <input type="text" size="20" id="adminUser" placeholder="不限" 
+					&nbsp;
+					借用者 <input type="text" size="15" id="adminUser" placeholder="不限" 
 					@if($User) value="{{$User}}" @endif />
-					&nbsp;&nbsp;&nbsp;
+					&nbsp;
 					<button type="submit" onClick="adminQuery();return false;">送出</button>
 					</form>
 				</div>

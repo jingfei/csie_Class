@@ -140,4 +140,40 @@ class AdminCardController extends BaseController {
 		file_put_contents("StudentCard.csv", $output);
 		return View::make('pages.ListAll')->with('Dept', $Dept)->with('Year',$Year)->with('data',$data)->with('CSV',$output?true:false);
 	}
+
+	public function queryBlock(){
+		if(Session::get('user')!='admin')
+			return "<script>something wrong</script>".Redirect::to('/');
+		$data = DB::table('StudentCard')
+					->where('block', 1)
+					->get();
+		$Dept = DB::table('StudentCard')
+					->select('department')
+					->distinct()
+					->get();
+		$Year = DB::table('StudentCard')
+					->select('enrollment_year')
+					->distinct()
+					->orderBy('enrollment_year')
+					->get();
+		$output = self::array_to_csv($data);
+		$output = "\"學號\", \"姓名\", \"系所\", \"入學年份\", \"學生證號碼\", \"手機號碼\"\n" . $output;
+		file_put_contents("StudentCard.csv", $output);
+		return View::make('pages.ListAll')
+					->with('Dept', $Dept)
+					->with('Year',$Year)
+					->with('data',$data)
+					->with('CSV',$output?true:false);
+	}
+
+	public function blockState(){
+		if(Session::get('user')!='admin')
+			return "<script>something wrong</script>".Redirect::to('/');
+		$id = htmlspecialchars( Input::get('id') );
+		$block = htmlspecialchars( Input::get('block') );
+		DB::table('StudentCard')
+			->where('id', $id)
+			->update(array('block' => $block));
+	}
+
 }

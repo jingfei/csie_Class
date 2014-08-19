@@ -69,6 +69,9 @@ Route::get('query', 'AdminCardController@query');
 Route::get('addnew', 'AdminCardController@addnew');
 Route::get('queryCard', 'AdminCardController@queryCard');
 Route::get('queryName', 'AdminCardController@queryName');
+Route::get('blockList', 'AdminCardController@queryBlock');
+
+Route::post('blockState', 'AdminCardController@blockState');
 
 Route::post('Modify', 'AdminCardController@Modify');
 
@@ -93,6 +96,7 @@ Route::get('Admin/{date?}/{date2?}/{factor?}/{detail?}', 'AdminController@show')
 
 Route::get('adminKey/{date?}/{date2?}/{factor?}/{detail?}', 'AdminController@adminKey');
 Route::post('keyState', 'AdminController@keyState');
+Route::get('allnoKey', 'AdminController@allnoKey');
 
 Route::post('adminDate', 'AdminController@updateDate');
 

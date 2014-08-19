@@ -10,6 +10,7 @@
 {{HTML::style('css/navbar/styles.css')}}
 {{HTML::style('css/Login/reset.css')}}
 {{HTML::style('css/Login/structure.css')}}
+{{HTML::style('css/cardRadio.css')}}
 {{HTML::style('css/date/lugo.datepicker.css')}}
 {{HTML::style('css/date/siena.datepicker.css')}}
 <!-- Including the Lobster font from Google's Font Directory -->

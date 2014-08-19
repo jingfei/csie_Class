@@ -73,21 +73,64 @@ class AdminController extends BaseController {
 		if(!$date2) $date2 = $date;
 		$limit = DB::table('BorrowList') 
 					->whereBetween('date', array($date, $date2))
-					->orderBy('date') ->orderBy('classroom') ->orderBy('start_time');
+					->orderBy('date') 
+					->orderBy('classroom') 
+					->orderBy('start_time');
 		if($Class && $Class!=0)
 			$limit = $limit->where('classroom', $className[$Class]);
 		if($User)
 			$limit = $limit->where('username', $User);
-		$limit = $limit->get();
-		foreach($limit as $tmp)
+		$list1 = $limit->where('key', 1)->get();
+		$list2 = $limit->where('key', 2)->get();
+		$list3 = $limit->where('key', 3)->get();
+		foreach($list1 as $tmp)
+			$tmp->classroom=$className[$tmp->classroom];
+		foreach($list2 as $tmp)
+			$tmp->classroom=$className[$tmp->classroom];
+		foreach($list3 as $tmp)
 			$tmp->classroom=$className[$tmp->classroom];
 		/****************/
 		return View::make('pages.adminKey')
-					->with('list', $limit)			//查詢的資料
+					->with('list1', $list1)			//未借用的資料
+					->with('list2', $list2)			//借出的資料
+					->with('list3', $list3)			//歸還的資料
 					->with('date1', self::eachDate($date))	//查詢起始日期
 					->with('date2', self::eachDate($date2))	//查詢終止日期
 					->with('Class', $Class)			//查詢教室
 					->with('User', $User);			//查詢使用者
+	}
+
+	public function allnoKey(){
+		if(Session::get('user')!='admin')
+			return "<script>something wrong</script>".Redirect::to('/');
+		$dateLimit = self::dateLimit();
+		/* classList */
+		$result = DB::table('classList')->get();
+		$className = array();
+		$i = 0;
+		foreach($result as $tmpClass){
+			$className[++$i] = $tmpClass->name;
+			$className[$tmpClass->name] = $tmpClass->id;
+		}
+		/*************/
+		/* 未歸還鑰匙查詢 */
+		$limit = DB::table('BorrowList') 
+					->where('key', 2)
+					->orderBy('date') 
+					->orderBy('classroom') 
+					->orderBy('start_time')
+					->get();
+		foreach($limit as $tmp)
+			$tmp->classroom=$className[$tmp->classroom];
+		/****************/
+		return View::make('pages.adminKey')
+					->with('list1', null)			//未借用的資料
+					->with('list2', $limit)			//借出的資料
+					->with('list3', null)			//歸還的資料
+					->with('date1', null)	//查詢起始日期
+					->with('date2', null)	//查詢終止日期
+					->with('Class', null)			//查詢教室
+					->with('User', null);			//查詢使用者
 	}
 
 	public function keyState(){

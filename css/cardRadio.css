@@ -1,0 +1,92 @@
+.switch {
+	position: absolute;
+	width: 100px;
+	height: 30px;
+	text-align: center;
+	margin-top: -15px;
+	background: #4cd964;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+	-webkit-border-radius: 25px;
+	border-radius: 25px;
+}
+.switch span {
+	position: absolute;
+    width: 20px;
+	height: 4px;
+	top: 50%;
+	left: 50%;
+	margin: -2px 0px 0px -4px;
+	background: #fff;
+	display: block;
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+.switch span:after {
+	content: "";
+    display: block;
+	position: absolute;
+	width: 4px;
+	height: 12px;
+	margin-top: -8px;
+	background: #fff;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+input[type=radio] {
+	display: none;
+}
+.switch label {
+	cursor: pointer;
+	color: rgba(0,0,0,0.2);
+	width: 60px;
+	line-height: 30px;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+label.Lyes {
+	position: absolute;
+	left: -10px;
+	height: 10px;
+}
+label.Lno {
+	position: absolute;
+	right: -10px;
+}
+.no:checked ~ .switch {
+	background: #ff3b30;
+}
+.no:checked ~ .switch span {
+	background: #fff;
+	margin-left: -8px;
+}
+.no:checked ~ .switch span:after {
+	background: #fff;
+	height: 20px;
+	margin-top: -8px;
+	margin-left: 8px;
+}
+.yes:checked ~ .switch label[for=yes] {
+	color: #fff;
+}
+.no:checked ~ .switch label[for=no] {
+	color: #fff;
+}
+

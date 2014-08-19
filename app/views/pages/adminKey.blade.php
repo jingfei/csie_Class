@@ -114,155 +114,167 @@ function Active(obj, tab){
 			<div style="margin:10px">
 				<div style="text-align:right;margin:8px 0;border:1px dotted #b0cdcb;padding:5px;line-height:2em;">
 					<form>
-					查詢: &nbsp;
-					<input type="text" size="5" id="y1" value="{{$date1['year']}}" />年
-					<input type="text" size="3" id="m1" value="{{$date1['month']}}"/>月
-					<input type="text" size="3" id="d1" value="{{$date1['day']}}"/>日
-					&nbsp;~&nbsp;
-					<input type="text" size="5" id="y2" value="{{$date2['year']}}"/>年
-					<input type="text" size="3" id="m2" value="{{$date2['month']}}"/>月
-					<input type="text" size="3" id="d2" value="{{$date2['day']}}"/>日
-					&nbsp;&nbsp;&nbsp;
-					教室編號 <input type="text" size="7" id="adminClass" placeholder="不限" 
+					<input type="text" size="4" id="y1" value="{{$date1['year']}}" />年
+					<input type="text" size="2" id="m1" value="{{$date1['month']}}"/>月
+					<input type="text" size="2" id="d1" value="{{$date1['day']}}"/>日
+					~
+					<input type="text" size="4" id="y2" value="{{$date2['year']}}"/>年
+					<input type="text" size="2" id="m2" value="{{$date2['month']}}"/>月
+					<input type="text" size="2" id="d2" value="{{$date2['day']}}"/>日
+					&nbsp;
+					教室編號 <input type="text" size="5" id="adminClass" placeholder="不限" 
 					@if($Class) value="{{$Class}}" @endif />
-					&nbsp;&nbsp;&nbsp;
-					借用者 <input type="text" size="20" id="adminUser" placeholder="不限" 
+					&nbsp;
+					借用者 <input type="text" size="15" id="adminUser" placeholder="不限" 
 					@if($User) value="{{$User}}" @endif />
-					&nbsp;&nbsp;&nbsp;
-					<button type="submit" onClick="adminQuery();return false;">送出</button>
+					&nbsp;
+					<button type="submit" onClick="adminQuery();return false;">查詢</button>
 					</form>
+					<button type="submit" onClick="location.href='{{URL::to('allnoKey')}}';">查詢所有未歸還鑰匙名單</button>
 				</div>
 				<div style="overflow:auto;height:600px;">
-<div id="Fauc-nav" style="width:100%;line-height:1.5em;font-size:1.5em;">
-	<ul class="nav nav-tabs" style="padding-left:20px;">
-		<li class="active"; style="display:list-item;list-style:none">
-			<a href="#tab1" onClick="Active(this,'tab1');" data-toggle="tab">借出</a>
-		</li>
-		<li style="display:list-item;list-style:none">
-			<a href="#tab2" onClick="Active(this,'tab2');" data-toggle="tab">歸還</a>
-		</li>
-		<li style="display:list-item;list-style:none;">
-			<a href="#tab3" onClick="Active(this,'tab3');" data-toggle="tab">未借用</a>
-		</li>
-	</ul>
-</div>
-				<table class="bordered" id="tab1" style="width:1500px;">
-				<tr>
-					<th>日期</th>
-					<th>教室編號</th>
-					<th>時間</th>
-					<th style="width:150px">課程 / 活動名稱</th>
-					<th>借用者</th>
-					<th><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
-					<th>email</th>
-					<th>聯絡電話</th>
-				</tr>
-				@foreach($list as $key => $item)
-				@if($item->key==2)
-				<tr>
-					<td>{{$item->date}}</td>
-					<td>{{$item->classroom}}</td>
-					<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
-					<td>{{$item->reason}}</td>
-					<td>{{$item->username}}</td>
-					<td class="key">
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-1" class="radio" @if($item->key==1) checked @endif />
-						<label for="{{$item->id}}-1">未借用</label>
-						</div>
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-2" class="radio" @if($item->key==2) checked @endif />
-						<label for="{{$item->id}}-2">借出</label>
-						</div>
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-3" class="radio" @if($item->key==3) checked @endif />
-						<label for="{{$item->id}}-3">歸還</label>
-						</div>
-					</td>
-					<td>{{$item->email}}</td>
-					<td>{{$item->phone}}</td>
-				</tr>
-				@endif
-				@endforeach
-				</table>
-				<table class="bordered" id="tab2" style="width:1500px;display:none">
-				<tr>
-					<th>日期</th>
-					<th>教室編號</th>
-					<th>時間</th>
-					<th style="width:150px">課程 / 活動名稱</th>
-					<th>借用者</th>
-					<th><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
-					<th>email</th>
-					<th>聯絡電話</th>
-				</tr>
-				@foreach($list as $key => $item)
-				@if($item->key==3)
-				<tr>
-					<td>{{$item->date}}</td>
-					<td>{{$item->classroom}}</td>
-					<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
-					<td>{{$item->reason}}</td>
-					<td>{{$item->username}}</td>
-					<td class="key">
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-1" class="radio" @if($item->key==1) checked @endif />
-						<label for="{{$item->id}}-1">未借用</label>
-						</div>
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-2" class="radio" @if($item->key==2) checked @endif />
-						<label for="{{$item->id}}-2">借出</label>
-						</div>
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-3" class="radio" @if($item->key==3) checked @endif />
-						<label for="{{$item->id}}-3">歸還</label>
-						</div>
-					</td>
-					<td>{{$item->email}}</td>
-					<td>{{$item->phone}}</td>
-				</tr>
-				@endif
-				@endforeach
-				</table>
-				<table class="bordered" id="tab3" style="width:1500px;display:none">
-				<tr>
-					<th>日期</th>
-					<th>教室編號</th>
-					<th>時間</th>
-					<th style="width:150px">課程 / 活動名稱</th>
-					<th>借用者</th>
-					<th><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
-					<th>email</th>
-					<th>聯絡電話</th>
-				</tr>
-				@foreach($list as $key => $item)
-				@if($item->key==1)
-				<tr>
-					<td>{{$item->date}}</td>
-					<td>{{$item->classroom}}</td>
-					<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
-					<td>{{$item->reason}}</td>
-					<td>{{$item->username}}</td>
-					<td class="key">
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-1" class="radio" @if($item->key==1) checked @endif />
-						<label for="{{$item->id}}-1">未借用</label>
-						</div>
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-2" class="radio" @if($item->key==2) checked @endif />
-						<label for="{{$item->id}}-2">借出</label>
-						</div>
-						<div>
-						<input type="radio" name="{{$item->id}}" id="{{$item->id}}-3" class="radio" @if($item->key==3) checked @endif />
-						<label for="{{$item->id}}-3">歸還</label>
-						</div>
-					</td>
-					<td>{{$item->email}}</td>
-					<td>{{$item->phone}}</td>
-				</tr>
-				@endif
-				@endforeach
-				</table>
+					<div id="Fauc-nav" style="width:100%;line-height:1.8em;font-size:1.5em;">
+						<ul class="nav nav-tabs" style="padding-left:20px;">
+							<li class="active"; style="display:list-item;list-style:none">
+								<a href="#" onClick="Active(this,'tab1');" data-toggle="tab">借出</a>
+							</li>
+							<li style="display:list-item;list-style:none">
+								<a href="#" onClick="Active(this,'tab2');" data-toggle="tab">歸還</a>
+							</li>
+							<li style="display:list-item;list-style:none;">
+								<a href="#" onClick="Active(this,'tab3');" data-toggle="tab">未借用</a>
+							</li>
+						</ul>
+					</div>
+					<table class="bordered" id="tab1" style="width:1500px;">
+					@if(count($list2))
+					<tr>
+						<th>日期</th>
+						<th>教室編號</th>
+						<th>時間</th>
+						<th style="width:150px">課程 / 活動名稱</th>
+						<th>借用者</th>
+						<th><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
+						<th>email</th>
+						<th>聯絡電話</th>
+					</tr>
+					@foreach($list2 as $item)
+					<tr>
+						<td>{{$item->date}}</td>
+						<td>{{$item->classroom}}</td>
+						<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
+						<td>{{$item->reason}}</td>
+						<td>{{$item->username}}</td>
+						<td class="key">
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-1" class="radio"/>
+							<label for="{{$item->id}}-1">未借用</label>
+							</div>
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-2" class="radio" checked/>
+							<label for="{{$item->id}}-2">借出</label>
+							</div>
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-3" class="radio"/>
+							<label for="{{$item->id}}-3">歸還</label>
+							</div>
+						</td>
+						<td>{{$item->email}}</td>
+						<td>{{$item->phone}}</td>
+					</tr>
+					@endforeach
+					@else
+					<tr><td>
+					查無資料
+					</td></tr>
+					@endif
+					</table>
+					<table class="bordered" id="tab2" style="width:1500px;display:none">
+					@if(count($list3))
+					<tr>
+						<th>日期</th>
+						<th>教室編號</th>
+						<th>時間</th>
+						<th style="width:150px">課程 / 活動名稱</th>
+						<th>借用者</th>
+						<th><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
+						<th>email</th>
+						<th>聯絡電話</th>
+					</tr>
+					@foreach($list3 as $item)
+					<tr>
+						<td>{{$item->date}}</td>
+						<td>{{$item->classroom}}</td>
+						<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
+						<td>{{$item->reason}}</td>
+						<td>{{$item->username}}</td>
+						<td class="key">
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-1" class="radio"/>
+							<label for="{{$item->id}}-1">未借用</label>
+							</div>
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-2" class="radio"/>
+							<label for="{{$item->id}}-2">借出</label>
+							</div>
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-3" class="radio" checked/>
+							<label for="{{$item->id}}-3">歸還</label>
+							</div>
+						</td>
+						<td>{{$item->email}}</td>
+						<td>{{$item->phone}}</td>
+					</tr>
+					@endforeach
+					@else
+					<tr><td>
+					查無資料
+					</td></tr>
+					@endif
+					</table>
+					<table class="bordered" id="tab3" style="width:1500px;display:none">
+					@if(count($list1))
+					<tr>
+						<th>日期</th>
+						<th>教室編號</th>
+						<th>時間</th>
+						<th style="width:150px">課程 / 活動名稱</th>
+						<th>借用者</th>
+						<th><img src="{{URL::to('img/key.ico')}}" style="width:30px;vertical-align:middle"/></th>
+						<th>email</th>
+						<th>聯絡電話</th>
+					</tr>
+					@foreach($list1 as $item)
+					<tr>
+						<td>{{$item->date}}</td>
+						<td>{{$item->classroom}}</td>
+						<td>{{$item->start_time}}:00~{{$item->end_time}}:00</td>
+						<td>{{$item->reason}}</td>
+						<td>{{$item->username}}</td>
+						<td class="key">
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-1" class="radio" checked/>
+							<label for="{{$item->id}}-1">未借用</label>
+							</div>
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-2" class="radio"/>
+							<label for="{{$item->id}}-2">借出</label>
+							</div>
+							<div>
+							<input type="radio" name="{{$item->id}}" id="{{$item->id}}-3" class="radio"/>
+							<label for="{{$item->id}}-3">歸還</label>
+							</div>
+						</td>
+						<td>{{$item->email}}</td>
+						<td>{{$item->phone}}</td>
+					</tr>
+					@endforeach
+					@else
+					<tr><td>
+					查無資料
+					</td></tr>
+					@endif
+					</table>
 				</div>
 			</div>
 		</div>
