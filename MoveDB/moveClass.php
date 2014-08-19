@@ -27,12 +27,15 @@
 		array_push($Type, $rows['type']);
 	/*************/
 	$mysqli->query("SET NAMES 'latin1'");
-	$sql="SELECT * FROM `choiceList` WHERE 1 order by `id`";
+	$sql="SELECT * FROM `choiceList` WHERE year >= 2014 order by `id`";
 	$result = $mysqli->query($sql);
 	$mysqli->query("SET NAMES 'utf8'");
-	$i=0;
+	$i=1;
+	$last = -1;  //last classid
+	$nowRepeat;
 	while($rows=$result->fetch_array()){
 //	$rows=$result->fetch_array();
+		if($rows['classid']==0) continue;
 		$month=$rows['month'];
 		$day=$rows['day'];
 		$year=$rows['year'];
@@ -45,6 +48,17 @@
 		$reason = $rows['classname']; 
 		$type = $rows['reason'];
 		$date = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
+		$classid = $rows['classid'];
+		if($classid==$last){
+			$repeat = $nowRepeat;
+			$sql="UPDATE `BorrowList` SET `repeat`=$nowRepeat WHERE `id` = $nowRepeat";
+			$mysqli->query($sql);
+		}
+		else{
+			$repeat = 0;
+			$last = $classid;
+			$nowRepeat = $i;
+		}
 		/* link data */
 		$classroom = array_search($classroom, $Class);
 		if(!$classroom) continue;
@@ -55,10 +69,9 @@
 		if(strtotime($date)<strtotime(date("Y-m-d", mktime(0,0,0,1,1,2014))))
 			continue;
 		/*************/
-		$i++;
-		$sql="INSERT INTO `BorrowList`(`date`, `classroom`, `start_time`, `end_time`, `user_id`, `username`, `phone`, `email`, `reason`, `type`) VALUES ('$date',$classroom,$start_time,$end_time,$user_id,'$username', '$phone','$email','$reason',$type)";
+		$sql="INSERT INTO `BorrowList`(`id`, `date`, `classroom`, `start_time`, `end_time`, `user_id`, `username`, `phone`, `email`, `reason`, `type`, `repeat`) VALUES ($i,'$date',$classroom,$start_time,$end_time,$user_id,'$username', '$phone','$email','$reason',$type,$repeat)";
 		$mysqli->query($sql);
-
+		$i++;
 	}
 	echo $i."\n";
 	
