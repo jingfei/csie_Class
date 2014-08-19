@@ -15,5 +15,6 @@
 		@else
 			<li><a href="/Class2014/Login" class="myButton">login</a></li>
 		@endif
+		<li></li>
 	</ul>
 </nav>
