@@ -74,6 +74,7 @@ class ClassController extends \BaseController {
 		$type = DB::table('typeList')->get();
 		$nowDate = date("Y-m-d");
 		$disable = $nowDate > $thisDate; 
+		if($warning) $disable = true;
 		return View::make('pages.class')
 					->with('data',$data)
 					->with('table',$table)
@@ -97,10 +98,12 @@ class ClassController extends \BaseController {
 		if($repeat) $repeat = htmlspecialchars($repeat);
 		/***********************/
 		/* 檢查日期是否過了 */
-		$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
-		$nowDate = date("Y-m-d");
-		if($thisDate < $nowDate)
-			return "<script>alert('日期已過，無法修改');</script>".Redirect::to('class/'.$year.'/'.$month.'/'.$day);
+		if(!$old){
+			$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
+			$nowDate = date("Y-m-d");
+			if($thisDate < $nowDate)
+				return "<script>alert('日期已過，無法修改');</script>".Redirect::to('class/'.$year.'/'.$month.'/'.$day);
+		}
 		/********************/
 		$diffUser=null;
 		/*get username*/
@@ -127,6 +130,12 @@ class ClassController extends \BaseController {
 			$year = strtok($result->date, '-');
 			$month = strtok('-');
 			$day = strtok('-');
+			/* 檢查日期是否過了 */
+			$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
+			$nowDate = date("Y-m-d");
+			if($thisDate < $nowDate)
+				return "<script>alert('日期已過，無法修改');</script>".Redirect::to('class/'.$year.'/'.$month.'/'.$day);
+			/********************/
 			$className = DB::table('classList')
 							->where('id', $result->classroom)
 							->first()

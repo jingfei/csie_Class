@@ -71,7 +71,7 @@ $(document).ready(function(){
 						<tr>
 							<th class="class_time">{{$time}}</th>
 						@for($i=($classpage-1)*6+1; $i<=$classpage*6 &&$i<=count($data); $i++)
-							@if($table[$time-8][$i][0]==-1 && $warning)
+							@if($table[$time-8][$i][0]==-1 && $disable)
 							<td class="class_inner">
 							@elseif($table[$time-8][$i][0]==-1)
 							<td class="class_inner {{$disable}} @if(!$disable) no_event @endif" name="{{$time.';'.$data[$i-1]->name}}">
@@ -82,7 +82,7 @@ $(document).ready(function(){
 							@elseif($table[$time-8][$i][0]==1)
 							<td class="class_inner">
 								<div class="outer_div">
-								@if(!$warning && $table[$time-8][$i][3])
+								@if(!$disable && $table[$time-8][$i][3])
 								<div class="inner_div user_div">
 									<br/>
 									@if($table[$time-8][$i][4])
@@ -101,7 +101,7 @@ $(document).ready(function(){
 							@elseif($table[$time-8][$i][0]>1)
 							<td class="class_inner" rowspan="{{$table[$time-8][$i][0]}}" style="height:{{70*$table[$time-8][$i][0]}}px;">
 								<div class="outer_div">
-								@if(!$warning && $table[$time-8][$i][3])
+								@if(!$disable && $table[$time-8][$i][3])
 								<div class="inner_div user_div">
 									<br/>
 									@if($table[$time-8][$i][4])

@@ -47,7 +47,7 @@
 	-ms-transition: all 0.2s ease;
 	transition: all 0.2s ease;
 }
-input[type=radio] {
+.yesno input[type=radio] {
 	display: none;
 }
 .switch label {

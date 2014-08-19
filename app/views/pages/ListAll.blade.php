@@ -139,7 +139,7 @@ function changeBlock($id, $block){
 			<td>{{$item->enrollment_year}}</td>
 			<td>{{$item->student_card}}</td>
 			<td>{{$item->phone}}</td>
-			<td style="width:100px;">
+			<td class="yesno" style="width:100px;">
 				<input type="radio" name="{{$item->id}}" id="yes-{{$item->id}}" class="yes" @if(!$item->block) checked @endif />
 				<input type="radio" name="{{$item->id}}" id="no-{{$item->id}}" class="no" @if($item->block) checked @endif />
 				<div class="switch">
