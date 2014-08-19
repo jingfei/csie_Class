@@ -30,7 +30,10 @@ class LoginController extends BaseController {
 //			imap_close($link); //Close the connection
 			$user = strtoupper($user);
 			$inTable = DB::table('StudentCard')->where('student_id', $user)->first();
-			if($inTable && $inTable->name){
+			if($inTable && $inTable->block){
+				return "<script>alert('您無法借用鑰匙，請聯絡系辦，謝謝');</script>".Redirect::to('/');
+			}
+			else if($inTable && $inTable->name){
 				Session::put('user', $user);
 				Session::put('username', $inTable->name);
 				return Redirect::to('/');
