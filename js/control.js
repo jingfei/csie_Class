@@ -73,14 +73,3 @@ function initClassform(){
 	$( "#dialog-form" ).dialog({ height: 650+30 });
 }
 
-function initAdmin(){
-	$( "#admin-form1" ).dialog({ closeText: "x" });
-	$( "#admin-form1" ).dialog({ modal: true });
-	$( "#admin-form1" ).dialog({ show: true });
-	$( "#admin-form1" ).dialog({ hide: { effect: "explode", duration: 500 } });
-	$( "#admin-form1" ).dialog({ width: 340 });
-	$( "#admin-form1" ).dialog({ title: "" });
-
-}
-
-

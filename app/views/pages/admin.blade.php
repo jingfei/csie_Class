@@ -2,11 +2,40 @@
 @section('content')
 <script>
 $(document).ready(function(){
-	initAdmin();
+	$('.openDate').on('change', function(){
+		$('#chooseDate').prop('checked', true);
+	});
 });
 
-function ShowForm1(){
-	$( "#admin-form1" ).dialog( "open" );
+function renewDate(){
+	var Radio = $('input[name=Open]:checked', '#OpenDate').val();
+	var month1 = $('#month1').val();
+	var month2 = $('#month2').val();
+	var day1 = $('#day1').val();
+	var day2 = $('#day2').val();
+	var year1 = $('#year1').val();
+	var year2 = $('#year2').val();
+	var request = $.ajax({
+		url: '{{URL::to('adminDate')}}',
+		type: "POST",
+		data: {
+			Open: Radio, 
+			month1: month1,
+			month2: month2,
+			day1: day1,
+			day2: day2,
+			year1: year1,
+			year2: year2
+		}
+	});
+	
+	request.done(function(data){
+		alert(data);
+	});
+
+	request.fail(function( jqXHR, textStatus){
+		alert("無法更新: "+textStatus+jqXHR);
+	});
 }
 
 function adminQuery(){
@@ -51,100 +80,27 @@ function adminQuery(){
 
 		<h1 class="content_title" style="font-size:220%;">課程管理 <small>管理者專用</small></h1>
 		<hr/>
-		<!-- form-start -->
-		<div id="admin-form1" title="class">
-			{{ Form::open(array('class' => 'box', 'url' => 'adminDate', 'method' => 'post')) }}
-			<label style="font-size:1.5em"> 開放日期修改 </label>
-				<!-- date_start -->
-				<div style="margin: 5px 5px 5px 25px">
-				從
-				<select name="year1" class="repeat2">
-					<option @if(date("Y")==$date['start']['year']) selected="selected" @endif>
-						{{date("Y")}}
-					</option>
-					<option @if(date("Y")+1==$date['start']['year']) selected="selected" @endif>
-						{{date("Y")+1}}
-					</option>
-					<option @if(date("Y")+2==$date['start']['year']) selected="selected" @endif>
-						{{date("Y")+2}}
-					</option>
-					<option @if(date("Y")+3==$date['start']['year']) selected="selected" @endif>
-						{{date("Y")+3}}
-					</option>
-				</select>
-				年
-				<select name="month1" class="repeat2">
-					@for($i=1; $i<=12; ++$i)
-						<option @if($date['start']['month']==$i) selected="selected" @endif>
-							{{$i}}
-						</option>
-					@endfor
-				</select>
-				月
-				<select name="day1" class="repeat2">
-					@for($i=1; $i<=31; ++$i)
-						<option @if($date['start']['day']==$i) selected="selected" @endif>
-							{{$i}}
-						</option>
-					@endfor
-				</select>
-				日
-				<br/>
-				<!-- date_end -->
-				<!-- date_start -->
-				到
-				<select name="year2" class="repeat2">
-					<option @if(date("Y")==$date['end']['year']) selected="selected" @endif>
-						{{date("Y")}}
-					</option>
-					<option @if(date("Y")+1==$date['end']['year']) selected="selected" @endif>
-						{{date("Y")+1}}
-					</option>
-					<option @if(date("Y")+2==$date['end']['year']) selected="selected" @endif>
-						{{date("Y")+2}}
-					</option>
-					<option @if(date("Y")+3==$date['end']['year']) selected="selected" @endif>
-						{{date("Y")+3}}
-					</option>
-				</select>
-				年
-				<select name="month2" class="repeat2">
-					@for($i=1; $i<=12; ++$i)
-						<option @if($date['end']['month']==$i) selected="selected" @endif>
-							{{$i}}
-						</option>
-					@endfor
-				</select>
-				月
-				<select name="day2" class="repeat2">
-					@for($i=1; $i<=31; ++$i)
-						<option @if($date['end']['day']==$i) selected="selected" @endif>
-							{{$i}}
-						</option>
-					@endfor
-				</select>
-				日
-				<br/>
-				</div>
-				<!-- date_end -->
-
-			</fieldset>
-	
-			<footer>
-			<input type="submit" value="確認修改" class="btnLogin" tabindex="4">
-			</footer>
-			
-		{{ Form::close() }}
-		</div>
-		<!-- form-end -->
 		<div style="font-size:1.3em">
 			<div style="margin:10px">
-				<span style="font-size:1.5em">開放登記日期：</span>
-				<span style="color:red" style="vertical-align:middle">
-					{{$date['start']['year']."年".$date['start']['month']."月".$date['start']['day']."日"}} ~ {{$date['end']['year']."年".$date['end']['month']."月".$date['end']['day']."日"}}
-				</span>
-				&nbsp;&nbsp;
-				<button onClick="ShowForm1();">修改</button>
+				<form id="OpenDate" onSubmit="renewDate(); return false;">
+					<span style="font-size:1.5em">開放登記日期：</span>
+					<input type="radio" id="chooseDate" name="Open" value="yes" @if($date['start']['all']!="2000-01-01") checked @endif />
+					<span style="color:red" style="vertical-align:middle">
+						<input class="openDate" type="text" size="3" id="year1" value="{{$date['start']['year']}}"/>年
+						<input class="openDate" type="text" size="1" id="month1" value="{{$date['start']['month']}}"/>月
+						<input class="openDate" type="text" size="1" id="day1" value="{{$date['start']['day']}}"/>日
+						 ~ 
+						<input class="openDate" type="text" size="3" id="year2" value="{{$date['end']['year']}}"/>年
+						<input class="openDate" type="text" size="1" id="month2" value="{{$date['end']['month']}}"/>月
+						<input class="openDate" type="text" size="1" id="day2" value="{{$date['end']['day']}}"/>日
+						
+					</span>
+					&nbsp;&nbsp;
+					<input type="radio" id="noChoose" name="Open" value="no" @if($date['start']['all']=="2000-01-01") checked @endif />
+					<label for="noChoose">不開放</label>
+					&nbsp;&nbsp;
+					<input type="submit" value="修改"/>
+				</form>
 			</div>
 			<hr style="border-top: dashed black 1px;width:96%;margin:20px 2%;"/>
 			<div style="margin:10px">

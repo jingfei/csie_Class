@@ -35,6 +35,8 @@ class BaseController extends Controller {
 						->where('name', 'date_end')
 						->first()
 						->detail;
+		if($start=="-") $start="2000-01-01";
+		if($end=="-") $end = "2000-01-01";
 		$date = array();
 		$date['start']=array();
 		$date['start']['all'] = $start;

@@ -145,31 +145,44 @@ class AdminController extends BaseController {
 
 	public function updateDate(){
 		if(Session::get('user')!='admin')
-			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$month1 = htmlspecialchars(Input::get('month1'));
-		$month2 = htmlspecialchars(Input::get('month2'));
-		$day1 = htmlspecialchars(Input::get('day1'));
-		$day2 = htmlspecialchars(Input::get('day2'));
-		$year1 = htmlspecialchars(Input::get('year1'));
-		$year2 = htmlspecialchars(Input::get('year2'));
-		$date1 = date("Y-m-d", mktime(0,0,0,$month1,$day1,$year1));
-		$date2 = date("Y-m-d", mktime(0,0,0,$month2,$day2,$year2));
-		if($date1 > $date2) return "<script>alert('日期選擇錯誤');</script>".Redirect::to("Admin"); 
-		else{
-			try{
-				$update1 = DB::table('Admin')
-							 ->where('name', 'date_start')
-							 ->update(array('detail' => $date1));
-				$update2 = DB::table('Admin')
-				  			 ->where('name', 'date_end')
-			  				 ->update(array('detail' => $date2));
-			}catch(\Exception $e){
-				return "<script>alert('更新失敗');</script>".Redirect::to("Admin");
-			
-			}
-			return "<script>alert('更新成功');</script>".Redirect::to("Admin");
+			return "something wrong";
+		$Choose = htmlspecialchars(Input::get('Open'));
+		if($Choose=="no"){
+			$update1 = DB::table('Admin')
+						 ->where('name', 'date_start')
+						 ->update(array('detail' => '-'));
+			$update2 = DB::table('Admin')
+			  			 ->where('name', 'date_end')
+		  				 ->update(array('detail' => '-'));
+			return "系統目前狀態為不開放借用";
 		}
-	
+		else{
+			$month1 = htmlspecialchars(Input::get('month1'));
+			$month2 = htmlspecialchars(Input::get('month2'));
+			$day1 = htmlspecialchars(Input::get('day1'));
+			$day2 = htmlspecialchars(Input::get('day2'));
+			$year1 = htmlspecialchars(Input::get('year1'));
+			$year2 = htmlspecialchars(Input::get('year2'));
+			if( !(is_numeric($month1) && is_numeric($month2) && is_numeric($day1) && is_numeric($day2) && is_numeric($year1) && is_numeric($year2)) )
+				return "日期錯誤";
+			$date1 = date("Y-m-d", mktime(0,0,0,$month1,$day1,$year1));
+			$date2 = date("Y-m-d", mktime(0,0,0,$month2,$day2,$year2));
+			if($date1 > $date2) 
+				return "日期錯誤";
+			else{
+				try{
+					$update1 = DB::table('Admin')
+								 ->where('name', 'date_start')
+								 ->update(array('detail' => $date1));
+					$update2 = DB::table('Admin')
+					  			 ->where('name', 'date_end')
+				  				 ->update(array('detail' => $date2));
+				}catch(\Exception $e){
+					return "更新失敗";
+				}
+				return "更新成功";
+			}
+		}
 	}
 
 	public function adminSetting(){

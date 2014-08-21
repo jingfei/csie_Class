@@ -98,7 +98,7 @@ class ClassController extends \BaseController {
 		if($repeat) $repeat = htmlspecialchars($repeat);
 		/***********************/
 		/* 檢查日期是否過了 */
-		if(!$old){
+		if(!$old && !$repeat){
 			$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 			$nowDate = date("Y-m-d");
 			if($thisDate < $nowDate)

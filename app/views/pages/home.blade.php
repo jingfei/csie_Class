@@ -49,7 +49,12 @@
 		<div style="display:inline-block;width:68%">
 			<div style="text-align:center;">
 				<div style="color:#2166e5; font-weight:bold; font-size: 1.5em;margin: 10px">
-			教室登記 / 查詢開放時間：{{$dateLimit['start']['all']." ~ ".$dateLimit['end']['all']}}
+					教室登記 / 查詢開放時間：
+					@if($dateLimit['start']['all']=="2000-01-01")
+						不開放
+					@else
+						{{$dateLimit['start']['all']." ~ ".$dateLimit['end']['all']}}
+					@endif
 				</div>
 				<button class="innerButton" onClick="ClickToday()" >today</button>
 				<button class="innerButton" onClick="gotoDate()">選擇</button>
