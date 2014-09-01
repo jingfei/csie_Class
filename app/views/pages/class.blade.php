@@ -6,15 +6,41 @@ $(document).ready(function(){
 	var currentDate = $( ".datepicker" ).datepicker( "setDate", "{{$year."/".$month."/".$day}}" );
 
 	$(".datepicker").change(function() {
-		var nowDate = $( ".datepicker" ).datepicker( "getDate" );
-		gotoDate();
+		gotoDate(0);
 	});
 	$( ".no_event" ).click(function() {
 		gotoModify( $(this) );
 	});
 });
-
 </script>
+<style>
+#left_top{
+	border: none;
+	border-top:70px #D6D3D6 solid;/*上邊框寬度等於表格第一行行高*/
+	width:0px;/*讓容器寬度為0*/
+	height:0px;/*讓容器高度為0*/
+	border-left:45px #BDBABD solid;/*左邊框寬度等於表格第一行第一格寬度*/
+	position:relative;/*讓裡面的兩個子容器絕對定位*/
+}
+#span1{
+	border: none;
+	font-style:normal;
+	display:block;
+	position:absolute;
+	top:-60px;
+	left:-33px;
+	width:35px;
+}	
+#span2{
+	border: none;
+	font-style:normal;
+	display:block;
+	position:absolute;
+	top:-25px;
+	left:-57px;
+	width:55px;
+}
+</style>
 
 
 		<h1 class="content_title" style="font-size:220%;">查詢 <small>教室</small></h1>
@@ -27,18 +53,18 @@ $(document).ready(function(){
 		</div>
 		<div class="class_outer">
 			<div>
-				<table style="width:100%;text-align: center;"><tr>
-				<td style="width:25%;">
-					<img src="{{asset('img/right.png')}}" onClick="ClassPage(-1)"/>
+				<table style="width:680px;text-align: center;"><tr>
+				<td style="width:20%;">
+					<img src="{{asset('img/right.png')}}" onClick="gotoDate(-1)"/>
 				</td>
-				<td style="width:50%;font-size:2.5em;vertical-align:middle">
+				<td style="width:60%;font-size:2.5em;vertical-align:middle">
 					{{$year." / ".$month." / ".$day}}
 					@if($warning)
 					<span style="font-size:0.8em;">({{$warning}})</span>
 					@endif
 				</td>
-				<td style="width:25%">
-					<img src="{{asset('img/left.png')}}"  onClick="ClassPage(1)"/>
+				<td style="width:20%">
+					<img src="{{asset('img/left.png')}}"  onClick="gotoDate(1)"/>
 				</td>
 				</tr></table>
 			</div>
@@ -56,7 +82,20 @@ $(document).ready(function(){
 				<div class="class_table class_title">
 					<table>
 						<tr>
-							<th class="class_time"> </th>
+							<td style="border:none"></td>
+							<td colspan="6" style="text-align:center;border-left:none;line-height:30px;">
+								<img src="{{asset('img/left-arrow.gif')}}" height="30px" alt="上一頁" style="border:none;float:left" onClick="ClassPage(-1);"/>
+								<span style="border:none;font-size:1.5em" id="PageNum">Page. {{$classpage}}</span>
+								<img src="{{asset('img/right-arrow.gif')}}" height="30px" alt="下一頁" style="border:none;float:right" onClick="ClassPage(1);"/>
+							</td>
+						</tr>
+						<tr>
+						<th class="class_time" style="vertical-align:bottom">
+							<div id="left_top">
+								<span id="span1">教室</span>
+								<span id="span2">時間</span>
+							</div>
+						</th>
 						@for($i=($classpage-1)*6; $i<$classpage*6 && $i<count($data); $i++)
 							<th class="class_name">
 								{{$data[$i]->name.'<br/>'.$data[$i]->type}}
@@ -69,7 +108,10 @@ $(document).ready(function(){
 					<table>
 					@for($time=8; $time<22; $time++)
 						<tr>
-							<th class="class_time">{{$time}}</th>
+							<th class="class_time">
+								{{$time}}:10<br/>
+								<span style="border:none;line-height:2.5em">{{test($time)}}</span>
+							</th>
 						@for($i=($classpage-1)*6+1; $i<=$classpage*6 &&$i<=count($data); $i++)
 							@if($table[$time-8][$i][0]==-1 && $disable)
 							<td class="class_inner">
@@ -127,4 +169,27 @@ $(document).ready(function(){
 			@endfor
 		</div>
 @stop
+
+<?php
+function test($time){
+	switch($time){
+		case 8: return "第一節";
+		case 9: return "第二節";
+		case 10: return "第三節";
+		case 11: return "第四節";
+		case 12: return "N";
+		case 13: return "第五節";
+		case 14: return "第六節";
+		case 15: return "第七節";
+		case 16: return "第八節";
+		case 17: return "第九節";
+		case 18: return "A";
+		case 19: return "B";
+		case 20: return "C";
+		case 21: return "D";
+		case 22: return "E";
+		default: return "";
+	}
+}
+?>
 

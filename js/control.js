@@ -2,8 +2,9 @@ function ClickToday(){
 	$( ".datepicker" ).datepicker( "setDate", new Date() );
 }
 
-function gotoDate(){
+function gotoDate($off){
 	var selectDate = $( ".datepicker" ).datepicker( "getDate" );
+	selectDate.setDate(selectDate.getDate() + $off);
 	location.href="/Class2014/class/"+selectDate.getFullYear()+"/"+(selectDate.getMonth()+1)+"/"+selectDate.getDate();
 }
 

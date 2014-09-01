@@ -262,6 +262,12 @@ class ClassController extends \BaseController {
 		$time_end = htmlspecialchars( Input::get('time_end') );
 		if(strlen($time_end)==4) $time_end=(int)$time_end[0];
 		else $time_end = (int)($time_end[0].$time_end[1]);
+		if(strlen($time_start)==4) $time_start=(int)$time_start[0];
+		else $time_start = (int)($time_start[0].$time_start[1]);
+		/* 檢查時間 */
+		if($time_start >= $time_end)
+			return "<script>alert('時間選擇錯誤');</script>".Redirect::to('/');
+		/************/
 		$email = htmlspecialchars( Input::get('form_email') );
 		$tel = htmlspecialchars( Input::get('form_tel') );
 		$type = htmlspecialchars( Input::get('form_reason') );
@@ -269,7 +275,7 @@ class ClassController extends \BaseController {
 		/*檢查日期 (管理者除外) */
 		$dateLimit = self::dateLimit();
 		if(!$old_repeat && Session::get('user')!='admin' && ($date_start>$dateLimit['end']['all'] || $date_start<$dateLimit['start']['all']) )
-			return "<script>alert('日期錯誤');</script>".Redirect::to('/');
+			return "<script>alert('日期錯誤');</script>".Redirect::to('class/');
 		/************************/
 		/* 檢查日期是否過了 */
 		$nowDate = date("Y-m-d");

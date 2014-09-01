@@ -106,22 +106,15 @@ $(document).ready(function(){
 			</select>
 
 			<label> 時間 </label>
-			@if(!$old)
-			<input type="hidden" name="time_start" value="{{$startTime}}" />
-			<span id="time_start">{{$startTime}}</span>:00
-			@else
 			<select name="time_start">
 				@for($i=8; $i<22; ++$i)
 					<option @if($startTime==$i) selected="selected" @endif >{{ $i }}:00</option>
 				@endfor
 			</select>
-			@endif
 			~
 			<select name="time_end" id="time_end">
 				@for($i=9; $i<23; ++$i)
-					@if($old || $i>= $endTime)
-						<option @if($endTime==$i) selected="selected" @endif >{{ $i }}:00</option>
-					@endif
+					<option @if($endTime==$i) selected="selected" @endif >{{ $i }}:00</option>
 				@endfor
 			</select>
 			
