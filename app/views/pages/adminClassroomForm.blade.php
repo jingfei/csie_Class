@@ -10,6 +10,9 @@
 			<label> 教室名稱 </label>
 			<input type="text" name="name" @if($old) value="{{$old->name}}" @endif required/>
 			
+			<label> 教室容量大小 </label>
+			<input type="text" name="capacity" @if($old) value="{{$old->capacity}}" @endif required/>
+			
 			<label> 教室類別 </label>
 			<input type="text" name="type" @if($old) value="{{$old->type}}" @endif required/>
 			

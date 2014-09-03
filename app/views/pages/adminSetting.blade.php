@@ -45,6 +45,7 @@ td{vertical-align:middle;}
 				<tr>
 					<th>id</th>
 					<th>教室名稱</th>
+					<th>可容納人數</th>
 					<th>教室類別</th>
 					<th>操作</th>
 				</tr>
@@ -52,6 +53,7 @@ td{vertical-align:middle;}
 				<tr id="{{'class'.$item->id}}">
 					<td>{{$item->id}}</td>
 					<td>{{$item->name}}</td>
+					<td>{{$item->capacity}}</td>
 					<td>{{$item->type}}</td>
 					<td style="width:100px">
 						<a href="{{URL::to('adminSettingClassroom/'.$item->id)}}"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>

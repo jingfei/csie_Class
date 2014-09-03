@@ -85,7 +85,7 @@ $(document).ready(function(){
 							<td style="border:none"></td>
 							<td colspan="6" style="text-align:center;border-left:none;line-height:30px;">
 								<img src="{{asset('img/left-arrow.gif')}}" height="30px" alt="上一頁" style="border:none;float:left" onClick="ClassPage(-1);"/>
-								<span style="border:none;font-size:1.5em" id="PageNum">Page. {{$classpage}}</span>
+								<span style="border:none;font-size:1.5em" id="PageNum">Page. {{$classpage}} / {{ceil(count($data)/6.0)}}</span>
 								<img src="{{asset('img/right-arrow.gif')}}" height="30px" alt="下一頁" style="border:none;float:right" onClick="ClassPage(1);"/>
 							</td>
 						</tr>
@@ -98,9 +98,18 @@ $(document).ready(function(){
 						</th>
 						@for($i=($classpage-1)*6; $i<$classpage*6 && $i<count($data); $i++)
 							<th class="class_name">
-								{{$data[$i]->name.'<br/>'.$data[$i]->type}}
+								{{$data[$i]->name}}<br/>
+								{{$data[$i]->type}}<br/>
+								@if($data[$i]->capacity) 
+									{{$data[$i]->capacity."人"}}
+								@endif
 							</th>
 						@endfor
+						@if( $i >= count($data) )
+							@for( $j=$i; $j<$classpage*6; ++$j )
+								<th class="class_name"></th>
+							@endfor
+						@endif
 						</tr>
 					</table>
 				</div>
@@ -161,6 +170,11 @@ $(document).ready(function(){
 							</td>
 							@endif
 						@endfor
+						@if( $i >= count($data) )
+							@for( $j=$i; $j<=$classpage*6; ++$j )
+								<td class="class_inner"></td>
+							@endfor
+						@endif
 						</tr>
 					@endfor
 					</table>

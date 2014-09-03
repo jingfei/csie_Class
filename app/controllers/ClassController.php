@@ -4,7 +4,7 @@ class ClassController extends \BaseController {
 
 	public function FindClass(){
 		$tmp = DB::table('classList')
-				->select('name', 'type')
+				->select('name', 'type', 'capacity')
 				->orderBy('id')
 				->get();
 		return $tmp;

@@ -319,9 +319,11 @@ class AdminController extends BaseController {
 		$id = htmlspecialchars($id);
 		$name = htmlspecialchars( Input::get('name') );
 		$type = htmlspecialchars( Input::get('type') );
+		$capacity = htmlspecialchars( Input::get('capacity') );
 		$ar = array();
 		$ar['name'] = $name;
 		$ar['type'] = $type;
+		$ar['capacity'] = $capacity;
 		if($id)
 			DB::table('classList')->where('id', $id)->update($ar);
 		else
