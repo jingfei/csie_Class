@@ -84,9 +84,9 @@ $(document).ready(function(){
 						<tr>
 							<td style="border:none"></td>
 							<td colspan="6" style="text-align:center;border-left:none;line-height:30px;">
-								<img src="{{asset('img/left-arrow.gif')}}" height="30px" alt="上一頁" style="border:none;float:left" onClick="ClassPage(-1);"/>
+								<img src="{{asset('img/left-arrow.png')}}" height="30px" alt="上一頁" style="border:none;float:left" onClick="ClassPage(-1);"/>
 								<span style="border:none;font-size:1.5em" id="PageNum">Page. {{$classpage}} / {{ceil(count($data)/6.0)}}</span>
-								<img src="{{asset('img/right-arrow.gif')}}" height="30px" alt="下一頁" style="border:none;float:right" onClick="ClassPage(1);"/>
+								<img src="{{asset('img/right-arrow.png')}}" height="30px" alt="下一頁" style="border:none;float:right" onClick="ClassPage(1);"/>
 							</td>
 						</tr>
 						<tr>
@@ -101,7 +101,7 @@ $(document).ready(function(){
 								{{$data[$i]->name}}<br/>
 								{{$data[$i]->type}}<br/>
 								@if($data[$i]->capacity) 
-									{{$data[$i]->capacity."人"}}
+									{{"(".$data[$i]->capacity."人)"}}
 								@endif
 							</th>
 						@endfor

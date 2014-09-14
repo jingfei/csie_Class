@@ -44,6 +44,8 @@ Route::get('Delete/{_id}/{repeatId?}', 'ClassController@deleteBorrow');
 
 Route::get('Repeat/{_id}', 'ClassController@repeatQuery');
 
+Route::post('addRepeatDate', 'ClassController@addRepeatDate');
+
 /* StudentCard */
 
 Route::get('DownloadCSV', function(){

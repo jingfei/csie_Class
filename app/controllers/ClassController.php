@@ -172,15 +172,15 @@ class ClassController extends \BaseController {
 	}
 
 	public function deleteBorrow($_id, $repeatId=null){
+		$nowdate = date("Y-m-d");
 		$_id = htmlspecialchars($_id);
 		if(!$repeatId) $data = DB::table('BorrowList')->where('id', $_id);
-		else $data = DB::table('BorrowList')->where('repeat', htmlspecialchars($repeatId));
+		else $data = DB::table('BorrowList')->where('repeat', htmlspecialchars($repeatId))->where('date','>',$nowdate);
 		if(!$data)
 			return "<script>something wrong</script>".Redirect::to('/');
 		if(Session::get('user')!='admin' && $data->first()->username!=Session::get('username'))
 			return "<script>something wrong</script>".Redirect::to('/');
 		$date = self::eachDate($data->first()->date);
-		$nowdate = date("Y-m-d");
 		if($data->first()->date < $nowdate)
 			return "<script>alert('日期已過，無法刪除');</script>".Redirect::to('class/'.$date['year'].'/'.$date['month'].'/'.$date['day']);
 		$data->delete();
@@ -217,7 +217,49 @@ class ClassController extends \BaseController {
 		/************/
 		return View::make('pages.repeatQuery')
 					->with('change', $change)
+					->with('_id',$_id)
 					->with('list', $limit);
+	}
+
+	public function addRepeatDate(){
+		$_id = htmlspecialchars( Input::get('_id') );
+		$year = htmlspecialchars( Input::get('year') );
+		$month = htmlspecialchars( Input::get('month') );
+		$day = htmlspecialchars( Input::get('day') );
+		$date = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
+		$dateLimit = self::dateLimit();
+		$limit = DB::table('BorrowList')
+					->where('repeat', $_id)
+					->first();
+		/* 可否修改 */
+		if(Session::get('user')!='admin' && $limit->username!=Session::get('username'))
+			return "error";
+		/************/
+		/*檢查日期 (管理者除外) */
+		$dateLimit = self::dateLimit();
+		if(Session::get('user')!='admin' && ($date>$dateLimit['end']['all'] || $date<$dateLimit['start']['all']) )
+			return "日期錯誤";
+		/************************/
+		/* 檢查日期是否過了 */
+		$nowDate = date("Y-m-d");
+		if($date < $nowDate)
+			return "日期已過，無法修改";
+		/********************/
+		$result = DB::table('BorrowList')
+					->select('start_time', 'end_time')
+					->where('date', $date)
+					->where('classroom', $limit->classroom)
+					->get();
+		if(self::CheckRepeat($result,$limit->start_time,$limit->end_time)) //if someone borrow the class first
+			return "教室已被借用，請確認後重新借用";
+		$ar = $limit;
+		$ar->key = 1;
+		$ar->id = null;
+		$ar->state = 1;
+		$ar->date = $date;
+		$ar = (array)$ar;
+		$result = DB::table('BorrowList')->insert($ar);
+		return "更新成功";		
 	}
 
 	public function Borrow(){
@@ -279,7 +321,7 @@ class ClassController extends \BaseController {
 		/************************/
 		/* 檢查日期是否過了 */
 		$nowDate = date("Y-m-d");
-		if($date_start < $nowDate)
+		if($date_start && $date_start < $nowDate)
 			return "<script>alert('日期已過，無法修改');</script>".Redirect::to('/');
 		/********************/
 		/* repeat */

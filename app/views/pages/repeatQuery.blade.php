@@ -6,6 +6,37 @@ $(document).ready(function(){
 		$(this).css('background', 'transparent');
 	});
 });
+
+function addRepeatDate(){
+	var yearNew = $("#yearNew").val();
+	var monthNew = $("#monthNew").val();
+	var dayNew = $("#dayNew").val();
+	if(!yearNew || !monthNew || !dayNew){
+		alert("日期填寫未完整");
+		return;
+	}
+	var request = $.ajax({
+		url: '{{URL::to('addRepeatDate')}}',
+		type: "POST",
+		data: {
+			_id: {{$_id}}, 
+			year: yearNew,
+			month: monthNew,
+			day: dayNew
+		}
+	});
+
+	request.success(function( result ){
+		alert(result);
+		location.reload();
+	});
+
+	request.fail(function( jqXHR, textStatus){
+		alert("無法更新: "+textStatus);
+	});
+
+}
+
 </script>
 <style>
 .ui-dialog-titlebar-close{
@@ -28,10 +59,19 @@ $(document).ready(function(){
 				<table class="bordered">
 				@if($change)
 				<tr>
-					<td colspan="9">
-						<a href="{{URL::to('modifyForm/0/0/0/0/'.$list[0]->repeat)}}">全部修改</a>
+					<td colspan="3" style="border-right:none">
+						<button><a href="{{URL::to('modifyForm/0/0/0/0/'.$list[0]->repeat)}}">全部修改</a></button>
 						&nbsp;&nbsp;
-						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/0/'.$list[0]->repeat)}}');">全部刪除</a>
+						<button><a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/0/'.$list[0]->repeat)}}');">全部刪除</a></button>
+					</td>
+					<td colspan="6" style="border-left:none;">
+					<form onsubmit="addRepeatDate(); return false;">
+					新增日期: 
+						<input class="openDate" type="text" size="3" id="yearNew" />年
+						<input class="openDate" type="text" size="1" id="monthNew" />月
+						<input class="openDate" type="text" size="1" id="dayNew" />日
+						<input type="submit" value="送出" />
+					</form>
 					</td>
 				</tr>
 				@endif

@@ -6,16 +6,17 @@ class LoginController extends BaseController {
 		
 		$passwd = htmlspecialchars( Input::get('pw') );
 		$user = htmlspecialchars( Input::get('studentid') );
-		if($user == "admin" && md5($passwd)=="1080ff5e02a6b1b0292325f0e7eae8ec"){
-			Session::put('user', 'admin');
-			Session::put('username', '最高管理者');
-			return Redirect::to('/');
-		}
+//		if($user == "admin" && md5($passwd)=="1080ff5e02a6b1b0292325f0e7eae8ec"){
+//			Session::put('user', 'admin');
+//			Session::put('username', '最高管理者');
+//			return Redirect::to('/');
+//		}
 		$inTable = DB::table('userList')->where('userid', $user)->first();
 		if($inTable && $inTable->password){
 			if($inTable->password==md5($passwd)){
 				Session::put('user', $user);
 				Session::put('username', $inTable->username);
+				Session::put('permission', $inTable->permission);
 				return Redirect::to('/');
 			}
 			else
@@ -36,6 +37,7 @@ class LoginController extends BaseController {
 			else if($inTable && $inTable->name){
 				Session::put('user', $user);
 				Session::put('username', $inTable->name);
+				Session::put('permission', '000001');
 				return Redirect::to('/');
 			}
 			else{
@@ -54,6 +56,7 @@ class LoginController extends BaseController {
 		if (Session::has('user')){
 			Session::forget('user');
 			Session::forget('username');
+			Session::forget('permission');
 			return '<script>alert("Logout success!!");</script>'.Redirect::to('/');
 		}
 		else

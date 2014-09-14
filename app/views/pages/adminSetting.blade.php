@@ -53,7 +53,7 @@ td{vertical-align:middle;}
 				<tr id="{{'class'.$item->id}}">
 					<td>{{$item->id}}</td>
 					<td>{{$item->name}}</td>
-					<td>{{$item->capacity}}</td>
+					<td>{{$item->capacity}} 人</td>
 					<td>{{$item->type}}</td>
 					<td style="width:100px">
 						<a href="{{URL::to('adminSettingClassroom/'.$item->id)}}"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>
@@ -62,7 +62,7 @@ td{vertical-align:middle;}
 				</tr>
 				@endforeach
 				<tr>
-					<td colspan="4" style="text-align:right"><button onClick="location.href='{{URL::to('adminSettingClassroom')}}';">新增</button></td>
+					<td colspan="5" style="text-align:right"><button onClick="location.href='{{URL::to('adminSettingClassroom')}}';">新增</button></td>
 				</tr>
 				</table>
 			</div>

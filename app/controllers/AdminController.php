@@ -50,7 +50,7 @@ class AdminController extends BaseController {
 	}
 
 	public function adminKey($date=null, $date2=null, $Class=0, $User=null){
-		if(Session::get('user')!='admin')
+		if(Session::get('permission')[1]!='1')
 			return "<script>something wrong</script>".Redirect::to('/');
 		$dateLimit = self::dateLimit();
 		/* check special chars */
@@ -101,7 +101,7 @@ class AdminController extends BaseController {
 	}
 
 	public function allnoKey(){
-		if(Session::get('user')!='admin')
+		if(Session::get('permission')[1]!='1')
 			return "<script>something wrong</script>".Redirect::to('/');
 		$dateLimit = self::dateLimit();
 		/* classList */
@@ -134,7 +134,7 @@ class AdminController extends BaseController {
 	}
 
 	public function keyState(){
-		if(Session::get('user')!='admin')
+		if(Session::get('permission')[1]!='1')
 			return "<script>something wrong</script>".Redirect::to('/');
 		$id = htmlspecialchars( Input::get('id') );
 		$state = htmlspecialchars( Input::get('state') );

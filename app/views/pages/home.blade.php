@@ -37,13 +37,6 @@
 				</p>
 			</div>
 			<div class="round-div">
-				<h2 style="font-size:20px">重要資訊：</h2><br/>
-				<p style="font-size:15px">
-					目前系統並不開放預約！<br/>
-					開放時間將從2014年9月10日 8:00起。
-				</p>
-			</div>
-			<div class="round-div">
 				<h2 style="font-size:20px">尚未歸還鑰匙名單：</h2><br/>
 				<p style="font-size:15px">
 				@foreach($key as $item)

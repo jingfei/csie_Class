@@ -1,12 +1,25 @@
 <nav>
 	<ul>
-		@if(Session::get('user')=='admin')
+<?php 
+	$permission="000000";
+	if(Session::has('permission')) $permission=Session::get('permission');
+?>
+		@if($permission[0])
 			<li><a href="/Class2014/query" class="myButton">學生證</a></li>
+		@endif
+		@if($permission[1])
 			<li><a href="/Class2014/adminKey" class="myButton">鑰匙</a></li>
+		@endif
+		@if($permission[2])
 			<li><a href="/Class2014/adminUser" class="myButton">使用者</a></li>
+		@endif
+		@if($permission[3])
 			<li><a href="/Class2014/Admin" class="myButton">課程</a></li>
+		@endif
+		@if($permission[4])
 			<li><a href="/Class2014/adminSetting" class="myButton">設定</a></li>
-		@elseif(Session::has('user'))
+		@endif
+		@if($permission[5])
 			<li><a href="/Class2014/Personal" class="myButton">維護資料</a></li>
 		@endif
 		<li><a href="/Class2014/" class="myButton">查詢</a></li>
