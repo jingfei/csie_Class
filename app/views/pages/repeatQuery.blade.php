@@ -37,6 +37,45 @@ function addRepeatDate(){
 
 }
 
+function repeatSplit(){
+	var yearSplit = $("#yearSplit").val();
+	var monthSplit = $("#monthSplit").val();
+	var daySplit = $("#daySplit").val();
+	if(!yearSplit || !monthSplit || !daySplit){
+		alert("日期填寫未完整");
+		return;
+	}
+
+	var warning = "確定將日期"+yearSplit+"-"+monthSplit+"-"+daySplit+
+					"~{{end($list)->date}}分割?\n(分割後無法合併)";
+	if(!confirm(warning))
+		return;
+
+	var request = $.ajax({
+		url: '{{URL::to('repeatSplit')}}',
+		type: "POST",
+		data: {
+			_id: {{$_id}}, 
+			year: yearSplit,
+			month: monthSplit,
+			day: daySplit
+		}
+	});
+
+	request.success(function( result ){
+		if( {{$_id}} == result)
+			alert("日期分割失敗");
+		else
+			alert("日期分割成功");
+		location.href=result;
+	});
+
+	request.fail(function( jqXHR, textStatus){
+		alert("無法更新: "+textStatus);
+	});
+
+}
+
 </script>
 <style>
 .ui-dialog-titlebar-close{
@@ -64,13 +103,22 @@ function addRepeatDate(){
 						&nbsp;&nbsp;
 						<button><a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/0/'.$list[0]->repeat)}}');">全部刪除</a></button>
 					</td>
-					<td colspan="6" style="border-left:none;">
+					<td colspan="3" style="border-left:none;">
 					<form onsubmit="addRepeatDate(); return false;">
 					新增日期: 
 						<input class="openDate" type="text" size="3" id="yearNew" />年
 						<input class="openDate" type="text" size="1" id="monthNew" />月
 						<input class="openDate" type="text" size="1" id="dayNew" />日
-						<input type="submit" value="送出" />
+						<input type="submit" value="新增" />
+					</form>
+					</td>
+					<td colspan="3" style="border-left:none;">
+					<form onsubmit="repeatSplit(); return false;">
+					分割日期: 
+						<input class="openDate" type="text" size="3" id="yearSplit" />年
+						<input class="openDate" type="text" size="1" id="monthSplit" />月
+						<input class="openDate" type="text" size="1" id="daySplit" />日
+						<input type="submit" value="分割" />
 					</form>
 					</td>
 				</tr>

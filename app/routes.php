@@ -46,6 +46,8 @@ Route::get('Repeat/{_id}', 'ClassController@repeatQuery');
 
 Route::post('addRepeatDate', 'ClassController@addRepeatDate');
 
+Route::post('repeatSplit', 'ClassController@repeatSplit');
+
 /* StudentCard */
 
 Route::get('DownloadCSV', function(){

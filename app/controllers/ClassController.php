@@ -175,16 +175,50 @@ class ClassController extends \BaseController {
 		$nowdate = date("Y-m-d");
 		$_id = htmlspecialchars($_id);
 		if(!$repeatId) $data = DB::table('BorrowList')->where('id', $_id);
-		else $data = DB::table('BorrowList')->where('repeat', htmlspecialchars($repeatId))->where('date','>',$nowdate);
+		else $data = DB::table('BorrowList')->where('repeat', htmlspecialchars($repeatId));
 		if(!$data)
 			return "<script>something wrong</script>".Redirect::to('/');
+		/* check ID */
 		if(Session::get('user')!='admin' && $data->first()->username!=Session::get('username'))
 			return "<script>something wrong</script>".Redirect::to('/');
+		/************/
 		$date = self::eachDate($data->first()->date);
 		if($data->first()->date < $nowdate)
 			return "<script>alert('日期已過，無法刪除');</script>".Redirect::to('class/'.$date['year'].'/'.$date['month'].'/'.$date['day']);
 		$data->delete();
 		return "<script>alert('刪除成功');</script>".Redirect::to('class/'.$date['year'].'/'.$date['month'].'/'.$date['day']);
+	}
+
+	public function repeatSplit(){
+		$_id = htmlspecialchars( Input::get('_id') );
+		$year = htmlspecialchars( Input::get('year') );
+		$month = htmlspecialchars( Input::get('month') );
+		$day = htmlspecialchars( Input::get('day') );
+		$dateSplit = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
+		$data = DB::table('BorrowList')
+					->where('repeat', $_id)
+					->where('date', '<', $dateSplit)
+					->orderBy('date', 'desc')
+					->first();
+		if(!$data)
+			return $_id;
+		$data = $data->date;
+		/* check ID */
+		if(Session::get('user')!='admin' && $data->first()->username!=Session::get('username'))
+			return "<script>something wrong</script>".Redirect::to('/');
+		/************/
+		$data = DB::table('BorrowList')
+					->where('repeat', $_id)
+					->where('date', '>', $data)
+					->orderBy('date', 'asc')
+					->first();
+		$firstDate = $data->date;
+		$firstID = $data->id;
+		$result = DB::table('BorrowList')
+					->where('repeat', $_id)
+					->where('date', '>=', $firstDate)
+					->update(array('repeat' => $firstID));
+		return $firstID;
 	}
 
 	public function repeatQuery($_id){
