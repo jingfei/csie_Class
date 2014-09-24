@@ -99,9 +99,13 @@ function repeatSplit(){
 				@if($change)
 				<tr>
 					<td colspan="3" style="border-right:none">
-						<button><a href="{{URL::to('modifyForm/0/0/0/0/'.$list[0]->repeat)}}">全部修改</a></button>
+						<form action="{{URL::to('modifyForm/0/0/0/0/'.$list[0]->repeat)}}" style="display:inline"> 
+							<input type="submit" value="全部修改" />
+						</form>
 						&nbsp;&nbsp;
-						<button><a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/0/'.$list[0]->repeat)}}');">全部刪除</a></button>
+						<form action="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('Delete/0/'.$list[0]->repeat)}}');" style="display:inline;"> 
+							<input type="submit" value="全部刪除" />
+						</form>
 					</td>
 					<td colspan="3" style="border-left:none;">
 					<form onsubmit="addRepeatDate(); return false;">
