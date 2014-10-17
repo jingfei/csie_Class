@@ -331,4 +331,10 @@ class AdminController extends BaseController {
 		return "<script>alert('更新成功');</script>".Redirect::to('adminSetting');
 	}
 
+	public function csvData(){
+		$data = self::FindClass();
+		return View::make('pages.csvData')
+					->with('data', $data);	
+	}
+
 }

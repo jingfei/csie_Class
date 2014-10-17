@@ -48,6 +48,8 @@ Route::post('addRepeatDate', 'ClassController@addRepeatDate');
 
 Route::post('repeatSplit', 'ClassController@repeatSplit');
 
+Route::post('CheckClass', 'ClassController@CheckClass');
+
 /* StudentCard */
 
 Route::get('DownloadCSV', function(){
@@ -119,6 +121,8 @@ Route::get('DeleteType/{id}', 'AdminController@DeleteType');
 Route::get('adminSettingClassroom/{old?}', 'AdminController@adminSettingClassroom');
 Route::match(array('POST', 'GET'), 'SettingClassroom/{id?}', 'AdminController@SettingClassroom');
 Route::get('DeleteClassroom/{id}', 'AdminController@DeleteClassroom');
+
+Route::get('csvData', 'AdminController@csvData');
 
 /*********/
 

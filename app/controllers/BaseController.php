@@ -101,4 +101,13 @@ class BaseController extends Controller {
 	
 	    return $csv;
 	}
+
+	protected function FindClass(){
+		$tmp = DB::table('classList')
+				->select('name', 'type', 'capacity')
+				->orderBy('id')
+				->get();
+		return $tmp;
+	}
+
 }
