@@ -539,35 +539,10 @@ class ClassController extends \BaseController {
 		}
 	}
 
-	public function CheckClass(){
-		$user = htmlspecialchars( Input::get('form_user') );
-		$old = htmlspecialchars( Input::get('old') ); 
-		if($old && Session::get('user')!='admin'){ //檢查post ID是否為本人
-			$result = DB::table('BorrowList')
-						->where('id', $old)
-						->first();
-			if(!self::CheckUserSession($result->user_id))
-				return "<script>alert('something wrong...');</script>".Redirect::to('/');
-		}
-		$old_repeat = htmlspecialchars( Input::get('old_repeat') );
-		/* 檢查使用者 */
-		$userInfo = DB::table('userList')
-						->where('username', $user)
-						->first();
-		if($userInfo){
-			$user_id = $userInfo->id;
-			$username = $userInfo->username;
-			$userid = $userInfo->userid;
-		}
-		else{
-			$userInfo = DB::table('StudentCard')
-							->where('name', $user)
-							->first();
-			$user_id = $userInfo->id;
-			$username = $userInfo->name;
-			$userid = $userInfo->student_id;
-		}
-		/**/
+	public function CheckClass($confirm=0){
+		if(Session::get('user')!='admin') 
+			return "<script>alert('something wrong...');</script>".Redirect::to('/');
+		$username = "最高管理者";
 		$date_start = htmlspecialchars( Input::get('date_start') );
 		$title = htmlspecialchars( Input::get('title') );
 		$class = htmlspecialchars( Input::get('form_class') );
@@ -583,38 +558,25 @@ class ClassController extends \BaseController {
 		if($time_start >= $time_end)
 			return "時間選擇錯誤";
 		/************/
-		/*檢查日期 (管理者除外) */
-		$dateLimit = self::dateLimit();
-		if(!$old_repeat && Session::get('user')!='admin' && ($date_start>$dateLimit['end']['all'] || $date_start<$dateLimit['start']['all']) )
-			return "日期錯誤";
-		/************************/
 		/* 檢查日期是否過了 */
 		$nowDate = date("Y-m-d");
 		if($date_start && $date_start < $nowDate)
 			return "日期已過，無法修改";
 		/********************/
 		/* repeat */
-		$Repeat = Input::get('form_repeat') ? true : false;
-		if($old) $Repeat=false;
 		$interval = 0;
 		$intervalUnit = "";
-		if($Repeat){
-			$interval = Input::get('date_interval');
-			$intervalUnit = Input::get('date_intervalUnit');
-		}
+		$interval = Input::get('date_interval');
+		$intervalUnit = Input::get('date_intervalUnit');
+		/**********/
 		$dateWay = 0;
 		$dateTmp = "";
-		if($Repeat && Input::get('Repeat_end')=='date'){ //循環方式為日期
+		 //循環方式為日期
 			$dateWay=1;
 			$year = Input::get('date_year');
 			$month = Input::get('date_month');
 			$day = Input::get('date_day');
 			$dateTmp = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
-		}
-		else if($Repeat && Input::get('Repeat_end')=='occurence'){ //次數
-			$dateWay = 2;
-			$dateTmp = Input::get('date_num');
-		}
 		/**********/
 		/* classList */
 		$result = DB::table('classList')->get();
@@ -628,75 +590,23 @@ class ClassController extends \BaseController {
 		/* data */
 		$eachDate = self::eachDate($date_start);
 		$ar=array();
-		if(!$old_repeat) $ar['date'] = $date_start;
+		$ar['date'] = $date_start;
 		$ar['classroom'] = $classId;
 		$ar['start_time'] = $time_start;
 		$ar['end_time'] = $time_end;
-		$ar['user_id'] = $user_id;
+		$ar['user_id'] = 1;
 		$ar['username'] = $username;
 //		$ar['phone'] = $tel;
 //		$ar['email'] = $email;
 		$ar['reason'] = $title;
-//		$ar['type'] = $typeId;
+		$ar['type'] = 1;
 		$ar['repeat'] = 0; //若有修改，返回預設
 		/********/
 		/* check */
 		$cannotClass = array();
 		$canClass = array();
-		if($old_repeat){
-			/* 更新連續資料 */
-			$dataTmp = DB::table('BorrowList')
-						->where('repeat', $old_repeat)
-						->get();
-			foreach($dataTmp as $tmp){
-				$tmp=$tmp->date;
-				$result = null;
-				if(Session::get('user')=='admin' || $tmp <= $dateLimit['end']['all']) //未超出日期範圍
-					$result = DB::table('BorrowList')
-								->select('start_time', 'end_time')
-								->where('date', $tmp)
-								->where('classroom', $classId)
-								->whereNotIn('repeat', array($old_repeat))
-								->get();
-				if(self::CheckRepeat($result,$time_start,$time_end)) //if someone borrow the class first
-					array_push($cannotClass, $tmp);
-				else
-					array_push($canClass, $tmp);
-			}
-			if(!empty($cannotClass)){
-				$warning = "更新失敗\\n";
-				foreach($cannotClass as $tmp)
-					$warning .= " ".$tmp."\\n";
-				$warning .= "以上日期有誤 請檢查";
-			}
-			else{
-				$ar['repeat'] = $old_repeat;
-				unset($ar['date']);
-				$warning = "Succeed";
-			}
-			return "$warning";
-		}
-		else if(!$Repeat){
-			$result = DB::table('BorrowList')
-						->where('date', $date_start)
-						->where('classroom', $classId)
-						->whereBetween('start_time', array($time_start,$time_end-1));
-			if($old) $result->whereNotIn('id', array($old));
-			$result = $result->get();
-			$warning = "";
-			/* if someone has borrowed the class first */
-			if(count($result)){ 
-				$warning = $class."教室已於".$date_start." ".$result[0]->start_time.":00借出，\\n請確認後重新借用";
-				return $warning;
-			}
-			/*******************************************/
-			/* 更新資料 */
-			else 
-				return "Succeed";
-			/************/
-		}
-		else{  //Repeat
-			if($dateWay == 1){ //循環方式為日期
+		//Repeat
+			 //循環方式為日期
 				for( $tmp=$date_start; $tmp<=$dateTmp; $tmp=self::NextDate($intervalUnit, $interval, $tmp) ){
 					$result = null;
 					if(Session::get('user')=='admin' || $tmp <= $dateLimit['end']['all']) //未超出日期範圍
@@ -710,37 +620,19 @@ class ClassController extends \BaseController {
 					else
 						array_push($canClass, $tmp);
 				}
-			}
-			else if($dateWay == 2){ //循環方式為次數
-				$tmp=$date_start;
-				for($i=0; $i<$dateTmp; ++$i){
-					$result = null;
-					if(Session::get('user')=='admin' || $tmp <= $dateLimit['end']['all']) //未超出日期範圍
-						$result = DB::table('BorrowList')
-									->select('start_time', 'end_time')
-									->where('date', $tmp)
-									->where('classroom', $classId)
-									->get();
-					if(self::CheckRepeat($result,$time_start,$time_end)) //if someone borrow the class first
-						array_push($cannotClass, $tmp);
-					else
-						array_push($canClass, $tmp);
-					$tmp=self::NextDate($intervalUnit, $interval, $tmp);
-				}
-			}
 			$warning = $class."教室";
 			if(!empty($cannotClass)){
 				$warning .= "於\\n";
 				foreach($cannotClass as $tmp)
 					$warning .= " ".$tmp."\\n";
-				$warning .= "無法借用或借出;\\n\\n";
+				$warning .= "無法借用或借出\\n";
 			}
-			if(!empty($canClass))
+			if(!empty($canClass)){
 				$warning = "Succeed";
-			else
-				$warning .= "借用未成功";
+				if($confirm)
+					$result = DB::table('BorrowList')->insert($ar);
+			}
 			return $warning;
-		}
 	}
 
 	private function NextDate($way, $interval, $date){

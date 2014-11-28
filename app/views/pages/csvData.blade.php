@@ -59,7 +59,7 @@
 						@endfor
 					</select>
 				</td>
-				<td id="Valid{{$tr}}"></td>
+				<td id="Valid{{$tr}}" style="vertical-align:top"></td>
 			</tr>
 			@endfor
 			<tr>
@@ -78,6 +78,9 @@
 }
 #Table{
 	table-layout: fixed;
+}
+.icons{
+	height: 20px;
 }
 </style>
 

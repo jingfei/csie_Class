@@ -48,7 +48,7 @@ Route::post('addRepeatDate', 'ClassController@addRepeatDate');
 
 Route::post('repeatSplit', 'ClassController@repeatSplit');
 
-Route::post('CheckClass', 'ClassController@CheckClass');
+Route::post('CheckClass/{confirm?}', 'ClassController@CheckClass');
 
 /* StudentCard */
 
