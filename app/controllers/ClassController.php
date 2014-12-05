@@ -541,7 +541,7 @@ class ClassController extends \BaseController {
 
 	public function CheckClass($confirm=0){
 		if(Session::get('user')!='admin') 
-			return "<script>alert('something wrong...');</script>".Redirect::to('/');
+			return "<script>alert('plz login as administrator');</script>".Redirect::to('/');
 		$username = "最高管理者";
 		$date_start = htmlspecialchars( Input::get('date_start') );
 		$title = htmlspecialchars( Input::get('title') );
@@ -627,7 +627,7 @@ class ClassController extends \BaseController {
 					$warning .= " ".$tmp."\\n";
 				$warning .= "無法借用或借出\\n";
 			}
-			if(!empty($canClass)){
+			else if(!empty($canClass)){
 				$warning = "Succeed";
 				if($confirm)
 					$result = DB::table('BorrowList')->insert($ar);
