@@ -105,6 +105,8 @@ function adminQuery(){
 			<hr style="border-top: dashed black 1px;width:96%;margin:20px 2%;"/>
 			<div style="margin:10px">
 				<span style="font-size:1.5em">課程異動</span>
+					&nbsp;&nbsp;
+				<button onClick="location.href='{{URL::to("csvData")}}'">大量教室借用</button>
 				<div style="text-align:right;margin:8px 0;border:1px dotted #b0cdcb;padding:5px;line-height:2em;">
 					<form>
 					查詢: &nbsp;
