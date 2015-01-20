@@ -629,8 +629,21 @@ class ClassController extends \BaseController {
 			}
 			else if(!empty($canClass)){
 				$warning = "Succeed";
-				if($confirm)
-					$result = DB::table('BorrowList')->insert($ar);
+				if($confirm){
+					$FirstId = 0;
+					foreach($canClass as $tmp){
+						$ar['date']=$tmp;
+						if(!$FirstId){
+							$FirstId = DB::table('BorrowList')->insertGetId($ar);
+							$ar['repeat']=$FirstId;
+							$result = DB::table('BorrowList')
+								->where('id', $FirstId)
+								->update($ar);
+						}
+						else
+							$result = DB::table('BorrowList')->insert($ar);
+					}
+				}
 			}
 			return $warning;
 	}
