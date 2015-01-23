@@ -7,10 +7,10 @@ class AdminController extends BaseController {
 			return "<script>something wrong</script>".Redirect::to('/');
 		$dateLimit = self::dateLimit();
 		/* check special chars */
-		if($date) $date = htmlspecialchars($date);
-		if($date2) $date2 = htmlspecialchars($date2);
-		if($Class) $Class = htmlspecialchars($Class);
-		if($User) $User = htmlspecialchars($User);
+		if($date) $date = htmlspecialchars($date, ENT_QUOTES);
+		if($date2) $date2 = htmlspecialchars($date2, ENT_QUOTES);
+		if($Class) $Class = htmlspecialchars($Class, ENT_QUOTES);
+		if($User) $User = htmlspecialchars($User, ENT_QUOTES);
 		/***********************/
 		/* classList */
 		$result = DB::table('classList')->get();
@@ -54,10 +54,10 @@ class AdminController extends BaseController {
 			return "<script>something wrong</script>".Redirect::to('/');
 		$dateLimit = self::dateLimit();
 		/* check special chars */
-		if($date) $date = htmlspecialchars($date);
-		if($date2) $date2 = htmlspecialchars($date2);
-		if($Class) $Class = htmlspecialchars($Class);
-		if($User) $User = htmlspecialchars($User);
+		if($date) $date = htmlspecialchars($date, ENT_QUOTES);
+		if($date2) $date2 = htmlspecialchars($date2, ENT_QUOTES);
+		if($Class) $Class = htmlspecialchars($Class, ENT_QUOTES);
+		if($User) $User = htmlspecialchars($User, ENT_QUOTES);
 		/***********************/
 		/* classList */
 		$result = DB::table('classList')->get();
@@ -136,8 +136,8 @@ class AdminController extends BaseController {
 	public function keyState(){
 		if(Session::get('permission')[1]!='1')
 			return "<script>something wrong</script>".Redirect::to('/');
-		$id = htmlspecialchars( Input::get('id') );
-		$state = htmlspecialchars( Input::get('state') );
+		$id = htmlspecialchars( Input::get('id'), ENT_QUOTES );
+		$state = htmlspecialchars( Input::get('state'), ENT_QUOTES );
 		DB::table('BorrowList')
 			->where('id', $id)
 			->update(array('key' => $state));
@@ -146,7 +146,7 @@ class AdminController extends BaseController {
 	public function updateDate(){
 		if(Session::get('user')!='admin')
 			return "something wrong";
-		$Choose = htmlspecialchars(Input::get('Open'));
+		$Choose = htmlspecialchars(Input::get('Open'), ENT_QUOTES);
 		if($Choose=="no"){
 			$update1 = DB::table('Admin')
 						 ->where('name', 'date_start')
@@ -157,12 +157,12 @@ class AdminController extends BaseController {
 			return "系統目前狀態為不開放借用";
 		}
 		else{
-			$month1 = htmlspecialchars(Input::get('month1'));
-			$month2 = htmlspecialchars(Input::get('month2'));
-			$day1 = htmlspecialchars(Input::get('day1'));
-			$day2 = htmlspecialchars(Input::get('day2'));
-			$year1 = htmlspecialchars(Input::get('year1'));
-			$year2 = htmlspecialchars(Input::get('year2'));
+			$month1 = htmlspecialchars(Input::get('month1'), ENT_QUOTES);
+			$month2 = htmlspecialchars(Input::get('month2'), ENT_QUOTES);
+			$day1 = htmlspecialchars(Input::get('day1'), ENT_QUOTES);
+			$day2 = htmlspecialchars(Input::get('day2'), ENT_QUOTES);
+			$year1 = htmlspecialchars(Input::get('year1'), ENT_QUOTES);
+			$year2 = htmlspecialchars(Input::get('year2'), ENT_QUOTES);
 			if( !(is_numeric($month1) && is_numeric($month2) && is_numeric($day1) && is_numeric($day2) && is_numeric($year1) && is_numeric($year2)) )
 				return "日期錯誤";
 			$date1 = date("Y-m-d", mktime(0,0,0,$month1,$day1,$year1));
@@ -208,7 +208,7 @@ class AdminController extends BaseController {
 	public function adminSettingUser($old=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$old = htmlspecialchars($old);
+		$old = htmlspecialchars($old, ENT_QUOTES);
 		$url = "SettingUser";
 		if($old){
 			$old = DB::table('userList')->where('id', $old)->first();
@@ -222,7 +222,7 @@ class AdminController extends BaseController {
 	public function ResetUser($id){
 		if(Session::get('user')!='admin' || $id==0)
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$id = htmlspecialchars($id);
+		$id = htmlspecialchars($id, ENT_QUOTES);
 		DB::table('userList')->where('id', $id)->update(array('password'=> md5('csie')));
 		return "<script>alert('密碼已重設為csie');</script>".Redirect::to('adminUser');
 	}
@@ -230,7 +230,7 @@ class AdminController extends BaseController {
 	public function DeleteUser($id){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$id = htmlspecialchars($id);
+		$id = htmlspecialchars($id, ENT_QUOTES);
 		DB::table('userList')->where('id', $id)->delete();
 		return "<script>alert('刪除成功');</script>".Redirect::to('adminUser');
 	}
@@ -238,9 +238,9 @@ class AdminController extends BaseController {
 	public function SettingUser($id=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$id = htmlspecialchars($id);
-		$userid = htmlspecialchars( Input::get('userid') );
-		$username = htmlspecialchars( Input::get('username') );
+		$id = htmlspecialchars($id, ENT_QUOTES);
+		$userid = htmlspecialchars( Input::get('userid'), ENT_QUOTES );
+		$username = htmlspecialchars( Input::get('username'), ENT_QUOTES );
 		$ar = array();
 		$ar['userid'] = $userid;
 		$ar['username'] = $username;
@@ -256,7 +256,7 @@ class AdminController extends BaseController {
 	public function adminSettingType($old=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$old = htmlspecialchars($old);
+		$old = htmlspecialchars($old, ENT_QUOTES);
 		$url = "SettingType";
 		if($old){
 			$old = DB::table('typeList')->where('id', $old)->first();
@@ -270,7 +270,7 @@ class AdminController extends BaseController {
 	public function DeleteType($id){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$id = htmlspecialchars($id);
+		$id = htmlspecialchars($id, ENT_QUOTES);
 		DB::table('typeList')->where('id', $id)->delete();
 		return "<script>alert('刪除成功');</script>".Redirect::to('adminSetting');
 	}
@@ -278,9 +278,9 @@ class AdminController extends BaseController {
 	public function SettingType($id=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$id = htmlspecialchars($id);
-		$name = htmlspecialchars( Input::get('name') );
-		$color = htmlspecialchars( Input::get('color') );
+		$id = htmlspecialchars($id, ENT_QUOTES);
+		$name = htmlspecialchars( Input::get('name'), ENT_QUOTES );
+		$color = htmlspecialchars( Input::get('color'), ENT_QUOTES );
 		$ar = array();
 		$ar['type'] = $name;
 		$ar['color'] = $color;
@@ -294,7 +294,7 @@ class AdminController extends BaseController {
 	public function adminSettingClassroom($old=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$old = htmlspecialchars($old);
+		$old = htmlspecialchars($old, ENT_QUOTES);
 		$url = "SettingClassroom";
 		if($old){
 			$old = DB::table('classList')->where('id', $old)->first();
@@ -308,7 +308,7 @@ class AdminController extends BaseController {
 	public function DeleteClassroom($id){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$id = htmlspecialchars($id);
+		$id = htmlspecialchars($id, ENT_QUOTES);
 		DB::table('classList')->where('id', $id)->delete();
 		return "<script>alert('刪除成功');</script>".Redirect::to('adminSetting');
 	}
@@ -316,10 +316,10 @@ class AdminController extends BaseController {
 	public function SettingClassroom($id=null){
 		if(Session::get('user')!='admin')
 			return "<script>alert('something wrong');</script>".Redirect::to('/');
-		$id = htmlspecialchars($id);
-		$name = htmlspecialchars( Input::get('name') );
-		$type = htmlspecialchars( Input::get('type') );
-		$capacity = htmlspecialchars( Input::get('capacity') );
+		$id = htmlspecialchars($id, ENT_QUOTES);
+		$name = htmlspecialchars( Input::get('name'), ENT_QUOTES );
+		$type = htmlspecialchars( Input::get('type'), ENT_QUOTES );
+		$capacity = htmlspecialchars( Input::get('capacity'), ENT_QUOTES );
 		$ar = array();
 		$ar['name'] = $name;
 		$ar['type'] = $type;

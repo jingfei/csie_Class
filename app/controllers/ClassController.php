@@ -49,11 +49,11 @@ class ClassController extends \BaseController {
 
 	public function getClass($year=null, $month=null, $day=null){
 		if(!$year) $year=date("Y"); 
-		else $year = htmlspecialchars($year);
+		else $year = htmlspecialchars($year, ENT_QUOTES);
 		if(!$month) $month=date("m");
-		else $month = htmlspecialchars($month);
+		else $month = htmlspecialchars($month, ENT_QUOTES);
 		if(!$day) $day=date("d"); 
-		else $day = htmlspecialchars($day);
+		else $day = htmlspecialchars($day, ENT_QUOTES);
 		$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		$dateLimit = self::dateLimit();
 		$warning = null;
@@ -83,11 +83,11 @@ class ClassController extends \BaseController {
 		if(!Session::has('user'))
 			return "<script>alert('請登入');</script>".Redirect::to('Login');
 		/* check special chars */
-		$month = htmlspecialchars($month);
-		$day = htmlspecialchars($day);
-		$year = htmlspecialchars($year);
-		if($old) $old = htmlspecialchars($old);
-		if($repeat) $repeat = htmlspecialchars($repeat);
+		$month = htmlspecialchars($month, ENT_QUOTES);
+		$day = htmlspecialchars($day, ENT_QUOTES);
+		$year = htmlspecialchars($year, ENT_QUOTES);
+		if($old) $old = htmlspecialchars($old, ENT_QUOTES);
+		if($repeat) $repeat = htmlspecialchars($repeat, ENT_QUOTES);
 		/***********************/
 		/* 檢查日期是否過了 */
 		if(!$old && !$repeat){
@@ -136,9 +136,9 @@ class ClassController extends \BaseController {
 			$endTime = $result->end_time;
 		}
 		else{
-			$className = htmlspecialchars( Input::get('className') );
-			$startTime = htmlspecialchars( Input::get('startTime') );
-			$endTime = htmlspecialchars( Input::get('endTime') );
+			$className = htmlspecialchars( Input::get('className'), ENT_QUOTES );
+			$startTime = htmlspecialchars( Input::get('startTime'), ENT_QUOTES );
+			$endTime = htmlspecialchars( Input::get('endTime'), ENT_QUOTES );
 		}
 		$thisDate = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		/* 檢查日期 （管理者除外）*/
@@ -165,9 +165,9 @@ class ClassController extends \BaseController {
 
 	public function deleteBorrow($_id, $repeatId=null){
 		$nowdate = date("Y-m-d");
-		$_id = htmlspecialchars($_id);
+		$_id = htmlspecialchars($_id, ENT_QUOTES);
 		if(!$repeatId) $data = DB::table('BorrowList')->where('id', $_id);
-		else $data = DB::table('BorrowList')->where('repeat', htmlspecialchars($repeatId));
+		else $data = DB::table('BorrowList')->where('repeat', htmlspecialchars($repeatId), ENT_QUOTES);
 		if(!$data)
 			return "<script>something wrong</script>".Redirect::to('/');
 		/* check ID */
@@ -182,10 +182,10 @@ class ClassController extends \BaseController {
 	}
 
 	public function repeatSplit(){
-		$_id = htmlspecialchars( Input::get('_id') );
-		$year = htmlspecialchars( Input::get('year') );
-		$month = htmlspecialchars( Input::get('month') );
-		$day = htmlspecialchars( Input::get('day') );
+		$_id = htmlspecialchars( Input::get('_id'), ENT_QUOTES );
+		$year = htmlspecialchars( Input::get('year'), ENT_QUOTES );
+		$month = htmlspecialchars( Input::get('month'), ENT_QUOTES );
+		$day = htmlspecialchars( Input::get('day'), ENT_QUOTES );
 		$dateSplit = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		$data = DB::table('BorrowList')
 					->where('repeat', $_id)
@@ -214,7 +214,7 @@ class ClassController extends \BaseController {
 	}
 
 	public function repeatQuery($_id){
-		$_id = htmlspecialchars($_id);
+		$_id = htmlspecialchars($_id, ENT_QUOTES);
 		$dateLimit = self::dateLimit();
 		/* classList */
 		$result = DB::table('classList')->get();
@@ -248,10 +248,10 @@ class ClassController extends \BaseController {
 	}
 
 	public function addRepeatDate(){
-		$_id = htmlspecialchars( Input::get('_id') );
-		$year = htmlspecialchars( Input::get('year') );
-		$month = htmlspecialchars( Input::get('month') );
-		$day = htmlspecialchars( Input::get('day') );
+		$_id = htmlspecialchars( Input::get('_id'), ENT_QUOTES );
+		$year = htmlspecialchars( Input::get('year'), ENT_QUOTES );
+		$month = htmlspecialchars( Input::get('month'), ENT_QUOTES );
+		$day = htmlspecialchars( Input::get('day'), ENT_QUOTES );
 		$date = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		$dateLimit = self::dateLimit();
 		$limit = DB::table('BorrowList')
@@ -291,8 +291,8 @@ class ClassController extends \BaseController {
 	public function Borrow(){
 		if(!Session::has('user'))
 			return "<script>alert('請登入');</script>".Redirect::to('Login');
-		$user = htmlspecialchars( Input::get('form_user') );
-		$old = htmlspecialchars( Input::get('old') ); 
+		$user = htmlspecialchars( Input::get('form_user'), ENT_QUOTES );
+		$old = htmlspecialchars( Input::get('old'), ENT_QUOTES ); 
 		if($old && Session::get('user')!='admin'){ //檢查post ID是否為本人
 			$result = DB::table('BorrowList')
 						->where('id', $old)
@@ -300,7 +300,7 @@ class ClassController extends \BaseController {
 			if(!self::CheckUserSession($result->user_id))
 				return "<script>alert('something wrong...');</script>".Redirect::to('/');
 		}
-		$old_repeat = htmlspecialchars( Input::get('old_repeat') );
+		$old_repeat = htmlspecialchars( Input::get('old_repeat'), ENT_QUOTES );
 		/* 檢查使用者 */
 		$userInfo = DB::table('userList')
 						->where('username', $user)
@@ -321,13 +321,13 @@ class ClassController extends \BaseController {
 		if(Session::get('user')!='admin' && $userid!=Session::get('user')) //登入與表單使用者不同
 				return "<script>alert('something wrong...');</script>".Redirect::to('/');
 		/**************/
-		$date_start = htmlspecialchars( Input::get('date_start') );
-		$title = htmlspecialchars( Input::get('title') );
-		$class = htmlspecialchars( Input::get('form_class') );
+		$date_start = htmlspecialchars( Input::get('date_start'), ENT_QUOTES );
+		$title = htmlspecialchars( Input::get('title'), ENT_QUOTES );
+		$class = htmlspecialchars( Input::get('form_class'), ENT_QUOTES );
 		$class = strtok($class, " ");
 		$classId = -1;
-		$time_start = htmlspecialchars( Input::get('time_start') );
-		$time_end = htmlspecialchars( Input::get('time_end') );
+		$time_start = htmlspecialchars( Input::get('time_start'), ENT_QUOTES );
+		$time_end = htmlspecialchars( Input::get('time_end'), ENT_QUOTES );
 		if(strlen($time_end)==4) $time_end=(int)$time_end[0];
 		else $time_end = (int)($time_end[0].$time_end[1]);
 		if(strlen($time_start)==4) $time_start=(int)$time_start[0];
@@ -336,9 +336,9 @@ class ClassController extends \BaseController {
 		if($time_start >= $time_end)
 			return "<script>alert('時間選擇錯誤');</script>".Redirect::to('/');
 		/************/
-		$email = htmlspecialchars( Input::get('form_email') );
-		$tel = htmlspecialchars( Input::get('form_tel') );
-		$type = htmlspecialchars( Input::get('form_reason') );
+		$email = htmlspecialchars( Input::get('form_email'), ENT_QUOTES );
+		$tel = htmlspecialchars( Input::get('form_tel'), ENT_QUOTES );
+		$type = htmlspecialchars( Input::get('form_reason'), ENT_QUOTES );
 		$typeId = -1;
 		/*檢查日期 (管理者除外) */
 		$dateLimit = self::dateLimit();
@@ -543,13 +543,13 @@ class ClassController extends \BaseController {
 		if(Session::get('user')!='admin') 
 			return "<script>alert('plz login as administrator');</script>".Redirect::to('/');
 		$username = "最高管理者";
-		$date_start = htmlspecialchars( Input::get('date_start') );
-		$title = htmlspecialchars( Input::get('title') );
-		$class = htmlspecialchars( Input::get('form_class') );
+		$date_start = htmlspecialchars( Input::get('date_start'), ENT_QUOTES );
+		$title = htmlspecialchars( Input::get('title'), ENT_QUOTES );
+		$class = htmlspecialchars( Input::get('form_class'), ENT_QUOTES );
 		$class = strtok($class, " ");
 		$classId = -1;
-		$time_start = htmlspecialchars( Input::get('time_start') );
-		$time_end = htmlspecialchars( Input::get('time_end') );
+		$time_start = htmlspecialchars( Input::get('time_start'), ENT_QUOTES );
+		$time_end = htmlspecialchars( Input::get('time_end'), ENT_QUOTES );
 		if(strlen($time_end)==4) $time_end=(int)$time_end[0];
 		else $time_end = (int)($time_end[0].$time_end[1]);
 		if(strlen($time_start)==4) $time_start=(int)$time_start[0];
@@ -629,8 +629,21 @@ class ClassController extends \BaseController {
 			}
 			else if(!empty($canClass)){
 				$warning = "Succeed";
-				if($confirm)
-					$result = DB::table('BorrowList')->insert($ar);
+				if($confirm){
+					$FirstId = 0;
+					foreach($canClass as $tmp){
+						$ar['date']=$tmp;
+						if(!$FirstId){
+							$FirstId = DB::table('BorrowList')->insertGetId($ar);
+							$ar['repeat']=$FirstId;
+							$result = DB::table('BorrowList')
+								->where('id', $FirstId)
+								->update($ar);
+						}
+						else
+							$result = DB::table('BorrowList')->insert($ar);
+					}
+				}
 			}
 			return $warning;
 	}

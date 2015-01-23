@@ -27,11 +27,11 @@ class AdminCardController extends BaseController {
 		$user = DB::table('StudentCard')
 					->where('student_id',$StudentID)
 					->get();
-		$name = htmlspecialchars(Input::get('name'));
-		$number =  preg_replace('/\D/','',htmlspecialchars(Input::get('number')));
-		$department = htmlspecialchars(Input::get('dept'));
-		$en_year = htmlspecialchars(Input::get('year'));
-		$card = htmlspecialchars(Input::get('card'));
+		$name = htmlspecialchars(Input::get('name'), ENT_QUOTES);
+		$number =  preg_replace('/\D/','',htmlspecialchars(Input::get('number', ENT_QUOTES)));
+		$department = htmlspecialchars(Input::get('dept'), ENT_QUOTES);
+		$en_year = htmlspecialchars(Input::get('year'), ENT_QUOTES);
+		$card = htmlspecialchars(Input::get('card'), ENT_QUOTES);
 		if($user){
 			$user = $user[0];
 			DB::table('StudentCard')
@@ -85,8 +85,8 @@ class AdminCardController extends BaseController {
 			return "<script>something wrong</script>".Redirect::to('/');
 		$Dept = DB::table('StudentCard')->select('department')->distinct()->get();
 		$Year = DB::table('StudentCard')->select('enrollment_year')->distinct()->orderBy('enrollment_year')->get();
-		$QueryDept = htmlspecialchars( Input::get('dept') );
-		$QueryYear = htmlspecialchars( Input::get('year') );
+		$QueryDept = htmlspecialchars( Input::get('dept'), ENT_QUOTES );
+		$QueryYear = htmlspecialchars( Input::get('year'), ENT_QUOTES );
 		$data = DB::table('StudentCard');
 		if($QueryDept != '不限') $data = $data->where('department', $QueryDept);
 		if($QueryYear != '不限') $data = $data->where('enrollment_year', $QueryYear);
@@ -100,8 +100,8 @@ class AdminCardController extends BaseController {
 	public function addnew(){
 		if(Session::get('user')!='admin')
 			return "<script>something wrong</script>".Redirect::to('/');
-		$StudentID = htmlspecialchars( Input::get('new') );
-		$QueryNew = DB::table('StudentCard')->where('student_id', htmlspecialchars( Input::get('new') ))->get();
+		$StudentID = htmlspecialchars( Input::get('new'), ENT_QUOTES );
+		$QueryNew = DB::table('StudentCard')->where('student_id', htmlspecialchars( Input::get('new'), ENT_QUOTES ))->get();
 		if(!$QueryNew && $StudentID){
 			Session::put('id',$StudentID);
 			return View::make('pages.formCard')->with('id',$StudentID)->with('student',null);
@@ -118,7 +118,7 @@ class AdminCardController extends BaseController {
 	public function queryCard(){
 		if(Session::get('user')!='admin')
 			return "<script>something wrong</script>".Redirect::to('/');
-		$StudentCard = htmlspecialchars( Input::get('new') );
+		$StudentCard = htmlspecialchars( Input::get('new'), ENT_QUOTES );
 		$data = DB::table('StudentCard')->where('student_card', $StudentCard)->get();
 		$Dept = DB::table('StudentCard')->select('department')->distinct()->get();
 		$Year = DB::table('StudentCard')->select('enrollment_year')->distinct()->orderBy('enrollment_year')->get();
@@ -131,7 +131,7 @@ class AdminCardController extends BaseController {
 	public function queryName(){
 		if(Session::get('user')!='admin')
 			return "<script>something wrong</script>".Redirect::to('/');
-		$StudentCard = htmlspecialchars( Input::get('new') );
+		$StudentCard = htmlspecialchars( Input::get('new'), ENT_QUOTES );
 		$data = DB::table('StudentCard')->where('name', $StudentCard)->get();
 		$Dept = DB::table('StudentCard')->select('department')->distinct()->get();
 		$Year = DB::table('StudentCard')->select('enrollment_year')->distinct()->orderBy('enrollment_year')->get();
@@ -169,8 +169,8 @@ class AdminCardController extends BaseController {
 	public function blockState(){
 		if(Session::get('user')!='admin')
 			return "<script>something wrong</script>".Redirect::to('/');
-		$id = htmlspecialchars( Input::get('id') );
-		$block = htmlspecialchars( Input::get('block') );
+		$id = htmlspecialchars( Input::get('id'), ENT_QUOTES );
+		$block = htmlspecialchars( Input::get('block'), ENT_QUOTES );
 		DB::table('StudentCard')
 			->where('id', $id)
 			->update(array('block' => $block));
