@@ -22,6 +22,9 @@ class LoginController extends BaseController {
 			else
 				return '<script>alert("Wrong Password");</script>'.Redirect::to('Login');
 		}
+		/* 大學部部能登入 */
+		if($user[0]!='P' && $user[1]!='7')
+				return '<script>alert("目前大學部無法使用，詳情請洽系辦");</script>'.Redirect::to('Login');
 		$link = @imap_open("{mail.ncku.edu.tw:143/novalidate-cert}", $user, $passwd);
 	//	or die('Cannot connect to Friggin Server: ' . print_r(imap_errors()));
 //		imap_errors();
