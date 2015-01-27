@@ -48,7 +48,7 @@ class ClassController extends \BaseController {
 	}
 
 	public function getClass($year=null, $month=null, $day=null, $num=6){
-		if($num==0) $num=6;
+		if($num<3) $num=3;
 		if(!$year) $year=date("Y"); 
 		else $year = htmlspecialchars($year, ENT_QUOTES);
 		if(!$month) $month=date("m");

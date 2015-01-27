@@ -1,7 +1,9 @@
+html, body{width: 100%;}
+
 .container
 {
 	margin: 0px auto;
-	width: 1000px !important;
+	width: 80%;
 }
 
 .title
