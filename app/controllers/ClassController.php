@@ -449,14 +449,12 @@ class ClassController extends \BaseController {
 		else if(!$Repeat){
 			$result = DB::table('BorrowList')
 						->where('date', $date_start)
-						->where('classroom', $classId)
-						->whereBetween('start_time', array($time_start,$time_end-1));
+						->where('classroom', $classId);
 			if($old) $result->whereNotIn('id', array($old));
 			$result = $result->get();
-			$warning = "";
 			/* if someone has borrowed the class first */
-			if(count($result)){ 
-				$warning = $class."教室已於".$date_start." ".$result[0]->start_time.":00借出，\\n請確認後重新借用";
+			if(self::CheckRepeat($result,$time_start,$time_end)){
+				$warning = $class."教室已被借出，\\n請確認後重新借用";
 				return "<script>alert('$warning');</script>".Redirect::to('class/'.$eachDate['year'].'/'.$eachDate['month'].'/'.$eachDate['day']);
 			}
 			/*******************************************/

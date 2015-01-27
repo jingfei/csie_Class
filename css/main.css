@@ -38,6 +38,10 @@
 	padding: 2px;
 }
 
+.ui-state-default{
+	height: 100%;
+}
+
 select:not(.ll-skin-siena *){
    background: url(../img/new_arrow.png) no-repeat right transparent;
    padding: 5px;
