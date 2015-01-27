@@ -11,19 +11,15 @@ br{
 	display: block;
 }
 
-.class_left{ 
-	width: 28%;
-	display: inline-block;
-}
-
-.small_date{
-//	position: fixed;
-	top: 200px;
-	left: 13%;
+.ui-dialog-titlebar{height: 20px; }
+button.ui-button{
+	position: absolute;
+	top:0;
+	right: 0;
+	height: 20px;
 }
 
 .class_outer {
-	width: 70%;
 	display: inline-block;
 }
 

@@ -47,7 +47,8 @@ class ClassController extends \BaseController {
 		return $table;
 	}
 
-	public function getClass($year=null, $month=null, $day=null){
+	public function getClass($year=null, $month=null, $day=null, $num=6){
+		if($num==0) $num=6;
 		if(!$year) $year=date("Y"); 
 		else $year = htmlspecialchars($year, ENT_QUOTES);
 		if(!$month) $month=date("m");
@@ -76,7 +77,9 @@ class ClassController extends \BaseController {
 					->with('year', $year)
 					->with('day', $day)
 					->with('warning', $warning)
-					->with('disable', $disable);
+					->with('disable', $disable)
+					->with('width', $num*105+45)
+					->with('num', $num);
 	}
 
 	public function classForm($year, $month, $day, $old=null, $repeat=null){

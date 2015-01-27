@@ -5,7 +5,8 @@ function ClickToday(){
 function gotoDate($off){
 	var selectDate = $( ".datepicker" ).datepicker( "getDate" );
 	selectDate.setDate(selectDate.getDate() + $off);
-	location.href="/Class2014/class/"+selectDate.getFullYear()+"/"+(selectDate.getMonth()+1)+"/"+selectDate.getDate();
+	var contentWidth = Math.floor(($("#content").width()-60)/105);
+	location.href="/Class2014/class/"+selectDate.getFullYear()+"/"+(selectDate.getMonth()+1)+"/"+selectDate.getDate()+"/"+contentWidth;
 }
 
 function ClassPage(off){

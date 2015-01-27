@@ -16,8 +16,9 @@ $(document).ready(function(){
 		autoOpen: true, 
 		closeText:"",
 		resizable: false, 
-		position: {my:"left top", at:"left top", of:"#content"}
+		position: {my:"right top", at:"right top", of:"body"}
 	});
+
 });
 </script>
 <style>
@@ -56,11 +57,9 @@ $(document).ready(function(){
 			{{HTML::style('css/date/jquery-ui-1.10.1_2.css')}}		
 			<div class="datepicker ll-skin-siena"></div>
 		</div>
-		<div class="class_left">
-		</div>
 		<div class="class_outer">
 			<div>
-				<table style="width:680px;text-align: center;"><tr>
+				<table id="topTable" style="width:{{$width}}px;text-align: center;"><tr>
 				<td style="width:20%;">
 					<img src="{{asset('img/right.png')}}" onClick="gotoDate(-1)"/>
 				</td>
@@ -83,16 +82,16 @@ $(document).ready(function(){
 				<div style="background:#ff9aae;display:inline-block;padding:3px" >可修改</div>
 			</div>
 			<!-- table -->
-			@for($classpage=1; $classpage<=ceil(count($data)/6.0); $classpage++)
+			@for($classpage=1; $classpage<=ceil(count($data)/intval($num)); $classpage++)
 			<div id="classpage{{$classpage}}" 
 						class="classpage @if($classpage==1) active @endif">
 				<div class="class_table class_title">
-					<table>
+					<table id="medTable">
 						<tr>
 							<td style="border:none"></td>
-							<td colspan="6" style="text-align:center;border-left:none;line-height:30px;">
+							<td colspan="{{$num}}" style="text-align:center;border-left:none;line-height:30px;">
 								<img src="{{asset('img/left-arrow.png')}}" height="30px" alt="上一頁" style="border:none;float:left" onClick="ClassPage(-1);"/>
-								<span style="border:none;font-size:1.5em" id="PageNum">Page. {{$classpage}} / {{ceil(count($data)/6.0)}}</span>
+								<span style="border:none;font-size:1.5em" id="PageNum">Page. {{$classpage}} / {{ceil(count($data)/intval($num))}}</span>
 								<img src="{{asset('img/right-arrow.png')}}" height="30px" alt="下一頁" style="border:none;float:right" onClick="ClassPage(1);"/>
 							</td>
 						</tr>
@@ -103,7 +102,7 @@ $(document).ready(function(){
 								<span id="span2">時間</span>
 							</div>
 						</th>
-						@for($i=($classpage-1)*6; $i<$classpage*6 && $i<count($data); $i++)
+						@for($i=($classpage-1)*$num; $i<$classpage*$num && $i<count($data); $i++)
 							<th class="class_name">
 								{{$data[$i]->name}}<br/>
 								{{$data[$i]->type}}<br/>
@@ -113,7 +112,7 @@ $(document).ready(function(){
 							</th>
 						@endfor
 						@if( $i >= count($data) )
-							@for( $j=$i; $j<$classpage*6; ++$j )
+							@for( $j=$i; $j<$classpage*$num; ++$j )
 								<th class="class_name"></th>
 							@endfor
 						@endif
@@ -121,14 +120,14 @@ $(document).ready(function(){
 					</table>
 				</div>
 				<div class="class_table class_content">
-					<table>
+					<table id="botTable">
 					@for($time=8; $time<22; $time++)
 						<tr>
 							<th class="class_time">
 								{{$time}}:10<br/>
 								<span style="border:none;line-height:2.5em">{{test($time)}}</span>
 							</th>
-						@for($i=($classpage-1)*6+1; $i<=$classpage*6 &&$i<=count($data); $i++)
+						@for($i=($classpage-1)*$num+1; $i<=$classpage*$num &&$i<=count($data); $i++)
 							@if($table[$time-8][$i][0]==-1 && $disable)
 							<td class="class_inner">
 							@elseif($table[$time-8][$i][0]==-1)
@@ -178,7 +177,7 @@ $(document).ready(function(){
 							@endif
 						@endfor
 						@if( $i >= count($data) )
-							@for( $j=$i; $j<=$classpage*6; ++$j )
+							@for( $j=$i; $j<=$classpage*$num; ++$j )
 								<td class="class_inner"></td>
 							@endfor
 						@endif
