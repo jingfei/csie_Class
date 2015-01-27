@@ -11,6 +11,13 @@ $(document).ready(function(){
 	$( ".no_event" ).click(function() {
 		gotoModify( $(this) );
 	});
+
+	$( "#dialog" ).dialog({ 
+		autoOpen: true, 
+		closeText:"",
+		resizable: false, 
+		position: {my:"left top", at:"left top", of:"#content"}
+	});
 });
 </script>
 <style>
@@ -45,7 +52,7 @@ $(document).ready(function(){
 
 		<h1 class="content_title" style="font-size:220%;">查詢 <small>教室</small></h1>
 		<hr/>
-		<div class="small_date">
+		<div id="dialog" class="small_date">
 			{{HTML::style('css/date/jquery-ui-1.10.1_2.css')}}		
 			<div class="datepicker ll-skin-siena"></div>
 		</div>
