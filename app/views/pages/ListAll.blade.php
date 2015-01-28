@@ -116,7 +116,7 @@ function changeBlock($id, $block){
 </div>
 @if($data)
 <div>
-	<table class="bordered" style="margin:5px 0;">
+	<table class="bordered" style="margin:5px 0;" id="list">
 		<thead>
 		<tr>
 			<th>學號</th>
