@@ -6,7 +6,7 @@
 		{{ Form::open(array('class' => 'box login', 'url' => 'log_in', 'method' => 'post')) }}
 		<fieldset class="boxBody">
 		
-		<label> 實驗室帳號 / 學號 </label>
+		<label> 實驗室帳號 / 資訊所學號 </label>
 		<input type="text" tabindex = "1" name="studentid" required>
 		
 		<label> 密碼 (moodle) </label>
