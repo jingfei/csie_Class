@@ -60,6 +60,8 @@ class ClassController extends \BaseController {
 		$warning = null;
 		if($thisDate>$dateLimit['end']['all'] || $thisDate<$dateLimit['start']['all'])
 			$warning = "不開放借用";
+		else if($thisDate>'2015-02-17' && $thisDate<'2015-02-23')
+			$warning = "不開放借用";
 		if(Session::get('user')=='admin') $warning=null;
 		$data = self::FindClass();
 		$date = self::FindDate($month, $day, $year);
@@ -346,6 +348,8 @@ class ClassController extends \BaseController {
 		/*檢查日期 (管理者除外) */
 		$dateLimit = self::dateLimit();
 		if(!$old_repeat && Session::get('user')!='admin' && ($date_start>$dateLimit['end']['all'] || $date_start<$dateLimit['start']['all']) )
+			return "<script>alert('日期錯誤');</script>".Redirect::to('class/');
+		else if(Session::get('user')!='admin' && $date_start>'2015-02-17' && $date_start<'2015-02-23')
 			return "<script>alert('日期錯誤');</script>".Redirect::to('class/');
 		/************************/
 		/* 檢查日期是否過了 */

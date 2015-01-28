@@ -3,6 +3,7 @@
 
 <style>
 .round-div{
+	font-family: Microsoft JhengHei;
 	border:1px solid gray;
 	color: #0e2d66;
 	padding:10px;
@@ -20,6 +21,9 @@
 		<h1 class="content_title" style="font-size:220%;">查詢 <small>日期</small></h1>
 		<hr/>
 		<div style="width:30%">
+			<div class="round-div">
+				<h2 style="font-size:20px;color:red;line-height:1.2em;">2015/2/18 - 2015/2/22 <br/>(過年期間) 不開放借用</h2>
+			</div>
 			<div class="round-div">
 				<h2 style="font-size:20px">各位借教室的同學請注意：</h2>
 				<br/>
