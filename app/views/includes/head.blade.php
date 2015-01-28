@@ -3,6 +3,7 @@
 
 <title>CSIE Equipment Borrowing</title>
 
+<link rel="shortcut icon" href="{{asset('img/csie.ico')}}" type="image/x-icon" />
 {{HTML::style('css/main.css')}}
 {{HTML::style('css/Button.css')}}
 {{HTML::style('css/class.css')}}
