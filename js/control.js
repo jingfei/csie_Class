@@ -5,17 +5,7 @@ function ClickToday(){
 function gotoDate($off){
 	var selectDate = $( ".datepicker" ).datepicker( "getDate" );
 	selectDate.setDate(selectDate.getDate() + $off);
-	var contentWidth = Math.floor(($("#content").width()-60)/105);
-	location.href="/Class2014/class/"+selectDate.getFullYear()+"/"+(selectDate.getMonth()+1)+"/"+selectDate.getDate()+"/"+contentWidth;
-}
-
-function ClassPage(off){
-	var name = $(".active").attr('id');
-	var num = Number(name.substring(9));
-	var Newname = "classpage"+(num+off);
-	if(!$("#"+Newname).length) return false;
-	$("#"+name).removeClass("active");
-	$("#"+Newname).addClass("active");
+	location.href="/Class2014/class/"+selectDate.getFullYear()+"/"+(selectDate.getMonth()+1)+"/"+selectDate.getDate();
 }
 
 function ShowCycle(object){

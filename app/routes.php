@@ -34,7 +34,7 @@ Route::get('/', function()
 			->with('key', $key);
 });
 
-Route::get('class/{year?}/{month?}/{day?}/{num?}', 'ClassController@getClass');
+Route::get('class/{year?}/{month?}/{day?}', 'ClassController@getClass');
 
 Route::match(array('POST', 'GET'), 'modifyForm/{year}/{month}/{day}/{old?}/{repeat?}', 'ClassController@classForm');
 

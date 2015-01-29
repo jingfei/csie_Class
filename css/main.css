@@ -1,9 +1,9 @@
-html, body{width: 100%;}
+html, body{width: 100%; min-width:1280px;}
 
 .container
 {
 	margin: 0px auto;
-	width: 80%;
+	width: 1280px;
 }
 
 .title
@@ -26,8 +26,8 @@ html, body{width: 100%;}
 {
 	position: absolute;
 	top: 140px;
-	width: 80%;
 	text-align: right;
+	width: 1280px;
 }
 #navbar ul
 {

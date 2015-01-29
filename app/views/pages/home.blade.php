@@ -16,11 +16,26 @@
 	-khtml-border-radius: 10px; /* for old Konqueror browsers */
 }
 </style>
+<script>
+$(document).ready(function(){
+	$(".datepicker").change(function() {
+		gotoDate(0);
+	});
+});
+</script>
 
 
 		<h1 class="content_title" style="font-size:220%;">查詢 <small>日期</small></h1>
 		<hr/>
-		<div style="width:30%">
+		<div style="color:#2166e5; font-weight:bold; font-size: 1.7em;margin: 25px;text-align:center;">
+			教室登記 / 查詢開放時間：
+			@if($dateLimit['start']['all']=="2000-01-01")
+				不開放
+			@else
+				{{$dateLimit['start']['all']." ~ ".$dateLimit['end']['all']}}
+			@endif
+		</div>
+		<div style="width:35%;margin-left:70px;">
 			<div class="round-div">
 				<h2 style="font-size:20px;color:red;line-height:1.2em;">2015/2/18 - 2015/2/22 <br/>(過年期間) 不開放借用</h2>
 			</div>
@@ -50,19 +65,7 @@
 				<h2 style="font-size:20px">請盡速歸還，謝謝</h2>
 			</div>
 		</div>
-		<div style="display:inline-block;width:68%">
-			<div style="text-align:center;">
-				<div style="color:#2166e5; font-weight:bold; font-size: 1.5em;margin: 10px">
-					教室登記 / 查詢開放時間：
-					@if($dateLimit['start']['all']=="2000-01-01")
-						不開放
-					@else
-						{{$dateLimit['start']['all']." ~ ".$dateLimit['end']['all']}}
-					@endif
-				</div>
-				<button class="innerButton" onClick="ClickToday()" >today</button>
-				<button class="innerButton" onClick="gotoDate(0)">選擇</button>
-			</div>
+		<div style="display:inline-block;width:58%">
 {{HTML::style('css/date/jquery-ui-1.10.1.css')}}
 			<div class="datepicker ll-skin-lugo"></div>
 		</div>
