@@ -29,7 +29,7 @@ $(document).ready(function(){
 			$("#medTable").attr("class","");
 	});
 
-	$("nav ul").prepend('<li><a id="Open" class="myButton">日曆</a></li>');
+	$("nav ul").append('<li><a id="Open" class="myButton">日曆</a></li>');
 	$("#Open").on("click",function(e){
 		e.preventDefault();
 		if($("#dialog").dialog("isOpen"))
