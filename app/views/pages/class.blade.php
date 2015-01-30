@@ -121,7 +121,7 @@ $(document).ready(function(){
 				</div>
 				<div>
 					<table style="margin-bottom:50px">
-					@for($i=0; $i<count($data); $i++)
+					@for($i=1; $i<count($data); $i++)
 						<tr>
 							<th class="new_class">
 								{{$data[$i]->name}}<br/>

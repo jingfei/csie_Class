@@ -107,7 +107,11 @@ class BaseController extends Controller {
 				->select('name', 'type', 'capacity')
 				->orderBy('id')
 				->get();
-		return $tmp;
+		$ar = array();
+		array_push($ar, (object) array('name'=>"", 'type'=>"", 'capacity'=>""));
+		foreach($tmp as $tmp2)
+			array_push($ar, $tmp2);
+		return $ar;
 	}
 
 }

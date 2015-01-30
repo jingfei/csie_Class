@@ -96,7 +96,7 @@ $(document).ready(function(){
 			
 			<label> 教室 </label>
 			<select name="form_class" id="form_class">
-				@for($i=0; $i<count($data); $i++)
+				@for($i=1; $i<count($data); $i++)
 					@if($className==$data[$i]->name)
 						<option selected="selected">{{ $data[$i]->name.' '.$data[$i]->type }}</option>
 					@else
