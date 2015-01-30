@@ -35,7 +35,7 @@ class LoginController extends BaseController {
 				return "<script>alert('您無法借用鑰匙，請聯絡系辦，謝謝');</script>".Redirect::to('/');
 			}
 			/* 大學部不能登入 */
-			else if($inTable && $user[0]!='P' && $user[1]!='7')
+			else if($user[0]!='P' || $user[1]!='7')
 				return '<script>alert("目前大學部無法使用，詳情請洽系辦");</script>'.Redirect::to('Login');
 			else if($inTable && $inTable->name){
 				Session::put('user', $user);
