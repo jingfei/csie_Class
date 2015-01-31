@@ -133,7 +133,7 @@ class ClassController extends \BaseController {
 			$className = DB::table('classList')
 							->where('id', $result->classroom)
 							->first()
-							->name;
+							->id;
 			$startTime = $result->start_time;
 			$endTime = $result->end_time;
 		}

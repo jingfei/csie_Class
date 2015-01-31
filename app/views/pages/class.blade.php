@@ -134,7 +134,7 @@ $(document).ready(function(){
 							@if($table[$j-8][$i][0]==-1 && $disable)
 							<td class="class_inner event">
 							@elseif($table[$j-8][$i][0]==-1)
-							<td class="class_inner {{$disable}} @if(!$disable) no_event @else event @endif" name="{{$j.';'.$data[$i]->name}}">
+							<td class="class_inner {{$disable}} @if(!$disable) no_event @else event @endif" name="{{$j.';'.$i}}">
 								<div class="outer_div">
 								<div class="inner_div hide_time" @if($disable) style="border:none" @endif>
 									<br/>{{$j}}
