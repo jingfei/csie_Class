@@ -1,45 +1,7 @@
 @extends('layouts.navbar')
 @section('content')
 
-<script>
-$(document).ready(function(){
-	var currentDate = $( ".datepicker" ).datepicker( "setDate", "{{$year."/".$month."/".$day}}" );
-
-	$(".datepicker").change(function() {
-		gotoDate(0);
-	});
-	$( ".no_event" ).click(function() {
-		gotoModify( $(this) );
-	});
-
-	$( "#dialog" ).dialog({ 
-		autoOpen: false, 
-		closeText:"",
-		resizable: false, 
-		position: {my:"right top", at:"right top", of:"body"}
-	});
-
-	var Top=$("#medTable").offset().top;
-	$(window).scroll( function(){
-		var t=document.documentElement.scrollTop || document.body.scrollTop;
-		if($(window).width()<1250) return;
-		else if(t+1>=Top)
-			$("#medTable").attr("class","TableFix");
-		else
-			$("#medTable").attr("class","");
-	});
-
-	$("nav ul").append('<li><a id="Open" class="myButton">日曆</a></li>');
-	$("#Open").on("click",function(e){
-		e.preventDefault();
-		if($("#dialog").dialog("isOpen"))
-			$("#dialog").dialog("close");
-		else
-			$("#dialog").dialog("open");
-	});
-
-});
-</script>
+{{HTML::script('js/class.js')}}
 <style>
 #left_top{
 	border: none;

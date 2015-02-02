@@ -15,12 +15,12 @@ function ShowCycle(object){
 		$('.Repeat').hide();
 }
 
-function gotoModify(thisObj){
-	//find time
-	var startTime = parseInt(thisObj.attr('name').split(";")[0]);
-	var endTime = startTime + 1;
-	//find class
-	var className = parseInt(thisObj.attr('name').split(";")[1]);
+function gotoModify(startTime, endTime, className){
+	if(startTime>endTime){
+		var tmp=endTime;
+		endTime=startTime;
+		startTime=tmp;
+	}
 	var obj = {
 		startTime: startTime,
 		endTime: endTime,
