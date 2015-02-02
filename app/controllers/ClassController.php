@@ -661,7 +661,7 @@ class ClassController extends \BaseController {
 		return date("Y-m-d", $tmp);
 	}
 
-	private function CheckRepeat($other, $start, $end){
+	protected function CheckRepeat($other, $start, $end){
 		$Repeat = false;
 		$time=array();
 		$time[0]=$start;

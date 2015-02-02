@@ -138,3 +138,13 @@ Route::get('Logout', 'LoginController@logout');
 
 /******************/
 
+/* KeyLender */
+
+Route::post('keylenderCheckUser', 'KeyLenderController@checkUser');
+Route::post('keylenderQueryUser', 'KeyLenderController@queryUser');
+Route::post('keylenderReturnKey', 'KeyLenderController@returnKey');
+Route::post('keylenderFindClass', 'KeyLenderController@findClass');
+Route::post('keylenderBorrow', 'KeyLenderController@borrow');
+
+/*************/
+
