@@ -2,6 +2,11 @@
 @section('content')
 
 {{HTML::script('js/class.js')}}
+<script>
+$(document).ready(function(){
+	var currentDate = $( ".datepicker" ).datepicker( "setDate", "{{$year."/".$month."/".$day}}" );
+});
+</script>
 <style>
 #left_top{
 	border: none;
