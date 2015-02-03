@@ -32,7 +32,8 @@ $(document).ready(function(){
 	var classID=0;
 	var Now = 0;
 	var Next = 0;
-	$(".no_event").mousedown(function(){
+	$(".no_event").mousedown(function(event){
+		if(event.which!=1) return;
 		event.preventDefault();
 		Now = parseInt($(this).attr("name").split(";")[0]);
 		classID = $(this).attr("name").split(";")[1];
