@@ -16,6 +16,9 @@
 	border-radius: 10px; /* future proofing */
 	-khtml-border-radius: 10px; /* for old Konqueror browsers */
 }
+.round-div p{
+	margin: 5px;
+}
 .round-div:hover{ background: rgba(204,221,255,0.8); }
 .datepicker>div{
 	box-shadow: 10px 10px 5px #888888;
@@ -41,24 +44,14 @@ $(document).ready(function(){
 			@endif
 		</div>
 		<div style="width:45%;display:inline-block;margin:0 0 20px 30px">
+			@foreach($announce as $item)
 			<div class="round-div">
-				<div style="font-size:20px;color:red;line-height:1.2em;font-weight:700">2015/2/18 - 2015/2/22 <br/>(過年期間) 不開放借用</div>
+				{{$item->content}}
+				<div style="text-align:right">{{$item->date}}</div>
 			</div>
-			<div class="round-div">
-				<div style="font-size:20px;font-weight:700">各位借教室的同學請注意：</div><br/>
-				<div style="font-size:15px">
-				教室登記後不代表借鑰匙，請記得到系辦登記押證件，切勿自行拿走鑰匙未登記，<br/>
-				使用完畢請將鑰匙送回系辦或投4215系辦的信箱，
-				若未依時間內歸還(上班日隔天早上8:00)，<br/>
-				<br/>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;借用人 勞動服務1小時 <br/>
-				累犯第二次 勞動服務3小時 <br/>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第三次 勞動服務5小時... <br/>
-					以此類推，<br/>
-				<br/>
-				敬請大家注意，謝謝！
-				</div>
-			</div>
+			@endforeach
+
+			@if(count($key))
 			<div class="round-div">
 				<div style="font-size:20px;font-weight:700">尚未歸還鑰匙名單：</div><br/>
 				<div style="font-size:15px">
@@ -68,6 +61,19 @@ $(document).ready(function(){
 				</div><br/>
 				<div style="font-size:20px;font-weight:700">請盡速歸還，謝謝</div>
 			</div>
+			@endif
+
+			@if(count($block))
+			<div class="round-div">
+				<div style="font-size:20px;font-weight:700">違規使用名單：</div><br/>
+				<div style="font-size:15px">
+				@foreach($block as $item)
+					{{$item->student_id.' '.$item->name.'<br/>'}}
+				@endforeach
+				</div><br/>
+				<div style="font-size:20px;font-weight:700">請盡速聯絡系辦，謝謝</div>
+			</div>
+			@endif
 		</div>
 		<div style="display:inline-block;width:50%;margin-top:25px;margin-right:30px;float:right;">
 {{HTML::style('css/date/jquery-ui-1.10.1.css')}}

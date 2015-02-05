@@ -28,10 +28,14 @@ Route::get('/', function()
 			->orderBy('classroom')
 			->orderBy('start_time')
 			->get();
+	$announce = DB::table('announceList')->orderBy('date','DESC')->get();
+	$block = DB::table('StudentCard')->where('block',1)->get();
 	foreach($key as $item) $item->classroom = $className[$item->classroom];
 	return View::make('pages.home')
 			->with('dateLimit', $dateLimit)
-			->with('key', $key);
+			->with('key', $key)
+			->with('announce', $announce)
+			->with('block', $block);
 });
 
 Route::get('class/{year?}/{month?}/{day?}', 'ClassController@getClass');
@@ -117,6 +121,9 @@ Route::get('ResetUser/{id}', 'AdminController@ResetUser');
 Route::get('adminSettingType/{old?}', 'AdminController@adminSettingType');
 Route::match(array('POST', 'GET'), 'SettingType/{id?}', 'AdminController@SettingType');
 Route::get('DeleteType/{id}', 'AdminController@DeleteType');
+
+Route::post('adminSettingAnnounce', 'AdminController@adminSettingAnnounce');
+Route::get('DeleteAnnounce/{id}', 'AdminController@DeleteAnnounce');
 
 Route::get('adminSettingClassroom/{old?}', 'AdminController@adminSettingClassroom');
 Route::match(array('POST', 'GET'), 'SettingClassroom/{id?}', 'AdminController@SettingClassroom');

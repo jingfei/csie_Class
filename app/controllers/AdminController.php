@@ -191,9 +191,11 @@ class AdminController extends BaseController {
 		/* classList */
 		$limit = DB::table('classList')->get();
 		$reason = DB::table('typeList')->get();
+		$announce = DB::table('announceList')->get();
 		return View::make('pages.adminSetting')
 					->with('reason', $reason)
-					->with('list', $limit);
+					->with('list', $limit)
+					->with('announce',$announce);
 	}
 
 	public function adminUser(){
@@ -289,6 +291,30 @@ class AdminController extends BaseController {
 		else
 			DB::table('typeList')->insert($ar);
 		return "<script>alert('更新成功');</script>".Redirect::to('adminSetting');
+	}
+
+	public function adminSettingAnnounce(){
+		if(Session::get('user')!='admin')
+			return "please login as admin";
+		$id = htmlspecialchars(Input::get('id'), ENT_QUOTES);
+		$content = Input::get('content');
+		$ar = array();
+		$ar['date'] = date('Y-m-d');
+		$ar['content'] = $content;
+		if($id)
+			DB::table('announceList')->where('id', $id)->update($ar);
+		else
+			DB::table('announceList')->insert($ar);
+		return "更新成功";
+		
+	}
+
+	public function DeleteAnnounce($id){
+		if(Session::get('user')!='admin')
+			return "<script>alert('something wrong');</script>".Redirect::to('/');
+		$id = htmlspecialchars($id, ENT_QUOTES);
+		DB::table('announceList')->where('id', $id)->delete();
+		return "<script>alert('刪除成功');</script>".Redirect::to('adminSetting');
 	}
 
 	public function adminSettingClassroom($old=null){

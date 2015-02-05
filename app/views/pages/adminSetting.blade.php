@@ -4,10 +4,67 @@
 <style>
 td{vertical-align:middle;}
 </style>
+<script>
+$(document).ready(function(){
+	$('.jqte').jqte();
+	var jqteStatus = true;
+});
+function modify(event, which, $id){
+	event.preventDefault();
+	$('#announce'+$id).jqte();
+	newHTML="<button onClick='ajaxAnnounce("+$id+");'>確認修改</button>";
+	$(which).parent().html(newHTML);
+}
+function ajaxAnnounce($id){
+	content = $("#announce"+$id).parent().parent().find('.jqte_editor').html();
+	var request = $.ajax({
+		url: '{{URL::to('adminSettingAnnounce')}}',
+		type: "POST",
+		data: {id: $id, content: content}
+	});
+
+	request.success(function( result ){
+		alert(result);
+		location.reload();
+	});
+
+	request.fail(function( jqXHR, textStatus){
+		alert("無法更新: "+textStatus);
+	});
+}
+</script>
 
 		<h1 class="content_title" style="font-size:220%;">設定 <small>管理者專用</small></h1>
 		<hr/>
 		<div style="font-size:1.3em">
+			<div style="margin:10px">
+				<span style="font-size:1.5em">公告異動</span>
+				<br/><br/>
+				<table class="bordered">
+				<tr>
+					<th>日期</th>
+					<th>內容</th>
+					<th>操作</th>
+				</tr>
+				@foreach($announce as $item)
+				<tr>
+					<td>{{$item->date}}</td>
+					<td><div id="{{'announce'.$item->id}}">{{$item->content}}</div></td>
+					<td style="width:100px">
+						<a href="" onClick="modify(event, this,'{{$item->id}}');"><img src="{{asset('img/edit.ico')}}" width="25px" alt="修改"/></a>
+						<a href="javascript: if(confirm('確認刪除?')) location.replace('{{URL::to('DeleteAnnounce/'.$item->id)}}');"><img src="{{asset('img/delete.ico')}}" width="25px" alt="刪除"/></a>
+					</td>
+				</tr>
+				@endforeach
+				<tr>
+					<td colspan="3">
+						<div id="announce0"></div>	
+						<span><button style="float:right" onClick="modify(event, this,'0');">新增</button></span>
+					</td>
+				</tr>
+				</table>
+			</div>
+			<hr style="border-top: dashed black 1px;width:96%;margin:20px 2%;"/>
 			<div style="margin:10px">
 				<span style="font-size:1.5em">借用事由異動</span>
 				<br/><br/>
