@@ -13,6 +13,8 @@
 
 Route::get('/', function()
 {
+	if(Session::has('new'))
+		return Redirect::to('form');
 	$dateLimit = BaseController::dateLimit();
 	/* classList */
 	$result = DB::table('classList')->get();
@@ -134,10 +136,6 @@ Route::get('csvData', 'AdminController@csvData');
 /*********/
 
 /* login & logout */
-
-Route::get('Login', function(){
-	return View::make('pages.login');
-});
 
 Route::post('log_in', 'LoginController@login');
 

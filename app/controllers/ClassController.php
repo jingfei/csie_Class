@@ -48,6 +48,8 @@ class ClassController extends \BaseController {
 	}
 
 	public function getClass($year=null, $month=null, $day=null){
+		if(Session::has('new'))
+			return Redirect::to('form');
 		if(!$year) $year=date("Y"); 
 		else $year = htmlspecialchars($year, ENT_QUOTES);
 		if(!$month) $month=date("m");
@@ -83,7 +85,7 @@ class ClassController extends \BaseController {
 
 	public function classForm($year, $month, $day, $old=null, $repeat=null){
 		if(!Session::has('user'))
-			return "<script>alert('請登入');</script>".Redirect::to('Login');
+			return "<script>alert('請登入');</script>".Redirect::back();
 		/* check special chars */
 		$month = htmlspecialchars($month, ENT_QUOTES);
 		$day = htmlspecialchars($day, ENT_QUOTES);
@@ -292,7 +294,7 @@ class ClassController extends \BaseController {
 
 	public function Borrow(){
 		if(!Session::has('user'))
-			return "<script>alert('請登入');</script>".Redirect::to('Login');
+			return "<script>alert('請登入');</script>".Redirect::back();
 		$user = htmlspecialchars( Input::get('form_user'), ENT_QUOTES );
 		$old = htmlspecialchars( Input::get('old'), ENT_QUOTES ); 
 		if($old && Session::get('user')!='admin'){ //檢查post ID是否為本人

@@ -17,6 +17,7 @@
 {{HTML::style('css/date/lugo.datepicker.css')}}
 {{HTML::style('css/date/siena.datepicker.css')}}
 {{HTML::style('css/jquery-te-1.4.0.css')}}
+{{HTML::style('css/jquery.modal.css')}}
 <!-- Including the Lobster font from Google's Font Directory -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster" />
 <!-- Enabling HTML5 support for Internet Explorer -->
@@ -27,6 +28,7 @@
 {{HTML::script('js/jquery-ui.js')}}
 {{HTML::script('js/control.js')}}
 {{HTML::script('js/jquery-te-1.4.0.min.js')}}
+{{HTML::script('js/jquery.modal.min.js')}}
 <script>
 	$(function() {	
 		$( ".datepicker" ).datepicker({

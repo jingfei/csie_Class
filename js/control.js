@@ -1,3 +1,43 @@
+$(document).ready(function(){
+	$('#Loginbutton').click(function(){
+		$('#loginform').modal({
+			fadeDuration: 250,
+			fadeDelay: 1.5
+		});
+		return false;
+	});
+	$("#LoginLogin").on('submit', userSubmit);
+});
+
+function userSubmit(event){
+	event.stopPropagation();
+	event.preventDefault();
+	$pw = $("#inputPasswd").val();
+	$studentid = $("#inputStudentid").val();
+
+	var request = $.ajax({
+		url: "/Class2014/log_in",
+		type: "POST",
+		data: 
+		{	
+			studentid: $studentid,
+			pw: $pw
+		}
+	});
+
+	request.success(function( result ){
+		if(result==="yes")
+			location.reload();
+		else
+			alert(result);
+	});
+
+	request.fail(function( jqXHR, textStatus){
+		alert("無法更新: "+textStatus);
+	//	alert("無法更新: "+jqXHR.responseText);
+	});
+}
+
 function ClickToday(){
 	$( ".datepicker" ).datepicker( "setDate", new Date() );
 }

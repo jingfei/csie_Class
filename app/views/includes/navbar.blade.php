@@ -26,7 +26,7 @@
 		@if(Session::has('user'))
 			<li><a href="/Class2014/Logout" class="myButton">logout</a></li>
 		@else
-			<li><a href="/Class2014/Login" class="myButton">login</a></li>
+			<li><a href="#" class="myButton" id="Loginbutton">login</a></li>
 		@endif
 		<li></li>
 	</ul>
