@@ -71,6 +71,7 @@ class AdminController extends BaseController {
 		/* 課程異動查詢 */
 		if(!$date) $date = date("Y-m-d");
 		if(!$date2) $date2 = $date;
+		//list1
 		$limit = DB::table('BorrowList') 
 					->whereBetween('date', array($date, $date2))
 					->orderBy('date') 
@@ -81,7 +82,27 @@ class AdminController extends BaseController {
 		if($User)
 			$limit = $limit->where('username', $User);
 		$list1 = $limit->where('key', 1)->get();
+		//list2
+		$limit = DB::table('BorrowList') 
+					->whereBetween('date', array($date, $date2))
+					->orderBy('date') 
+					->orderBy('classroom') 
+					->orderBy('start_time');
+		if($Class && $Class!=0)
+			$limit = $limit->where('classroom', $className[$Class]);
+		if($User)
+			$limit = $limit->where('username', $User);
 		$list2 = $limit->where('key', 2)->get();
+		//list3
+		$limit = DB::table('BorrowList') 
+					->whereBetween('date', array($date, $date2))
+					->orderBy('date') 
+					->orderBy('classroom') 
+					->orderBy('start_time');
+		if($Class && $Class!=0)
+			$limit = $limit->where('classroom', $className[$Class]);
+		if($User)
+			$limit = $limit->where('username', $User);
 		$list3 = $limit->where('key', 3)->get();
 		foreach($list1 as $tmp)
 			$tmp->classroom=$className[$tmp->classroom];
