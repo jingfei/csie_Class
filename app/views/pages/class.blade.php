@@ -78,9 +78,14 @@ $(document).ready(function(){
 							</div>
 						</th>
 						@for($i=8; $i<=21; ++$i)
-							<th class="time_name">
+							<th class="time_name" height="80">
+								<div>
+								<img src={{asset('img/clock/'.$i.'.png')}} style="height:80px;opacity:0.6;cursor:default;"/>
+								<span style="position:relative;top:-60px">
 								{{$i}}<br/>
 								{{test($i)}}
+								</span>
+								</div>
 							</th>
 						@endfor
 						</tr>
@@ -104,7 +109,7 @@ $(document).ready(function(){
 							<td class="class_inner {{$disable}} @if(!$disable) no_event @else event @endif" name="{{$j.';'.$i}}">
 								<div class="outer_div">
 								<div class="inner_div hide_time" @if($disable) style="border:none" @endif>
-									<br/>{{$j}}
+									<img src="{{asset('img/clock/'.$j.'.png')}}" style="height:100%;position:relative;top:0" />
 								</div></div>
 							</td>
 							@elseif($table[$j-8][$i][0]==1)

@@ -7,13 +7,18 @@
 	border:1px solid gray;
 	color: #0e2d66;
 	padding:10px;
-	float:left;
-	margin:5px;
-	width:90%;
+	background: rgba(204,221,255,0.6);
+	box-shadow: 5px 5px 5px #888888;
+	margin: 10px auto;
+	width: 80%;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px; /* future proofing */
 	-khtml-border-radius: 10px; /* for old Konqueror browsers */
+}
+.round-div:hover{ background: rgba(204,221,255,0.8); }
+.datepicker>div{
+	box-shadow: 10px 10px 5px #888888;
 }
 </style>
 <script>
@@ -35,7 +40,7 @@ $(document).ready(function(){
 				{{$dateLimit['start']['all']." ~ ".$dateLimit['end']['all']}}
 			@endif
 		</div>
-		<div style="width:35%;margin-left:70px;">
+		<div style="width:45%;display:inline-block;margin-bottom:20px">
 			<div class="round-div">
 				<h2 style="font-size:20px;color:red;line-height:1.2em;">2015/2/18 - 2015/2/22 <br/>(過年期間) 不開放借用</h2>
 			</div>
@@ -65,7 +70,7 @@ $(document).ready(function(){
 				<h2 style="font-size:20px">請盡速歸還，謝謝</h2>
 			</div>
 		</div>
-		<div style="display:inline-block;width:58%">
+		<div style="display:inline-block;width:50%;margin:25px;float:right;">
 {{HTML::style('css/date/jquery-ui-1.10.1.css')}}
 			<div class="datepicker ll-skin-lugo"></div>
 		</div>

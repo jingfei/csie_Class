@@ -19,7 +19,9 @@ button.ui-button{
 	height: 20px;
 }
 
-.no_event .inner_div:hover{ background: rgba(154,174,255,0.5); }
+.no_event .inner_div:hover{ 
+	background: rgba(154,174,255,0.5); 
+}
 
 .class_outer {
 	display: inline-block;
@@ -74,7 +76,8 @@ small {color: gray;}
 
 .no_event{ cursor: pointer; }
 
-.time_name{ 
+.time_name>div{ 
+	overflow: hidden;
 	height: 80px; 
 	width: 81px;
 	vertical-align: middle;
@@ -82,8 +85,9 @@ small {color: gray;}
 	border-radius:50px; 
 	background:#D6D3D6; 
 	cursor: default;
+	text-align:center;
 }
-.time_name:hover{
+.time_name>div:hover{
 	border-radius: 0;
 }
 .class_inner{ height: 80px; font-size: 1.2em; }
@@ -104,6 +108,7 @@ small {color: gray;}
 }
 .TableFix{
 	position: fixed;
+	z-index: 20;
 	top:0;
 }
 .hide_time{
