@@ -40,14 +40,13 @@ $(document).ready(function(){
 				{{$dateLimit['start']['all']." ~ ".$dateLimit['end']['all']}}
 			@endif
 		</div>
-		<div style="width:45%;display:inline-block;margin-bottom:20px">
+		<div style="width:45%;display:inline-block;margin:0 0 20px 30px">
 			<div class="round-div">
-				<h2 style="font-size:20px;color:red;line-height:1.2em;">2015/2/18 - 2015/2/22 <br/>(過年期間) 不開放借用</h2>
+				<div style="font-size:20px;color:red;line-height:1.2em;font-weight:700">2015/2/18 - 2015/2/22 <br/>(過年期間) 不開放借用</div>
 			</div>
 			<div class="round-div">
-				<h2 style="font-size:20px">各位借教室的同學請注意：</h2>
-				<br/>
-				<p style="font-size:15px">
+				<div style="font-size:20px;font-weight:700">各位借教室的同學請注意：</div><br/>
+				<div style="font-size:15px">
 				教室登記後不代表借鑰匙，請記得到系辦登記押證件，切勿自行拿走鑰匙未登記，<br/>
 				使用完畢請將鑰匙送回系辦或投4215系辦的信箱，
 				若未依時間內歸還(上班日隔天早上8:00)，<br/>
@@ -58,19 +57,19 @@ $(document).ready(function(){
 					以此類推，<br/>
 				<br/>
 				敬請大家注意，謝謝！
-				</p>
+				</div>
 			</div>
 			<div class="round-div">
-				<h2 style="font-size:20px">尚未歸還鑰匙名單：</h2><br/>
-				<p style="font-size:15px">
+				<div style="font-size:20px;font-weight:700">尚未歸還鑰匙名單：</div><br/>
+				<div style="font-size:15px">
 				@foreach($key as $item)
 					{{$item->date.' '.$item->classroom.' '.$item->username.'<br/>'}}
 				@endforeach
-				</p><br/>
-				<h2 style="font-size:20px">請盡速歸還，謝謝</h2>
+				</div><br/>
+				<div style="font-size:20px;font-weight:700">請盡速歸還，謝謝</div>
 			</div>
 		</div>
-		<div style="display:inline-block;width:50%;margin:25px;float:right;">
+		<div style="display:inline-block;width:50%;margin-top:25px;margin-right:30px;float:right;">
 {{HTML::style('css/date/jquery-ui-1.10.1.css')}}
 			<div class="datepicker ll-skin-lugo"></div>
 		</div>
