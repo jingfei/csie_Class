@@ -45,7 +45,7 @@ class LoginController extends BaseController {
 			}
 			else{
 				Session::put('new', $user);
-				return "請先填寫個人資料以利系辦審查";
+				return "form: 請先填寫個人資料以利系辦審查";
 			}
 		}
 		else{

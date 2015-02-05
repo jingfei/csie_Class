@@ -4,6 +4,7 @@
 	$permission="000000";
 	if(Session::has('permission')) $permission=Session::get('permission');
 ?>
+		<li><a href="/Class2014/" class="myButton">回首頁</a></li>
 		@if($permission[0])
 			<li><a href="/Class2014/query" class="myButton">學生證</a></li>
 		@endif
@@ -22,7 +23,6 @@
 		@if($permission[5])
 			<li><a href="/Class2014/Personal" class="myButton">維護資料</a></li>
 		@endif
-		<li><a href="/Class2014/" class="myButton">回首頁</a></li>
 		@if(Session::has('user'))
 			<li><a href="/Class2014/Logout" class="myButton">logout</a></li>
 		@else

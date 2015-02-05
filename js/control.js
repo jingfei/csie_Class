@@ -26,8 +26,13 @@ function userSubmit(event){
 	});
 
 	request.success(function( result ){
+		console.log(result.search("form"));
 		if(result==="yes")
 			location.reload();
+		else if(result.search("form")!=-1){
+			alert(result);
+			location.reload();
+		}
 		else
 			alert(result);
 	});
