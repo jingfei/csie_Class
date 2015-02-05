@@ -1,5 +1,7 @@
-<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="keywords" content="成大資工,鑰匙,設備,鑰匙借用">
+<meta http-equiv="description" content="成功大學資訊工程學系 設備及鑰匙借用系統，供系上實驗室及學生查詢及登記借用鑰匙">
 
 <title>CSIE Equipment Borrowing</title>
 
