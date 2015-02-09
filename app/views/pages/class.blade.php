@@ -131,7 +131,7 @@ $(document).ready(function(){
 								</div></div>
 							</td>
 							@elseif($table[$j-8][$i][0]>1)
-							<td class="class_inner event" colspan="{{$table[$j-8][$i][0]}}" style="width:{{70*$table[$j-8][$i][0]-10}}px;">
+							<td class="class_inner event" colspan="{{$table[$j-8][$i][0]}}" style="width:{{83*$table[$j-8][$i][0]}}px;">
 								<div class="outer_div">
 								@if(!$disable && $table[$j-8][$i][3])
 								<div class="inner_div user_div">
