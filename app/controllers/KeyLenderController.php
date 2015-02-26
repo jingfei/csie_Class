@@ -117,7 +117,8 @@ class KeyLenderController extends ClassController {
 			$array["reason"] = "someone borrowed it first";
 			return Response::json($array);
 		}
-		$result = DB::table('BorrowList')->insert($ar);
+		$result = DB::table('BorrowList')->insertGetId($ar);
+		$array["id"] = $result;
 		$array["status"] = "success";
 		return Response::json($array);
 	}
