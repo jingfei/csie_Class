@@ -2,7 +2,15 @@
 
 class KeyLenderController extends ClassController {
 
+	private function checkKey($input){
+		$key = "KeyLender".date("Ymd");
+		for($i=0; $i<10; ++$i)
+			$key=md5($key);
+		return $input===$key;
+	}
+
 	public function checkUser(){
+		if(!self::checkKey(Input::get('key'))) return App::abort(404);
 		$StudentCard = htmlspecialchars(Input::get('StudentCard'),ENT_QUOTES);
 		$id = DB::table('StudentCard') 
 						->select('id') 
@@ -13,6 +21,7 @@ class KeyLenderController extends ClassController {
 	}
 
 	public function queryUser(){
+		if(!self::checkKey(Input::get('key'))) return App::abort(404);
 		$UserID = htmlspecialchars(Input::get('UserID'),ENT_QUOTES);
 		$date = date("Y-m-d");
 		$data = DB::table('BorrowList')
@@ -33,6 +42,7 @@ class KeyLenderController extends ClassController {
 	}
 
 	public function returnKey(){
+		if(!self::checkKey(Input::get('key'))) return App::abort(404);
 		$BorrowID = htmlspecialchars(Input::get('BorrowID'),ENT_QUOTES);
 		$data = DB::table('BorrowList')
 					->select('key')
@@ -68,6 +78,7 @@ class KeyLenderController extends ClassController {
 	}
 
 	public function borrow(){
+		if(!self::checkKey(Input::get('key'))) return App::abort(404);
 		$UserID = htmlspecialchars(Input::get('UserID'),ENT_QUOTES);
 		$ClassName = htmlspecialchars(Input::get('ClassName'),ENT_QUOTES);
 		$start = htmlspecialchars(Input::get('StartTime'),ENT_QUOTES);
