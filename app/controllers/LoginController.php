@@ -14,7 +14,7 @@ class LoginController extends BaseController {
 		$inTable = DB::table('userList')->where('userid', $user)->first();
 		if($inTable && $inTable->password){
 			if($inTable->password==md5($passwd)){
-				Session::put('user', $user);
+				Session::put('user', $inTable->userid);
 				Session::put('username', $inTable->username);
 				Session::put('permission', $inTable->permission);
 				return "yes";
