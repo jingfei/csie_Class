@@ -99,6 +99,9 @@ $(document).ready(function(){
 				@for($i=1; $i<count($data); $i++)
 					@if($className==$i)
 						<option selected="selected">{{ $data[$i]->name.' '.$data[$i]->type }}</option>
+					@elseif($data[$i]->name=="4210" && 
+							sprintf("%4d%02d%02d",$year,$month,$day)>="20150700")
+						{{ "" }}
 					@else
 						<option>{{ $data[$i]->name.' '.$data[$i]->type }}</option>
 					@endif

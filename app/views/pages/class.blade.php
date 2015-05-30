@@ -94,7 +94,10 @@ $(document).ready(function(){
 				<div>
 					<table style="margin-bottom:50px">
 					@for($i=1; $i<count($data); $i++)
-						<tr>
+						<tr @if($data[$i]->name =="4210" && 
+							sprintf("%4d%02d%02d",$year,$month,$day)>="20150700")
+								style="display:none"
+							@endif >
 							<th class="new_class">
 								{{$data[$i]->name}}<br/>
 								{{$data[$i]->type}}<br/>

@@ -367,11 +367,11 @@ class ClassController extends \BaseController {
 		}
 		$dateWay = 0;
 		$dateTmp = "";
+		$year = Input::get('date_year');
+		$month = Input::get('date_month');
+		$day = Input::get('date_day');
 		if($Repeat && Input::get('Repeat_end')=='date'){ //循環方式為日期
 			$dateWay=1;
-			$year = Input::get('date_year');
-			$month = Input::get('date_month');
-			$day = Input::get('date_day');
 			$dateTmp = date("Y-m-d", mktime(0,0,0,$month,$day,$year));
 		}
 		else if($Repeat && Input::get('Repeat_end')=='occurence'){ //次數
@@ -384,6 +384,9 @@ class ClassController extends \BaseController {
 		foreach($result as $tmpClass)
 			if($tmpClass->name == $class){
 				$classId = $tmpClass->id;
+				if($tmpClass->name == "4210" &&
+					sprintf("%4d%02d%02d",$year,$month,$day)>="20150700")
+					return "<script>alert('此教室已不開放使用');</script>".Redirect::to('class');
 				break;
 			}
 		if($classId == -1) return "<script>alert('沒有這間教室');</script>".Redirect::to('class');
