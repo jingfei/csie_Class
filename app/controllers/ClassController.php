@@ -590,6 +590,9 @@ class ClassController extends \BaseController {
 		foreach($result as $tmpClass)
 			if($tmpClass->name == $class){
 				$classId = $tmpClass->id;
+				if($tmpClass->name == "4210" &&
+					$date_start>="2015-07-00")
+					return "此教室已不開放使用";
 				break;
 			}
 		if($classId == -1) return "沒有這間教室";
