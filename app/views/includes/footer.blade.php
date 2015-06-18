@@ -25,7 +25,7 @@
 	<blockquote style="float: right">
 		<small>
 			<br/>
-			Designed By J.F.Y. 
+			Designed by Jingfei
 		</small>
 		<br/><br/>
 	</blockquote>
