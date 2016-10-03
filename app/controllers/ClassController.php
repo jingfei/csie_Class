@@ -316,13 +316,13 @@ class ClassController extends \BaseController {
 		}
 		else{
 			$userInfo = DB::table('StudentCard')
-							->where('name', $user)
+							->where('student_id', Session::get('user'))
 							->first();
 			$user_id = $userInfo->id;
 			$username = $userInfo->name;
 			$userid = $userInfo->student_id;
 		}
-		if(Session::get('user')!='admin' && $userid!=Session::get('user')) //登入與表單使用者不同
+		if(Session::get('user')!='admin' && $username!=$user) //登入與表單使用者不同
 				return "<script>alert('something wrong...');</script>".Redirect::to('/');
 		/**************/
 		$date_start = htmlspecialchars( Input::get('date_start'), ENT_QUOTES );
